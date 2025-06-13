@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import logo from "@/public/icons/jcGJc8N66ozFfkVDcgmYwvoVeA.svg"
+import logo from "@/public/icone.svg"
 import { FaInstagram, FaLinkedin } from "react-icons/fa"
 
 export default function Footer() {
@@ -16,6 +16,7 @@ export default function Footer() {
           <FaLinkedin className="text-2xl" />
         </Link>
       </div>
+
     </footer>
   )
 } 

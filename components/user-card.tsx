@@ -1,6 +1,8 @@
 import Image from "next/image"
 import { FaWhatsapp, FaLinkedin } from "react-icons/fa"
 import InstagramIcon from "../public/icons/Instagram_icon.png"
+import Linkedin from "@/public/icons/linkedin.png"
+import Whatsapp from "@/public/icons/WhatsApp.svg"
 
 type User = {
   avatar: string
@@ -30,7 +32,7 @@ export default function UserCard({ user }: { user: User }) {
   }
 
   return (
-    <div className="bg-gradient-to-b from-white/10 via-white/25 to-white/10 backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 max-w-sm w-full mx-auto overflow-hidden border-2 rounded-[24px]">
+    <div className= "bg-gradient-to-b from-white/10 via-white/25 to-white/10 backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 max-w-sm w-full mx-auto overflow-hidden border-2 rounded-[24px]">
       {/* Avatar Section - Top */}
       <div className="relative w-full h-[334px] rounded-t-2xl overflow-hidden">
         {user.avatar && user.avatar.trim() !== "" ? (
@@ -84,7 +86,7 @@ export default function UserCard({ user }: { user: User }) {
               aria-label={`Perfil do LinkedIn de ${user.name}`}
               className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
             >
-              <FaLinkedin className="text-3xl" />
+              <Image src={Linkedin} alt="Instagram Icon" width={30} height={30} />
             </a>
           )}
           
@@ -96,7 +98,7 @@ export default function UserCard({ user }: { user: User }) {
               aria-label={`Enviar mensagem no WhatsApp para ${user.name}`}
               className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors"
             >
-              <FaWhatsapp className="text-3xl" />
+              <Image src={Whatsapp} alt="Instagram Icon" width={30} height={30} />
             </a>
           )}
         </div>

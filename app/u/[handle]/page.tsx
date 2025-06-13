@@ -71,6 +71,10 @@ async function fetchUserData(handle: string): Promise<User> {
   }
 
   const response: ApiResponse = await res.json()
+  // Se não houver dados de usuário válidos, lança erro
+  if (!response.data || Object.keys(response.data).length === 0) {
+    throw new Error("User not found")
+  }
   return response.data
 }
 
@@ -85,16 +89,17 @@ export default async function UserPage({
     const user = await fetchUserData(handle)
 
     return (
-      <div className="min-h-screen items-center justify-center overflow-hidden">
-        <Image
-          src={Light}
-          alt="Background Light Effect"
-          width={1440}
-          height={800}
-          className="absolute top-0 left-1/2 -translate-x-1/2 opacity-60 blur-2xl z-0 pointer-events-none"
-          priority
-        />
-        <div className="flex flex-col items-center justify-center gap-10">
+      <div className="min-h-screen items-center justify-center overflow-hidden relative">
+        <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+          <Image
+            src={Light}
+            alt="Background Light Effect"
+            fill
+            className="object-cover opacity-60 blur-2xl"
+            priority
+          />
+        </div>
+        <div className="flex flex-col items-center justify-center gap-10 relative z-10">
           <Header />
           <div className="flex flex-col items-center justify-center gap-2">
             <h1 className="text-4xl font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">Membros</h1>
@@ -105,9 +110,6 @@ export default async function UserPage({
       </div>
     )
   } catch (error) {
-    if (error instanceof Error && error.message === "User not found") {
-      notFound()
-    }
-    throw error
+    notFound()
   }
 }
