@@ -3,6 +3,7 @@ import Image from "next/image"
 import type { Metadata } from "next"
 import UserCard from "@/components/user-card"
 import Light from "@/public/7AfGia7in1mhxc8qYNT9wvedPU.png"
+import Header from "@/components/Header"
 
 // Define the User type based on the API response
 type User = {
@@ -84,7 +85,7 @@ export default async function UserPage({
     const user = await fetchUserData(handle)
 
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <div className="min-h-screen items-center justify-center overflow-hidden">
         <Image
           src={Light}
           alt="Background Light Effect"
@@ -93,8 +94,14 @@ export default async function UserPage({
           className="absolute top-0 left-1/2 -translate-x-1/2 opacity-60 blur-2xl z-0 pointer-events-none"
           priority
         />
-        <UserCard user={user} />
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#000015] to-transparent" />
+        <div className="flex flex-col items-center justify-center gap-10">
+          <Header />
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h1 className="text-4xl font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">Membros</h1>
+            <p className="text-white/50">Perfil do usuário</p>
+          </div>
+          <UserCard user={user}/>
+        </div>
       </div>
     )
   } catch (error) {

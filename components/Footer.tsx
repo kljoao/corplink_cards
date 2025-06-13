@@ -9,10 +9,10 @@ export default function Footer() {
         
       <Image src={logo} alt="CorpLink Logo" width={100} height={26} className="mb-4" />
       <div className="flex gap-4">
-        <Link href="#" aria-label="Instagram" className="text-gray-400 hover:text-gray-200 transition-colors">
+        <Link href="https://www.instagram.com/corplink.co/" aria-label="Instagram" className="text-gray-400 hover:text-gray-200 transition-colors">
           <FaInstagram className="text-2xl" />
         </Link>
-        <Link href="#" aria-label="LinkedIn" className="text-gray-400 hover:text-gray-200 transition-colors">
+        <Link href="https://www.linkedin.com/company/corplink-co/" aria-label="LinkedIn" className="text-gray-400 hover:text-gray-200 transition-colors">
           <FaLinkedin className="text-2xl" />
         </Link>
       </div>
