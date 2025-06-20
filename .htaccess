@@ -1,0 +1,13 @@
+Options +FollowSymLinks
+    RewriteEngine On
+RewriteBase /
+
+# Permite que arquivos e diretórios existentes sejam acessados diretamente
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+# Adiciona .html para URLs sem extensão
+    RewriteRule ^(.*)$ $1.html [L,QSA]
+
+# Redireciona para a página 404 personalizada
+    ErrorDocument 404 /404.html

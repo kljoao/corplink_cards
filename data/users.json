@@ -1,0 +1,1648 @@
+[
+  {
+    "id": "82ae0f17-0af6-4408-b9d3-eaffbf5ff9f1",
+    "name": "Super Admin",
+    "email": "superadmin@starter-kit.com",
+    "avatar": null,
+    "info": {
+      "company": null,
+      "occupation": null,
+      "sector": null,
+      "phone": null,
+      "social_links": []
+    },
+    "created_at": "2024-09-01T18:12:24.000000Z"
+  },
+  {
+    "id": "9e5a8d34-650a-4576-b7f7-9c65731272ba",
+    "name": "Alexsandro Barros de Sá",
+    "email": "alexsandro@me.com",
+    "avatar": "https://admin.corplink.co/storage/194/01JXGVKZRA0D7FEBB2AW99JGAX.jpg",
+    "info": {
+      "company": "Itribos Multimarcas",
+      "occupation": "Proprietário",
+      "sector": "Comércio",
+      "phone": "+5521981213864",
+      "social_links": {
+        "instagram": "alexsandrosa",
+        "linkedin": "alexsandro-barros-de-s%C3%A1-96b77931"
+      }
+    },
+    "created_at": "2025-03-04T19:45:32.000000Z"
+  },
+  {
+    "id": "9e60e4ad-947d-4c1e-8fce-baaf9057f8a6",
+    "name": "Felippe Bastos",
+    "email": "felippe.bastos@solveenergies.com",
+    "avatar": "https://admin.corplink.co/storage/195/01JXGVZCACANRPEVR1JGBAZNJ3.jpg",
+    "info": {
+      "company": "Solve Energies",
+      "occupation": "CEO",
+      "sector": "Energia",
+      "phone": "+5521990447887",
+      "social_links": {
+        "instagram": "bastos.felippe",
+        "linkedin": "felippe-bastos-94254a157"
+      }
+    },
+    "created_at": "2025-03-07T23:25:06.000000Z"
+  },
+  {
+    "id": "9e7ce4b4-3199-47c3-bdab-1b19dee9fca7",
+    "name": "Márlyson Silva",
+    "email": "ms@transfero.com",
+    "avatar": "https://admin.corplink.co/storage/201/01JXHSRCBTA6AKMBEMKDCCQ7JP.jpg",
+    "info": {
+      "company": "Transfero",
+      "occupation": "CEO",
+      "sector": "Setor Financeiro",
+      "phone": "+5521997459140",
+      "social_links": {
+        "instagram": "m4rlyson",
+        "linkedin": "marlyson"
+      }
+    },
+    "created_at": "2025-03-21T21:28:21.000000Z"
+  },
+  {
+    "id": "9e90dcbb-2323-4425-8e45-e0d31055173f",
+    "name": "Alberto Blois",
+    "email": "blois@asjb.com.br",
+    "avatar": "https://admin.corplink.co/storage/202/01JXHT3WBS0RK0VTPR1C6FPNAS.jpg",
+    "info": {
+      "company": "TI Rio",
+      "occupation": "Presidente",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521994615481",
+      "social_links": {
+        "instagram": "conexao21.oficial",
+        "linkedin": "albertoblois"
+      }
+    },
+    "created_at": "2025-03-31T19:42:37.000000Z"
+  },
+  {
+    "id": "9e9ec599-7c83-45c0-8eeb-02daf72d7310",
+    "name": "Lucca Freire",
+    "email": "lucca@unblockpay.com",
+    "avatar": "https://admin.corplink.co/storage/203/01JXHTQP89QSXB0GC6DQ62BHCK.jpg",
+    "info": {
+      "company": "UnblockPay",
+      "occupation": "Fundador",
+      "sector": "Setor Financeiro",
+      "phone": "+5521981419836",
+      "social_links": {
+        "instagram": "lucca___freire",
+        "linkedin": "lucca-freire-b39758110"
+      }
+    },
+    "created_at": "2025-04-07T17:39:31.000000Z"
+  },
+  {
+    "id": "9eff631b-eaba-4870-b286-7eca361bae60",
+    "name": "Suzana Ribeiro",
+    "email": "suzana@corplink.co",
+    "avatar": "https://admin.corplink.co/storage/204/01JXHTSGCMWW32T8BE58S489N0.jpg",
+    "info": {
+      "company": "CorpLink & Co Ⓟ",
+      "occupation": "Customer Success",
+      "sector": "Clube Privado",
+      "phone": "+5521997297791",
+      "social_links": {
+        "instagram": "corplink.co",
+        "linkedin": null
+      }
+    },
+    "created_at": "2025-05-25T18:19:26.000000Z"
+  },
+  {
+    "id": "9eff8634-c430-40ac-b93a-b15d329d34a1",
+    "name": "Luiz Grossi",
+    "email": "grossi@gdg.digital",
+    "avatar": "https://admin.corplink.co/storage/205/01JXHTV1CBG4R3PXC8RA0YTDVK.jpg",
+    "info": {
+      "company": "IBPD",
+      "occupation": "CEO",
+      "sector": "Serviços",
+      "phone": "+5521995058040",
+      "social_links": {
+        "instagram": "Grossi.digital",
+        "linkedin": "Lfgrossi"
+      }
+    },
+    "created_at": "2025-05-25T19:57:34.000000Z"
+  },
+  {
+    "id": "9f0353ee-0e94-477b-9924-da6e2d52e3a6",
+    "name": "Rafael Alcemar",
+    "email": "rafael@webdec.com.br",
+    "avatar": "https://admin.corplink.co/storage/206/01JXHTYNT0ADWB7YSCHGTCM7QR.jpg",
+    "info": {
+      "company": "Webdec",
+      "occupation": "CEO",
+      "sector": "Setor Financeiro",
+      "phone": "+5521999013583",
+      "social_links": {
+        "instagram": "rafaelalcemar",
+        "linkedin": "rafael-alcemar"
+      }
+    },
+    "created_at": "2025-05-27T17:20:18.000000Z"
+  },
+  {
+    "id": "9f0390fc-6930-4395-ad2b-043972f4bc2b",
+    "name": "João Ramos",
+    "email": "joaolbramos@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/61/1746215927829-(1).jpeg",
+    "info": {
+      "company": "JL Tech and DEV",
+      "occupation": "Desenvolvedor",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521964865400",
+      "social_links": {
+        "instagram": "kl_joao",
+        "linkedin": "joaoluisbr"
+      }
+    },
+    "created_at": "2025-05-27T20:11:01.000000Z"
+  },
+  {
+    "id": "9f0b05da-56f4-4683-82a2-871258fbe946",
+    "name": "Adriana Coutinho",
+    "email": "adriana.coutinho@ichseguros.com.br",
+    "avatar": "https://admin.corplink.co/storage/190/01JXGNRGN4JXPH3KTT2CNM703Z.jpg",
+    "info": {
+      "company": "ICH Seguros",
+      "occupation": "Empresária",
+      "sector": "Saúde",
+      "phone": "+5521973211787",
+      "social_links": {
+        "instagram": "dricacoutinho",
+        "linkedin": "dricacoutinhorj"
+      }
+    },
+    "created_at": "2025-05-31T13:08:36.000000Z"
+  },
+  {
+    "id": "9f0bdd64-1bbf-4eae-93e8-30f337617988",
+    "name": "Eduardo Diniz",
+    "email": "contato@corplink.co",
+    "avatar": "https://admin.corplink.co/storage/67/Facetune_27-05-2025-03-23-39.jpeg",
+    "info": {
+      "company": "Sicoob Empresas RJ",
+      "occupation": "Presidente",
+      "sector": "Setor Financeiro",
+      "phone": "+5521981215145",
+      "social_links": {
+        "instagram": "edusicoob",
+        "linkedin": "ediniz"
+      }
+    },
+    "created_at": "2025-05-31T23:11:17.000000Z"
+  },
+  {
+    "id": "9f0be786-a777-4c3b-9bc3-977562067ad2",
+    "name": "Eduardo Diniz",
+    "email": "edu@sicoob.com.br",
+    "avatar": "https://admin.corplink.co/storage/207/01JXHV12RE6WJPEMECZ2GTYY8T.jpg",
+    "info": {
+      "company": "Sicoob Empresas RJ Ⓟ",
+      "occupation": "Presidente",
+      "sector": "Setor Financeiro",
+      "phone": "+5521981215145",
+      "social_links": {
+        "instagram": "edusicoob",
+        "linkedin": "ediniz"
+      }
+    },
+    "created_at": "2025-05-31T23:39:38.000000Z"
+  },
+  {
+    "id": "9f155dbc-4f21-4a7c-8531-52c2e210675f",
+    "name": "Francine Capistrano",
+    "email": "francinecapstrano@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/74/IMG_6527.jpeg",
+    "info": {
+      "company": "Sicoob Empresas RJ Ⓟ",
+      "occupation": "Marketing",
+      "sector": "Setor Financeiro",
+      "phone": "+5521972020349",
+      "social_links": {
+        "instagram": "francinecapstrano",
+        "linkedin": "francinecapistrano"
+      }
+    },
+    "created_at": "2025-06-05T16:32:37.000000Z"
+  },
+  {
+    "id": "9f15ac23-42f2-4509-9e5e-010ea34ab2f8",
+    "name": "André Pereira",
+    "email": "andre@soarespereira.com.br",
+    "avatar": "https://admin.corplink.co/storage/208/01JXHV65N22PQRV6C3YZ136YFS.jpg",
+    "info": {
+      "company": "Grupo Soares Pereira",
+      "occupation": "CEO",
+      "sector": "Serviços",
+      "phone": "+5521996705110",
+      "social_links": {
+        "instagram": "andrelsoarespereira",
+        "linkedin": "andré-luis-soares-pereira-a9943921/"
+      }
+    },
+    "created_at": "2025-06-05T20:11:51.000000Z"
+  },
+  {
+    "id": "9f199e6d-99e3-4307-9382-3ba02711f32a",
+    "name": "Julio Junior",
+    "email": "julio@crieseubanco.com.br",
+    "avatar": "https://admin.corplink.co/storage/209/01JXHV83PWS9V0042TABV8FB7X.png",
+    "info": {
+      "company": "Crie Seu Banco",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5511951854654",
+      "social_links": {
+        "instagram": "empresariojc",
+        "linkedin": "juliojunior"
+      }
+    },
+    "created_at": "2025-06-07T19:16:49.000000Z"
+  },
+  {
+    "id": "9f199f6d-2864-4a98-80a3-02793c488bfd",
+    "name": "Leoni Frank",
+    "email": "leony.e.frank@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/210/01JXHV99V06JJXCC8F13XRQ7JB.jpg",
+    "info": {
+      "company": "PAY",
+      "occupation": "Diretora Administrativa",
+      "sector": "Setor Financeiro",
+      "phone": "+5551998647501",
+      "social_links": {
+        "instagram": null,
+        "linkedin": "leoni-frank-48072aa2"
+      }
+    },
+    "created_at": "2025-06-07T19:19:37.000000Z"
+  },
+  {
+    "id": "9f199f99-dcad-4b88-97b0-d09cb1f9b5a9",
+    "name": "Ricardo Rozgrin",
+    "email": "ricardo@supermodular.com.br",
+    "avatar": "https://admin.corplink.co/storage/211/01JXHVA7G3ZG97BWVNAM0JXGZ5.jpg",
+    "info": {
+      "company": "AWA",
+      "occupation": "Diretor",
+      "sector": "Setor Alimentício",
+      "phone": "+5511993330218",
+      "social_links": {
+        "instagram": "ricardorozgrin",
+        "linkedin": "ricardo-rozgrin"
+      }
+    },
+    "created_at": "2025-06-07T19:20:06.000000Z"
+  },
+  {
+    "id": "9f19a012-d2be-462d-8d14-42e728d75521",
+    "name": "Ricardo Moraes",
+    "email": "oricardomoraes@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/212/01JXHVCCD011AC3CXD44MKMNTM.jpg",
+    "info": {
+      "company": "A42 Solutions",
+      "occupation": "Fundador & Consultor",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521971672134",
+      "social_links": {
+        "instagram": "oricardomoraes",
+        "linkedin": "oricardomoraes"
+      }
+    },
+    "created_at": "2025-06-07T19:21:25.000000Z"
+  },
+  {
+    "id": "9f19a033-a146-47a0-b909-bf3e9a66232f",
+    "name": "Leonardo Chaves",
+    "email": "leonardochavesadv@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/213/01JXHVNBVSNZQ681QXNWJKKWPK.jpg",
+    "info": {
+      "company": "Idecan",
+      "occupation": "CEO",
+      "sector": "Serviços",
+      "phone": "+5585999880606",
+      "social_links": {
+        "instagram": "Leocmc79",
+        "linkedin": null
+      }
+    },
+    "created_at": "2025-06-07T19:21:47.000000Z"
+  },
+  {
+    "id": "9f19a038-1804-4cc2-a3ff-d3e3d339ddc7",
+    "name": "Isabel Galvão",
+    "email": "galvaoisabel21@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/214/01JXHVPFANGS5NWVKT8R9C9VE6.jpg",
+    "info": {
+      "company": "Regia Capital",
+      "occupation": "Compliance Manager",
+      "sector": "Setor Financeiro",
+      "phone": "+5521966460660",
+      "social_links": {
+        "instagram": "Iafgalvao",
+        "linkedin": "isfernandes"
+      }
+    },
+    "created_at": "2025-06-07T19:21:50.000000Z"
+  },
+  {
+    "id": "9f19a043-5e54-49f2-817b-af67122bd530",
+    "name": "Marc Lahoud",
+    "email": "marc@queroquitar.com.br",
+    "avatar": "https://admin.corplink.co/storage/215/01JXHVR61BSESAGKND2AR6RJJM.jpg",
+    "info": {
+      "company": "QueroQuitar",
+      "occupation": "CEO",
+      "sector": "Setor Financeiro",
+      "phone": "+5511989370448",
+      "social_links": {
+        "instagram": "marclahoud",
+        "linkedin": "marclahoud"
+      }
+    },
+    "created_at": "2025-06-07T19:21:57.000000Z"
+  },
+  {
+    "id": "9f19a0b7-5383-4f27-a576-b2a95cae2aa3",
+    "name": "Joni Junior",
+    "email": "joni.larson@boni.com.br",
+    "avatar": "https://admin.corplink.co/storage/216/01JXHVSGVB76RGTG7YS9BPG77K.jpg",
+    "info": {
+      "company": "Nova Boni",
+      "occupation": "Sócio Diretor",
+      "sector": "Comércio",
+      "phone": "+5521994740157",
+      "social_links": {
+        "instagram": null,
+        "linkedin": "joni-larson-junior-86503b29"
+      }
+    },
+    "created_at": "2025-06-07T19:23:13.000000Z"
+  },
+  {
+    "id": "9f19a0ec-d15c-41ac-892c-5d8a2f5ffdf4",
+    "name": "Daniel Pereira",
+    "email": "daniel.cavalin2023@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/217/01JXHVV3ZK21CNEWHASMYVSSS2.jpg",
+    "info": {
+      "company": "Rw Consultoria",
+      "occupation": "Diretor",
+      "sector": "Serviços",
+      "phone": "+5521998016041",
+      "social_links": {
+        "instagram": "Daniel_rmp",
+        "linkedin": "daniel-pereira-a78415147"
+      }
+    },
+    "created_at": "2025-06-07T19:23:48.000000Z"
+  },
+  {
+    "id": "9f19a1ac-c272-47c6-bcc0-eec9dd3e72a3",
+    "name": "Paula Abrantes",
+    "email": "paula.petrucio@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/219/01JXHVY6K23WZ3J95D7X2WYKS3.jpg",
+    "info": {
+      "company": "IBPD",
+      "occupation": "Empresária",
+      "sector": "Serviços",
+      "phone": "+5521988459661",
+      "social_links": {
+        "instagram": "paula.petrucio",
+        "linkedin": "paulapetrucio"
+      }
+    },
+    "created_at": "2025-06-07T19:25:54.000000Z"
+  },
+  {
+    "id": "9f19a1c7-71a9-4df6-87bb-7735ef02ca7d",
+    "name": "Witoldo Junior",
+    "email": "witoldo@hendrich.adv.br",
+    "avatar": "https://admin.corplink.co/storage/220/01JXHW0MNQ8V4QYGZFHZWRYHJC.jpg",
+    "info": {
+      "company": "Hendrich Advogados",
+      "occupation": "CLO",
+      "sector": "Setor Financeiro",
+      "phone": "+5521993518821",
+      "social_links": {
+        "instagram": "witoldo",
+        "linkedin": "Witoldojr"
+      }
+    },
+    "created_at": "2025-06-07T19:26:12.000000Z"
+  },
+  {
+    "id": "9f19a1fa-5fe8-4e2c-adc5-73ee662226e4",
+    "name": "Marcelo Traitel",
+    "email": "traitel@thetopgroup.com.br",
+    "avatar": "https://admin.corplink.co/storage/95/Photoroom-20250215_214511.png",
+    "info": {
+      "company": "The Top Wine",
+      "occupation": "Presidente",
+      "sector": "Setor Alimentício",
+      "phone": "+5521987887777",
+      "social_links": {
+        "instagram": "marcelotraitel",
+        "linkedin": "marcelo-traitel-b642b330"
+      }
+    },
+    "created_at": "2025-06-07T19:26:45.000000Z"
+  },
+  {
+    "id": "9f19a295-dd96-4b60-ae78-59ce118812e5",
+    "name": "Paulo Espanha",
+    "email": "paulo.espanha@istartup.rio",
+    "avatar": "https://admin.corplink.co/storage/221/01JXHW85WP7QZGEX5F3JTQD19S.jpg",
+    "info": {
+      "company": "Kate Capital",
+      "occupation": "Founder",
+      "sector": "Setor Financeiro",
+      "phone": "+5521987667855",
+      "social_links": {
+        "instagram": "pauloespanha",
+        "linkedin": "pauloespanha"
+      }
+    },
+    "created_at": "2025-06-07T19:28:27.000000Z"
+  },
+  {
+    "id": "9f19a2ea-6603-4cea-b975-f618e36df5c1",
+    "name": "Gustavo Mota",
+    "email": "eu@gustavomota.com",
+    "avatar": "https://admin.corplink.co/storage/226/01JXHWSWQ90TBAAG73ZEG59Z6Q.png",
+    "info": {
+      "company": "Grupo Mola",
+      "occupation": "CEO",
+      "sector": "Serviços",
+      "phone": "+5521971601605",
+      "social_links": {
+        "instagram": "gustavomotapontocom",
+        "linkedin": "gustavodemesquitamota"
+      }
+    },
+    "created_at": "2025-06-07T19:29:22.000000Z"
+  },
+  {
+    "id": "9f19a336-a17e-4ce0-8205-f1d3fd18c71f",
+    "name": "Abdul Nasser",
+    "email": "abdulnasserrio@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/222/01JXHWD3TYWT10M49J4DGSXA7C.jpg",
+    "info": {
+      "company": "OCB SESCOOP RJ",
+      "occupation": "Superintendente",
+      "sector": "Serviços",
+      "phone": "+5521970185948",
+      "social_links": {
+        "instagram": "abdul_nasser",
+        "linkedin": "abdulnassercoop"
+      }
+    },
+    "created_at": "2025-06-07T19:30:12.000000Z"
+  },
+  {
+    "id": "9f19a369-9178-49fc-b38a-81adb0c88007",
+    "name": "Felipe Nogueira",
+    "email": "felipe@tg4.com.br",
+    "avatar": "https://admin.corplink.co/storage/224/01JXHWHTM73BCX47S8PAGMNPRF.jpg",
+    "info": {
+      "company": "TG4",
+      "occupation": "Co-Founder",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521988819852",
+      "social_links": {
+        "instagram": "Filnog",
+        "linkedin": "feliperochanogueira"
+      }
+    },
+    "created_at": "2025-06-07T19:30:46.000000Z"
+  },
+  {
+    "id": "9f19a477-735b-45cb-9f18-38dc2a0d6d32",
+    "name": "Joel Leandro",
+    "email": "joelml@uol.com.br",
+    "avatar": "https://admin.corplink.co/storage/223/01JXHWG3Y7WCD1GFCAMB9DB0GG.png",
+    "info": {
+      "company": "JML Consultoria",
+      "occupation": "Consultor",
+      "sector": "Serviços",
+      "phone": "+5521993810398",
+      "social_links": {
+        "instagram": "joelmgleandro",
+        "linkedin": "joel-leandro-90177b24"
+      }
+    },
+    "created_at": "2025-06-07T19:33:42.000000Z"
+  },
+  {
+    "id": "9f19a4a3-7a4f-44ba-9794-8bf9c8a00c17",
+    "name": "Michel Tauil",
+    "email": "mtauil11@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/225/01JXHWRKQWA0BCMD6J73QEAMBJ.jpg",
+    "info": {
+      "company": "BlueMan",
+      "occupation": "CEO",
+      "sector": "Moda e Vestuário",
+      "phone": "+5521998948763",
+      "social_links": {
+        "instagram": "Michel.tauil",
+        "linkedin": "michel-tauil-a20798a4"
+      }
+    },
+    "created_at": "2025-06-07T19:34:11.000000Z"
+  },
+  {
+    "id": "9f19a532-15a9-490e-99b7-497f311fb4bd",
+    "name": "Felipe Herrera",
+    "email": "felipeherre@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/227/01JXHWTZXYGFDB2ZSDY6CPB48P.jpg",
+    "info": {
+      "company": "Villemor Amaral Advogados",
+      "occupation": "Sócio",
+      "sector": "Serviços",
+      "phone": "+5521991558089",
+      "social_links": {
+        "instagram": "Fmaiaherrera",
+        "linkedin": "Herrerafelipe"
+      }
+    },
+    "created_at": "2025-06-07T19:35:45.000000Z"
+  },
+  {
+    "id": "9f19a5b1-f8ea-4cf5-a2a6-3628a3ed9906",
+    "name": "Marcos Nonemacher",
+    "email": "mlnonemacher@hotmail.com",
+    "avatar": "https://admin.corplink.co/storage/228/01JXHWXSS76G0TXJ3D8DEY4VVF.jpg",
+    "info": {
+      "company": "Kepha Venture Builder",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5546999119029",
+      "social_links": {
+        "instagram": "mlnonemacher",
+        "linkedin": "Mlnonemacher"
+      }
+    },
+    "created_at": "2025-06-07T19:37:09.000000Z"
+  },
+  {
+    "id": "9f19a679-bd9d-40ba-9d22-6ddd5c54f5ee",
+    "name": "Marcelo Gomez",
+    "email": "marcelo.gomez@neufcapital.com.br",
+    "avatar": "https://admin.corplink.co/storage/229/01JXHWYW14P9CDJBG8DKEQTYQD.png",
+    "info": {
+      "company": "Prognum",
+      "occupation": "Diretor",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521981716252",
+      "social_links": {
+        "instagram": "Mtexgomez",
+        "linkedin": "marcelo-teixeira-gomez"
+      }
+    },
+    "created_at": "2025-06-07T19:39:19.000000Z"
+  },
+  {
+    "id": "9f19a6fe-33ae-4bb7-8b82-843c9125df77",
+    "name": "Marcelo Molina",
+    "email": "molina@molina.adv.br",
+    "avatar": "https://admin.corplink.co/storage/230/01JXHX0KNAQZCQZZXH774R8MCM.jpg",
+    "info": {
+      "company": "Molina Advogados",
+      "occupation": "Empresário",
+      "sector": "Serviços",
+      "phone": "+5511983837961",
+      "social_links": {
+        "instagram": "marcelomolina",
+        "linkedin": "marcelo-molina-14437027"
+      }
+    },
+    "created_at": "2025-06-07T19:40:46.000000Z"
+  },
+  {
+    "id": "9f19a8b5-4f5b-45f8-ac7e-914d720596b6",
+    "name": "Ian Borges",
+    "email": "ian@metakosmos.com.br",
+    "avatar": "https://admin.corplink.co/storage/231/01JXHX1RY7ZN3W5RGZNGS2N12W.jpg",
+    "info": {
+      "company": "Meta Kosmos",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521990643030",
+      "social_links": {
+        "instagram": "ianpborges",
+        "linkedin": "ianpborges"
+      }
+    },
+    "created_at": "2025-06-07T19:45:34.000000Z"
+  },
+  {
+    "id": "9f19a921-5d53-4b68-b78e-27fc84248787",
+    "name": "Ricardo Braga",
+    "email": "rpbraga61@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/232/01JXHX3E5JS7SCE5VP39GH6QD4.jpg",
+    "info": {
+      "company": "Juntos Pagamentos",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5561992713302",
+      "social_links": {
+        "instagram": "ricardopbraga",
+        "linkedin": "ricardopbraga"
+      }
+    },
+    "created_at": "2025-06-07T19:46:45.000000Z"
+  },
+  {
+    "id": "9f19aa2e-1c66-43df-8f20-02bf0995d52c",
+    "name": "Rafael D'Alessandro",
+    "email": "rafael@iblueconsulting.com.br",
+    "avatar": "https://admin.corplink.co/storage/233/01JXHX4KAH5THVQS9PB0ARKWSW.jpg",
+    "info": {
+      "company": "Iblue Consulting",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521999419931",
+      "social_links": {
+        "instagram": "angelorafaelrj",
+        "linkedin": "angelorafael"
+      }
+    },
+    "created_at": "2025-06-07T19:49:41.000000Z"
+  },
+  {
+    "id": "9f19ab6e-72e5-4c26-9b96-7d592bf2aa1f",
+    "name": "Alexander Albuquerque",
+    "email": "alexander@bvm12.com.br",
+    "avatar": "https://admin.corplink.co/storage/234/01JXHX63RJGVWJPQGZ7RQWG8R6.jpg",
+    "info": {
+      "company": "BVM12",
+      "occupation": "CTO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5592982322910",
+      "social_links": {
+        "instagram": "alexanderpj2",
+        "linkedin": "alexander-albuquerque-78b3187"
+      }
+    },
+    "created_at": "2025-06-07T19:53:11.000000Z"
+  },
+  {
+    "id": "9f19ac1b-373e-47a1-a84e-f13f9e1e5633",
+    "name": "Joseph Spiegel",
+    "email": "joseph.dir@alterdata.com.br",
+    "avatar": "https://admin.corplink.co/storage/235/01JXHX7S7RSEJ7YWTZZNV0Q2P0.jpg",
+    "info": {
+      "company": "Alterdata Tecnologia",
+      "occupation": "Diretor",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521988448050",
+      "social_links": {
+        "instagram": "josephspiegel",
+        "linkedin": "joseph-spiegel-340b0a26"
+      }
+    },
+    "created_at": "2025-06-07T19:55:04.000000Z"
+  },
+  {
+    "id": "9f19ad6e-7f05-4305-ad3f-ccc5b4aa911d",
+    "name": "Ricardo Silva",
+    "email": "ricardoolliveira.vendas@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/236/01JXHX90PR7BFN2FFT115P2MET.jpg",
+    "info": {
+      "company": "Global",
+      "occupation": "Presidente",
+      "sector": "Serviços",
+      "phone": "+5521996092442",
+      "social_links": {
+        "instagram": "ricardoolliveira.oficial",
+        "linkedin": null
+      }
+    },
+    "created_at": "2025-06-07T19:58:46.000000Z"
+  },
+  {
+    "id": "9f19af8e-4e45-4ed9-b712-d6ffbb23c76d",
+    "name": "Fabio Ehrlich",
+    "email": "fabioehrlich@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/237/01JXHXA4QQS55WSHVS6N61VEVR.jpg",
+    "info": {
+      "company": "Multiplica Partners",
+      "occupation": "Sócio Diretor",
+      "sector": "Serviços",
+      "phone": "+5521983800000",
+      "social_links": {
+        "instagram": "fabioehrlich",
+        "linkedin": "fabioehrlich"
+      }
+    },
+    "created_at": "2025-06-07T20:04:43.000000Z"
+  },
+  {
+    "id": "9f19afa5-e314-4939-93ff-73993073b91a",
+    "name": "Manoel Alberto",
+    "email": "contato@grupogwp.com.br",
+    "avatar": "https://admin.corplink.co/storage/238/01JXHXGAWJP85CEQTWXATZKH6F.jpg",
+    "info": {
+      "company": "Grupo GWP",
+      "occupation": "CEO",
+      "sector": "Setor Financeiro",
+      "phone": "+5511947416003",
+      "social_links": {
+        "instagram": "Manoel_expandindo",
+        "linkedin": "Manoel-Alberto-5766a415"
+      }
+    },
+    "created_at": "2025-06-07T20:04:58.000000Z"
+  },
+  {
+    "id": "9f19b10d-3735-4d1c-b2b3-e8793ad5e30d",
+    "name": "Vinicius Mesquita",
+    "email": "viniciusmesquit@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/239/01JXHXH99A1NQ4ZR3DB7PMW0PQ.jpg",
+    "info": {
+      "company": "OCB SESCOOP RJ",
+      "occupation": "Presidente",
+      "sector": "Serviços",
+      "phone": "+5521970085343",
+      "social_links": {
+        "instagram": "viniciusmesquita_coop",
+        "linkedin": "vinicius-de-oliveira-mesquita-901ba117a"
+      }
+    },
+    "created_at": "2025-06-07T20:08:54.000000Z"
+  },
+  {
+    "id": "9f19b1db-ae08-4ad6-a2d2-e459b2434556",
+    "name": "Mauro Angelo",
+    "email": "mauro@imperialinvest.com.br",
+    "avatar": "https://admin.corplink.co/storage/240/01JXHXJGAVE0V0XDS6F22G5V7M.jpg",
+    "info": {
+      "company": "Imperial investimentos",
+      "occupation": "Sócio Fundador",
+      "sector": "Setor Financeiro",
+      "phone": "+5521995306307",
+      "social_links": {
+        "instagram": "imperial_investimentos",
+        "linkedin": "mauro-sant-angelo-6b8a67149"
+      }
+    },
+    "created_at": "2025-06-07T20:11:09.000000Z"
+  },
+  {
+    "id": "9f19b6ae-f22f-408f-bf1d-0bed6e769a5e",
+    "name": "Dalmo Marcolino",
+    "email": "dalmo.marcolino@hotmail.com",
+    "avatar": "https://admin.corplink.co/storage/241/01JXHXKJS3ZHRPBCGY57T26F37.jpg",
+    "info": {
+      "company": "Nasajon Sistemas",
+      "occupation": "Gerente de Contas",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521994150371",
+      "social_links": {
+        "instagram": "Dalmomarcolino",
+        "linkedin": "Dalmomarcolino"
+      }
+    },
+    "created_at": "2025-06-07T20:24:39.000000Z"
+  },
+  {
+    "id": "9f19bc75-488b-4e83-9573-ff1714536efc",
+    "name": "Liria Knutti",
+    "email": "liria@doctorweb.com.br",
+    "avatar": "https://admin.corplink.co/storage/242/01JXHXMHYS7HGD1HJ8V3HFKGMB.jpg",
+    "info": {
+      "company": "Doctor Web",
+      "occupation": "Founder",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521992372553",
+      "social_links": {
+        "instagram": "_liria_knutti_",
+        "linkedin": "liriaknutti"
+      }
+    },
+    "created_at": "2025-06-07T20:40:48.000000Z"
+  },
+  {
+    "id": "9f19bc82-d97f-43d0-a085-037decedc607",
+    "name": "Paulo Nascimento",
+    "email": "paulo.nascimento@iriom.com.br",
+    "avatar": "https://admin.corplink.co/storage/243/01JXHXNE04HVP063S3TGDQ5Z8D.jpg",
+    "info": {
+      "company": "IRIOM",
+      "occupation": "CEO",
+      "sector": "Setor Financeiro",
+      "phone": "+5517981188605",
+      "social_links": {
+        "instagram": "paulounion",
+        "linkedin": "paulounion"
+      }
+    },
+    "created_at": "2025-06-07T20:40:56.000000Z"
+  },
+  {
+    "id": "9f19bdfc-f69a-4016-8539-0d61fb9509a5",
+    "name": "Rafael Domingues",
+    "email": "rdottore@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/244/01JXHXQSH4X08SRAEFQAK0XJA9.jpg",
+    "info": {
+      "company": "Konecta",
+      "occupation": "Diretor",
+      "sector": "Serviços",
+      "phone": "+5521981332509",
+      "social_links": {
+        "instagram": "rdottore",
+        "linkedin": "rafaeldottore"
+      }
+    },
+    "created_at": "2025-06-07T20:45:04.000000Z"
+  },
+  {
+    "id": "9f19befe-b0c0-4fa8-8deb-1ed322b58153",
+    "name": "Patrick Algranti",
+    "email": "patrickalgranti@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/245/01JXHXSB0QV58Y0F49EY5X9XH2.jpg",
+    "info": {
+      "company": "SD Consultoria",
+      "occupation": "Diretor",
+      "sector": "Comércio",
+      "phone": "+5521991250946",
+      "social_links": {
+        "instagram": null,
+        "linkedin": "patrick-algranti-8548a51b3"
+      }
+    },
+    "created_at": "2025-06-07T20:47:53.000000Z"
+  },
+  {
+    "id": "9f19c177-2822-4ce4-aa1e-3b111a1a5d24",
+    "name": "Nilson Junior",
+    "email": "nilson@acertando.com.br",
+    "avatar": "https://admin.corplink.co/storage/246/01JXHXW11E89A40KFT0TE3E647.jpg",
+    "info": {
+      "company": "Duo Gourmet",
+      "occupation": "CEO",
+      "sector": "Setor Financeiro",
+      "phone": "+5531988070118",
+      "social_links": {
+        "instagram": "Nilsongouvea",
+        "linkedin": "nilson-gouvêa-a9086335"
+      }
+    },
+    "created_at": "2025-06-07T20:54:48.000000Z"
+  },
+  {
+    "id": "9f19c9fc-7864-43b2-851d-67b5f987b00e",
+    "name": "Marcus Moraes",
+    "email": "marcus.moraes1007@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/247/01JXHXX144NM6MFK06GBQWYBJ8.jpg",
+    "info": {
+      "company": "Planck Data Centers",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521988824980",
+      "social_links": {
+        "instagram": null,
+        "linkedin": "mmoraes"
+      }
+    },
+    "created_at": "2025-06-07T21:18:37.000000Z"
+  },
+  {
+    "id": "9f19cbc4-9766-4d3e-91a0-fd7ca71a6104",
+    "name": "Jordão Bevilaqua",
+    "email": "jordao@jordaobevilaqua.com",
+    "avatar": "https://admin.corplink.co/storage/248/01JXHXYVKPE1DP1HSSK6VJ37H8.jpg",
+    "info": {
+      "company": "Guriga Engenharia",
+      "occupation": "CEO",
+      "sector": "Construção Civil",
+      "phone": "+5521966243679",
+      "social_links": {
+        "instagram": "bevilaquajordao",
+        "linkedin": "jordaobevilaqua"
+      }
+    },
+    "created_at": "2025-06-07T21:23:36.000000Z"
+  },
+  {
+    "id": "9f19ce1b-249b-47a7-a9c4-aa92e5a3a054",
+    "name": "Laila Cavalcanti",
+    "email": "laila.cavalcanti@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/249/01JXHY0A9Y3K71YVZHDQWBDXX0.jpg",
+    "info": {
+      "company": "Laila Cavalcabti",
+      "occupation": "Direção",
+      "sector": "Serviços",
+      "phone": "+5521991919291",
+      "social_links": {
+        "instagram": "lailabcavalcanti",
+        "linkedin": "lailadebragacavalcanti"
+      }
+    },
+    "created_at": "2025-06-07T21:30:08.000000Z"
+  },
+  {
+    "id": "9f19dacc-e622-45c8-adea-38a59f0ca81a",
+    "name": "Andreia Fontelles",
+    "email": "andreiafontelles@hotmail.com",
+    "avatar": "https://admin.corplink.co/storage/250/01JXHY1QJXZS8QBFH4TNCEPZEP.jpg",
+    "info": {
+      "company": "Banco Bradesco",
+      "occupation": "Diretora",
+      "sector": "Setor Financeiro",
+      "phone": "+5511984497874",
+      "social_links": {
+        "instagram": "andreiabfontelles",
+        "linkedin": "andréia-fontelles-5393521"
+      }
+    },
+    "created_at": "2025-06-07T22:05:38.000000Z"
+  },
+  {
+    "id": "9f19db97-0a49-4eee-8f92-186d2b3bdf69",
+    "name": "Fabio Custodio",
+    "email": "asesfabio@icloud.com",
+    "avatar": "https://admin.corplink.co/storage/251/01JXHY3931W45C78Q2CGE4H4R3.jpg",
+    "info": {
+      "company": "FabCapital",
+      "occupation": "CVO",
+      "sector": "Setor Financeiro",
+      "phone": "+5521981435973",
+      "social_links": {
+        "instagram": null,
+        "linkedin": "fábiovárzeacustódio"
+      }
+    },
+    "created_at": "2025-06-07T22:07:51.000000Z"
+  },
+  {
+    "id": "9f19dbfa-5917-4c0f-b848-7fa53f9c063b",
+    "name": "Paulo Sang",
+    "email": "diretoria@twts.com.br",
+    "avatar": "https://admin.corplink.co/storage/252/01JXHY45PEC5PJ4KZ0516FD2A8.jpg",
+    "info": {
+      "company": "Twts Viagens",
+      "occupation": "Diretor",
+      "sector": "Serviços",
+      "phone": "+5521998354444",
+      "social_links": {
+        "instagram": "Paulomaxsang",
+        "linkedin": "paulo-max-sang-83057773"
+      }
+    },
+    "created_at": "2025-06-07T22:08:56.000000Z"
+  },
+  {
+    "id": "9f19dfa1-a8d3-4fdf-9b46-031b699d9baf",
+    "name": "Guilherme Rabinovitsch",
+    "email": "gui@cysfera.com",
+    "avatar": "https://admin.corplink.co/storage/253/01JXHY5FQQVKR6FD325WD2HE1C.jpg",
+    "info": {
+      "company": "Cysfera",
+      "occupation": "Founder",
+      "sector": "Tecnologia da Informação",
+      "phone": "+551150438526",
+      "social_links": {
+        "instagram": "gui_rabinovitsch",
+        "linkedin": "gershon-rabinovitschch"
+      }
+    },
+    "created_at": "2025-06-07T22:19:09.000000Z"
+  },
+  {
+    "id": "9f1a0322-2bb6-45f4-a0d4-a6e624cf8f4b",
+    "name": "Marcelo Roque",
+    "email": "marcelo@precocerto.co",
+    "avatar": "https://admin.corplink.co/storage/254/01JXHY6H0MZ9J887V2B0B3B6MW.jpg",
+    "info": {
+      "company": "Preço Certo",
+      "occupation": "Fundador",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521996476109",
+      "social_links": {
+        "instagram": "Precocerto.co",
+        "linkedin": "marcelo-roque"
+      }
+    },
+    "created_at": "2025-06-07T23:58:25.000000Z"
+  },
+  {
+    "id": "9f1a0584-3ee5-410f-a48d-cdc1ced5aef4",
+    "name": "João Paulo",
+    "email": "joao@tagme.com.br",
+    "avatar": "https://admin.corplink.co/storage/255/01JXHY7M3F959QJQFB6271GBMZ.jpg",
+    "info": {
+      "company": "Tagme",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521998394768",
+      "social_links": {
+        "instagram": "joaotagme",
+        "linkedin": "joaopaulowinetag"
+      }
+    },
+    "created_at": "2025-06-08T00:05:05.000000Z"
+  },
+  {
+    "id": "9f1a0a07-6314-4fbe-8332-366fd129868b",
+    "name": "Alessandra Simões",
+    "email": "alessandra@uphill.com.br",
+    "avatar": "https://admin.corplink.co/storage/256/01JXHY8Q00VBBBN3FHQ66A0EY9.jpg",
+    "info": {
+      "company": "UpHill",
+      "occupation": "Sócia",
+      "sector": "Serviços",
+      "phone": "+5521979136555",
+      "social_links": {
+        "instagram": "Alessandra_simoes",
+        "linkedin": "Alessandramsimoes"
+      }
+    },
+    "created_at": "2025-06-08T00:17:42.000000Z"
+  },
+  {
+    "id": "9f1a1b7f-3a76-429e-9e4f-5641b4acb197",
+    "name": "Marcio Bastos",
+    "email": "marcio_c_bastos@hotmail.com",
+    "avatar": "https://admin.corplink.co/storage/257/01JXHYABCJCEFEX4FPCF93Q54M.png",
+    "info": {
+      "company": "Accenture",
+      "occupation": "Diretor Executivo",
+      "sector": "Serviços",
+      "phone": "+5511943148103",
+      "social_links": {
+        "instagram": "marcioscbastos",
+        "linkedin": "marciobastos"
+      }
+    },
+    "created_at": "2025-06-08T01:06:32.000000Z"
+  },
+  {
+    "id": "9f1b0472-10a8-4eb7-8164-ba511cafab16",
+    "name": "Guilherme Boer",
+    "email": "guilherme@jupiterventures.com.br",
+    "avatar": "https://admin.corplink.co/storage/258/01JXHYBRW5J3Q67MWFZFK9DDRR.jpg",
+    "info": {
+      "company": "Seller Company",
+      "occupation": "Fundador e CEO",
+      "sector": "Serviços",
+      "phone": "+5519981011309",
+      "social_links": {
+        "instagram": "gui.boer",
+        "linkedin": "guilherme-boer"
+      }
+    },
+    "created_at": "2025-06-08T11:57:55.000000Z"
+  },
+  {
+    "id": "9f1b0f4a-7ab8-4382-951c-554f394f2e0e",
+    "name": "Juliano Melchior",
+    "email": "juliano@leadsperhour.com",
+    "avatar": "https://admin.corplink.co/storage/259/01JXHYCTRBW0CXEK5S59MCX4ZH.png",
+    "info": {
+      "company": "Leads Per Hour",
+      "occupation": "Co-Founder & CRO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5511966089924",
+      "social_links": {
+        "instagram": "Julianomelchhior",
+        "linkedin": "Julianomelchior"
+      }
+    },
+    "created_at": "2025-06-08T12:28:14.000000Z"
+  },
+  {
+    "id": "9f1b1956-17ee-4feb-a628-778a95a815ec",
+    "name": "Igor Oliveira",
+    "email": "igor_edelstein@hotmail.com",
+    "avatar": "https://admin.corplink.co/storage/261/01JXHYJ4WTV1B509NHA91ZCN8V.png",
+    "info": {
+      "company": "Grupo Vogue",
+      "occupation": "Sócio Administrador",
+      "sector": "Comércio",
+      "phone": "+5521999982583",
+      "social_links": {
+        "instagram": "igor_edelstein",
+        "linkedin": "igor-edelstein-466378"
+      }
+    },
+    "created_at": "2025-06-08T12:56:20.000000Z"
+  },
+  {
+    "id": "9f1b226e-1551-4867-8cbb-07362dd3a1ff",
+    "name": "Eduardo Tabone",
+    "email": "etabone@me.com",
+    "avatar": "https://admin.corplink.co/storage/260/01JXHYH175JASF2F34BP3T78WH.jpg",
+    "info": {
+      "company": "XP inc.",
+      "occupation": "Private Bank Director",
+      "sector": "Setor Financeiro",
+      "phone": "+5511984474979",
+      "social_links": {
+        "instagram": "Dudatabone",
+        "linkedin": "eduardo-tabone-cfp®-1761b0"
+      }
+    },
+    "created_at": "2025-06-08T13:21:45.000000Z"
+  },
+  {
+    "id": "9f1b2ba8-e5cd-4707-ac03-6b2c958db8e2",
+    "name": "René Saleme",
+    "email": "rene@piedadecervejaria.com.br",
+    "avatar": "https://admin.corplink.co/storage/262/01JXHYKNHR3MWNKKENS0C3BC8C.jpg",
+    "info": {
+      "company": "Cervejaria Piedade",
+      "occupation": "Sócio Diretor",
+      "sector": "Indústria",
+      "phone": "+5521999766621",
+      "social_links": {
+        "instagram": "piedade.cervejaria",
+        "linkedin": "rené-saleme-4ba754"
+      }
+    },
+    "created_at": "2025-06-08T13:47:34.000000Z"
+  },
+  {
+    "id": "9f1b89b7-baf7-4ef4-83d5-d03ca1b5f72a",
+    "name": "Franklin Silva",
+    "email": "assessoria@flypay.com.br",
+    "avatar": "https://admin.corplink.co/storage/263/01JXHYMVMZ72F1DF39VP9GM0GX.jpg",
+    "info": {
+      "company": "Flypay",
+      "occupation": "Co-Founder",
+      "sector": "Setor Financeiro",
+      "phone": "+5521979272959",
+      "social_links": {
+        "instagram": "flypayoficial",
+        "linkedin": "flypayoficial"
+      }
+    },
+    "created_at": "2025-06-08T18:10:34.000000Z"
+  },
+  {
+    "id": "9f1bc17a-084a-4119-8829-77fb3ef78426",
+    "name": "Giselle Silva",
+    "email": "gisellesilva@flypay.com.br",
+    "avatar": "https://admin.corplink.co/storage/264/01JXHYP08PX0Q19NX3WR4XKBHT.jpg",
+    "info": {
+      "company": "Flypay",
+      "occupation": "CEO",
+      "sector": "Setor Financeiro",
+      "phone": "+5521981116350",
+      "social_links": {
+        "instagram": "gisellesantosa",
+        "linkedin": "giselle-silva-35091463"
+      }
+    },
+    "created_at": "2025-06-08T20:46:29.000000Z"
+  },
+  {
+    "id": "9f1bc2e6-7f7e-4e8c-842a-a0a85649d73b",
+    "name": "Bernard Pires",
+    "email": "caffe.bernarf@jovensgenios.com",
+    "avatar": "https://admin.corplink.co/storage/265/01JXHYR2212W729YJ64NRPFV2E.jpg",
+    "info": {
+      "company": "Jovens Gênios",
+      "occupation": "CEO",
+      "sector": "Educação",
+      "phone": "+5521972713389",
+      "social_links": {
+        "instagram": "caffebernard",
+        "linkedin": "bernardcaffe"
+      }
+    },
+    "created_at": "2025-06-08T20:50:28.000000Z"
+  },
+  {
+    "id": "9f1c241f-5eaa-406e-8e6a-f24837994bcd",
+    "name": "Leonardo Alvarenga",
+    "email": "leonardobma@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/266/01JXHYSPZ007ZB0PRW2H93KR73.jpg",
+    "info": {
+      "company": "SNASH",
+      "occupation": "CEO",
+      "sector": "Agricultura",
+      "phone": "+5521986678785",
+      "social_links": {
+        "instagram": "Leonardobma",
+        "linkedin": "leonardo-alvarenga"
+      }
+    },
+    "created_at": "2025-06-09T01:22:19.000000Z"
+  },
+  {
+    "id": "9f1d0c4e-fb7d-4196-b1b8-9c7c5a6ab9f6",
+    "name": "André Chaves",
+    "email": "andre.chaves@kpm.business",
+    "avatar": "https://admin.corplink.co/storage/267/01JXHYVC85F7SH7XR14GRAJKDR.jpg",
+    "info": {
+      "company": "4D imobi",
+      "occupation": "CEO",
+      "sector": "Setor Imobiliário",
+      "phone": "+5521991162726",
+      "social_links": {
+        "instagram": "andrechaves75",
+        "linkedin": "andrechaves75"
+      }
+    },
+    "created_at": "2025-06-09T12:11:33.000000Z"
+  },
+  {
+    "id": "9f1d0d9c-7f60-4739-8d13-f3ff232c65ce",
+    "name": "Miguel Machado",
+    "email": "migmac28@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/268/01JXHYX4FD3SE0EVCT49V2V38C.jpg",
+    "info": {
+      "company": "Gabarito",
+      "occupation": "Sócio Diretor",
+      "sector": "Entretenimento e Lazer",
+      "phone": "+5521974521618",
+      "social_links": {
+        "instagram": "machadomiguel",
+        "linkedin": "miguel-soares-machado-0ba1714b"
+      }
+    },
+    "created_at": "2025-06-09T12:15:12.000000Z"
+  },
+  {
+    "id": "9f1d232a-67f9-4399-82fb-ad0d4778028f",
+    "name": "Marcelo Herskovits",
+    "email": "marcelo_herskovits@hotmail.com",
+    "avatar": "https://admin.corplink.co/storage/270/01JXHZ26S02VP513H9GEWT0QMX.jpg",
+    "info": {
+      "company": "WSI",
+      "occupation": "Sócio",
+      "sector": "Serviços",
+      "phone": "+5521971186421",
+      "social_links": {
+        "instagram": "marceloherskovits",
+        "linkedin": "marceloherskovits"
+      }
+    },
+    "created_at": "2025-06-09T13:15:28.000000Z"
+  },
+  {
+    "id": "9f1d2e95-3cfa-4dc3-bcbd-8f9672735707",
+    "name": "Rafael Maia",
+    "email": "rafaelmaia@dgrafo.com",
+    "avatar": "https://admin.corplink.co/storage/269/01JXHZ0H8RJNY041KRMWTFY8QF.jpg",
+    "info": {
+      "company": "D'GRAFO Design",
+      "occupation": "Sócio",
+      "sector": "Comunicação",
+      "phone": "+5521975551251",
+      "social_links": {
+        "instagram": "rmaiadg",
+        "linkedin": "rafael-maia-3b661428"
+      }
+    },
+    "created_at": "2025-06-09T13:47:24.000000Z"
+  },
+  {
+    "id": "9f1d37dc-cce1-48b6-af00-6227a30e013f",
+    "name": "Douglas Almeida",
+    "email": "douglas@stayfilm.com",
+    "avatar": "https://admin.corplink.co/storage/271/01JXHZ3YM5PDPWVAJXQ5FS2HCQ.jpg",
+    "info": {
+      "company": "Stayfilm",
+      "occupation": "Co-founder & CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5511986449714",
+      "social_links": {
+        "instagram": "douglashalmeida",
+        "linkedin": "douglashalmeida"
+      }
+    },
+    "created_at": "2025-06-09T14:13:20.000000Z"
+  },
+  {
+    "id": "9f1d4b64-41a4-475e-ad25-7f665b094b2a",
+    "name": "Henrique Rebello",
+    "email": "henrique.dir@alterdata.com.br",
+    "avatar": "https://admin.corplink.co/storage/272/01JXHZ53S8KB7AVZSPSP7VJNFJ.png",
+    "info": {
+      "company": "Alterdata Software",
+      "occupation": "Diretor",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521992531415",
+      "social_links": {
+        "instagram": "henrique.rebello",
+        "linkedin": "henrique-rebello"
+      }
+    },
+    "created_at": "2025-06-09T15:07:57.000000Z"
+  },
+  {
+    "id": "9f1d4be1-f633-4c8f-9cca-fc925416fa20",
+    "name": "Vinicius Santos",
+    "email": "vinicius@tapago.com.br",
+    "avatar": "https://admin.corplink.co/storage/273/01JXHZ5Z61EV2P3BZ7Y1FZS0NZ.jpg",
+    "info": {
+      "company": "TÁ PAGO",
+      "occupation": "CEO",
+      "sector": "Setor Financeiro",
+      "phone": "+5511998773130",
+      "social_links": {
+        "instagram": "amorim_vi",
+        "linkedin": "vinicius-amorim-da-costa-santos-69889430"
+      }
+    },
+    "created_at": "2025-06-09T15:09:19.000000Z"
+  },
+  {
+    "id": "9f1d8faf-261e-419e-b177-c35953383e5c",
+    "name": "Diego Cunha",
+    "email": "contato@diegoribas.com.br",
+    "avatar": "https://admin.corplink.co/storage/274/01JXHZ877KE6HCA0KZWCRYRQWG.jpg",
+    "info": {
+      "company": "10 & Faixa",
+      "occupation": "Palestrante e Mentor",
+      "sector": "Serviços",
+      "phone": "+5521999305910",
+      "social_links": {
+        "instagram": "diegoribas10",
+        "linkedin": "diegoribas10"
+      }
+    },
+    "created_at": "2025-06-09T18:18:54.000000Z"
+  },
+  {
+    "id": "9f1f07b0-68ab-4f80-9a4b-3a2bc70724f7",
+    "name": "Carlos Carvalho",
+    "email": "carlos.a.miranda@sicoob.com.br",
+    "avatar": "https://admin.corplink.co/storage/275/01JXHZA7SKR1WVSXJJ0VSYREF8.jpg",
+    "info": {
+      "company": "Sicoob Empresas RJ Ⓟ",
+      "occupation": "Diretor",
+      "sector": "Setor Financeiro",
+      "phone": "+5521992168225",
+      "social_links": {
+        "instagram": "carlos.a.miranda",
+        "linkedin": "carlosbit2000"
+      }
+    },
+    "created_at": "2025-06-10T11:50:18.000000Z"
+  },
+  {
+    "id": "9f1f2361-dc26-4362-ba92-ab63a7455eb1",
+    "name": "Léo Tostes",
+    "email": "leotostes@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/276/01JXHZBBGMZYKP498D69EN30E5.jpg",
+    "info": {
+      "company": "Impactability",
+      "occupation": "Head de Inovação e Marketing",
+      "sector": "Meio Ambiente",
+      "phone": "+5541999689378",
+      "social_links": {
+        "instagram": "Leo_tostes",
+        "linkedin": "leotostes"
+      }
+    },
+    "created_at": "2025-06-10T13:07:44.000000Z"
+  },
+  {
+    "id": "9f1f4d35-7c97-4d23-8347-52d7bc4343e6",
+    "name": "Carlos Duarte",
+    "email": "carlos.duarte@sicoob.com.br",
+    "avatar": "https://admin.corplink.co/storage/288/01JXMYNWRK7GF00XRAWVZT3RBN.jpg",
+    "info": {
+      "company": "Sicoob Empresas RJ Ⓟ",
+      "occupation": "Diretor",
+      "sector": "Setor Financeiro",
+      "phone": "+5521999987770",
+      "social_links": {
+        "instagram": "carlosgduarte",
+        "linkedin": "carlos-manoel-gomes-duarte-58ab0126"
+      }
+    },
+    "created_at": "2025-06-10T15:04:41.000000Z"
+  },
+  {
+    "id": "9f1f5048-18dc-4cf4-ae46-33be164302de",
+    "name": "Ingrid Barth",
+    "email": "ingrid.barth@pilotin.com.br",
+    "avatar": "https://admin.corplink.co/storage/277/01JXHZH8YV1YG34EHV7VFTJC4W.jpg",
+    "info": {
+      "company": "PilotIn",
+      "occupation": "CEO e Fundadora",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5511983615309",
+      "social_links": {
+        "instagram": "Ingridbarth",
+        "linkedin": "Ingridbarth"
+      }
+    },
+    "created_at": "2025-06-10T15:13:17.000000Z"
+  },
+  {
+    "id": "9f1f5103-09ad-48d1-8206-f88b61130567",
+    "name": "Fernando Gonçalves",
+    "email": "fernandovitor.mkt@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/278/01JXHZK6YYFMM11KW0H6R73VFW.jpg",
+    "info": {
+      "company": "Clínica DentalUp",
+      "occupation": "Sócio Diretor",
+      "sector": "Saúde",
+      "phone": "+5521994570338",
+      "social_links": {
+        "instagram": "fernando_vitor_penteado",
+        "linkedin": "fernando-vitor-penteado-34044928"
+      }
+    },
+    "created_at": "2025-06-10T15:15:19.000000Z"
+  },
+  {
+    "id": "9f1f7290-1a73-4ca0-99c5-d098ceec9fbb",
+    "name": "Thiago Souza",
+    "email": "email.tsouza@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/279/01JXHZMHSQPA93PCV34ZMGKF01.jpg",
+    "info": {
+      "company": "Banco Ùtil",
+      "occupation": "Co-Founder",
+      "sector": "Setor Financeiro",
+      "phone": "+5511997324689",
+      "social_links": {
+        "instagram": "thiagomoraessouza",
+        "linkedin": "thiagomoraesdesouza/"
+      }
+    },
+    "created_at": "2025-06-10T16:49:08.000000Z"
+  },
+  {
+    "id": "9f215208-3b91-480f-8b44-b9eeff10046d",
+    "name": "Rodrigo Costa",
+    "email": "rodrigoccosta@outlook.com",
+    "avatar": "https://admin.corplink.co/storage/280/01JXHZP824PAM43S4SEVKTTXJD.jpg",
+    "info": {
+      "company": "Mobi FIDC",
+      "occupation": "Sócio Diretor",
+      "sector": "Setor Financeiro",
+      "phone": "+5521992120190",
+      "social_links": {
+        "instagram": null,
+        "linkedin": null
+      }
+    },
+    "created_at": "2025-06-11T15:09:50.000000Z"
+  },
+  {
+    "id": "9f217248-edde-4aa4-ba5c-802908ab7223",
+    "name": "Raphael Oliveira",
+    "email": "rgno1979@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/281/01JXHZQBJ54PZ1CCRHMCNRNEW1.png",
+    "info": {
+      "company": "QGX Digital",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521981479987",
+      "social_links": {
+        "instagram": null,
+        "linkedin": "raphael-oliveira-qgx"
+      }
+    },
+    "created_at": "2025-06-11T16:40:01.000000Z"
+  },
+  {
+    "id": "9f21b6fd-9e0f-4f06-a5df-5e0535d3e32f",
+    "name": "Lenon Stelman",
+    "email": "lenonstelman1@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/189/WhatsApp-Image-2025-05-09-at-15.18.13.jpeg",
+    "info": {
+      "company": "Master Secure",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5524981552555",
+      "social_links": {
+        "instagram": "lenonstelman",
+        "linkedin": "lenon-stelman"
+      }
+    },
+    "created_at": "2025-06-11T19:52:08.000000Z"
+  },
+  {
+    "id": "9f221be6-bbc9-4ee1-bb76-07e1b5acdb10",
+    "name": "Frederico Martins",
+    "email": "adm@ijuprev.com.br",
+    "avatar": "https://admin.corplink.co/storage/283/01JXJ170MYHRTKH4E0XZ1E5X3D.jpg",
+    "info": {
+      "company": "ePREV - Escola Prática Previdenciária",
+      "occupation": "Fundador",
+      "sector": "Educação",
+      "phone": "+5521983662559",
+      "social_links": {
+        "instagram": "eprevensino",
+        "linkedin": null
+      }
+    },
+    "created_at": "2025-06-12T00:34:18.000000Z"
+  },
+  {
+    "id": "9f222a83-4ae6-48d9-bfff-69457b71b5e2",
+    "name": "Matias Grazziotin",
+    "email": "matiasgrazziotin@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/193/1000247323.jpg",
+    "info": {
+      "company": "Mundiart SA",
+      "occupation": "Diretor",
+      "sector": "Comércio",
+      "phone": "+5554999929998",
+      "social_links": {
+        "instagram": "matiasgrazziotin",
+        "linkedin": "matias-grazziotin-975359"
+      }
+    },
+    "created_at": "2025-06-12T01:15:09.000000Z"
+  },
+  {
+    "id": "9f224125-16ea-4d2f-98b2-aebef527edd0",
+    "name": "Rodrigo Schiavini",
+    "email": "r@rocketinvest.com.br",
+    "avatar": "https://admin.corplink.co/storage/282/01JXJ0WTEHMYMCS6ASQJSF1NBB.jpg",
+    "info": {
+      "company": "Rocket Invest",
+      "occupation": "CEO",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5541988383737",
+      "social_links": {
+        "instagram": "rodrigoschiavini",
+        "linkedin": "Rodrigo-Schiavini"
+      }
+    },
+    "created_at": "2025-06-12T02:18:26.000000Z"
+  },
+  {
+    "id": "9f23767a-ff0f-4aef-9163-d4ccc0f36db2",
+    "name": "Dan Messer",
+    "email": "da@zeefpart.com",
+    "avatar": "https://admin.corplink.co/storage/284/IMG_6428.jpeg",
+    "info": {
+      "company": "Esfera Solutions",
+      "occupation": "Consultor",
+      "sector": "Tecnologia da Informação",
+      "phone": "+5521990550443",
+      "social_links": {
+        "instagram": null,
+        "linkedin": "Dan-wolf-messer"
+      }
+    },
+    "created_at": "2025-06-12T16:43:24.000000Z"
+  },
+  {
+    "id": "9f23940a-283b-4a06-8b67-f6d9eb6c9eca",
+    "name": "Sergio Motta",
+    "email": "sergio.motta10@gmail.com",
+    "avatar": "https://admin.corplink.co/storage/285/1000227930.jpg",
+    "info": {
+      "company": "ESG Consultoria Empresarial",
+      "occupation": "Sócio Diretor",
+      "sector": "Setor Financeiro",
+      "phone": "+5521991363751",
+      "social_links": {
+        "instagram": "sergio-motta-10b17632",
+        "linkedin": "sergio-motta-10"
+      }
+    },
+    "created_at": "2025-06-12T18:06:03.000000Z"
+  },
+  {
+    "id": "9f25557c-5f52-4233-99f2-3e62adea44ed",
+    "name": "Débora Sampaio",
+    "email": "debora.sampaio@sicoob.com.br",
+    "avatar": "https://admin.corplink.co/storage/287/WhatsApp-Image-2025-06-13-at-11.59.41-(2).jpeg",
+    "info": {
+      "company": "Sicoob Empresas RJ Ⓟ",
+      "occupation": "Comercial",
+      "sector": "Setor Financeiro",
+      "phone": "+5521976767210",
+      "social_links": {
+        "instagram": "deboraabernardes",
+        "linkedin": "débora-sampaio-3042b2109"
+      }
+    },
+    "created_at": "2025-06-13T15:02:48.000000Z"
+  },
+  {
+    "id": "9f26553e-89a9-4d00-a1c1-ce9d358d30be",
+    "name": "Aldo Jardim",
+    "email": "aldofagundes@dgrafo.com",
+    "avatar": "https://admin.corplink.co/storage/289/-94yh69.jpg",
+    "info": {
+      "company": "D'GRAFO Design Estratégico",
+      "occupation": "CEO",
+      "sector": "Comunicação",
+      "phone": "+5521975554972",
+      "social_links": {
+        "instagram": "aldofagundes",
+        "linkedin": "aldofagundes"
+      }
+    },
+    "created_at": "2025-06-14T02:57:57.000000Z"
+  }
+]
