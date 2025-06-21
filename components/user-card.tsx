@@ -19,21 +19,9 @@ type User = {
   }
 }
 
-async function fetchUserBySlug(slug: string): Promise<User | null> {
-  const sanitizedSlug = slug.toLowerCase().trim();
-  const apiUrl = `${process.env.NEXT_PUBLIC_API}/v1/users/by-slug/${sanitizedSlug}`;
-  const res = await fetch(apiUrl, { headers: { 'Accept': 'application/json' } });
-
-  if (!res.ok) return null;
-  const user: User = await res.json();
-  return user;
-}
-
 export default function UserCard({ user }: { user: User }) {
-  // Format phone number for WhatsApp link with null check
   const whatsappNumber = user.phone ? user.phone.replace(/\D/g, "") : ""
 
-  // Create initials for avatar fallback
   const getInitials = (name: string | undefined) => {
     if (!name) return "?"
     return name
@@ -57,7 +45,6 @@ export default function UserCard({ user }: { user: User }) {
 
   return (
     <div className= "bg-gradient-to-b from-white/10 via-white/25 to-white/10 backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 max-w-sm w-full mx-auto overflow-hidden border-2 rounded-[24px]">
-      {/* Avatar Section - Top */}
       <div className="relative w-full h-[334px] rounded-t-2xl overflow-hidden">
         {user.avatar && user.avatar.trim() !== "" ? (
           <Image
@@ -74,7 +61,6 @@ export default function UserCard({ user }: { user: User }) {
         )}
       </div>
 
-      {/* User Info Section */}
       <div className="p-6 space-y-4 z-10">
         <h2 className="text-[24px] font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
           {user.name}
@@ -87,10 +73,8 @@ export default function UserCard({ user }: { user: User }) {
           )}
         </div>
 
-        {/* Social Links */}
         <hr className="border-t border-white/20" />
         <div className="flex flex-wrap gap-4 pt-2">
-          {/* Instagram Section */}
           {user.social_links?.instagram ? (
             <a
               href={`https://instagram.com/${user.social_links.instagram}`}
@@ -111,7 +95,6 @@ export default function UserCard({ user }: { user: User }) {
             </span>
           )}
           
-          {/* LinkedIn Section */}
           {user.social_links?.linkedin ? (
             <a
               href={`https://linkedin.com/in/${user.social_links.linkedin}`}
@@ -132,8 +115,7 @@ export default function UserCard({ user }: { user: User }) {
             </span>
           )}
 
-                    {/* WhatsApp Section */}
-                    {whatsappNumber ? (
+          {whatsappNumber ? (
             <a
               href={`https://wa.me/${whatsappNumber}`}
               target="_blank"
@@ -156,35 +138,4 @@ export default function UserCard({ user }: { user: User }) {
       </div>
     </div>
   )
-}
-
-export async function generateStaticParams() {
-  const apiUrl = `${process.env.NEXT_PUBLIC_API}/v1/users/all`
-  const defaultSlug = { slug: "eduardo.diniz" }
-
-  try {
-    const res = await fetch(apiUrl, { headers: { Accept: "application/json" } })
-    if (!res.ok) {
-      console.error("Falha ao buscar usuários, retornando apenas o slug padrão:", await res.text())
-      return [defaultSlug]
-    }
-    const users: any[] = await res.json()
-    console.log("Usuários retornados pela API:", users.length)
-
-    const dynamicSlugs = users
-      .filter((user) => user.firstname && user.lastname)
-      .map((user) => ({
-        slug: `${user.firstname.toLowerCase().trim()}.${user.lastname.toLowerCase().trim()}`,
-      }))
-
-    const allSlugs = [...dynamicSlugs, defaultSlug]
-    const uniqueSlugs = Array.from(new Map(allSlugs.map((item) => [item.slug, item])).values())
-
-    console.log("Slugs gerados:", uniqueSlugs.map(s => s.slug))
-
-    return uniqueSlugs
-  } catch (error) {
-    console.error("Erro em generateStaticParams, retornando apenas o slug padrão:", error)
-    return [defaultSlug]
-  }
 }
