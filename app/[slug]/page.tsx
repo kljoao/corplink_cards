@@ -52,7 +52,7 @@ export default async function UserPage({ params }: { params: { slug:string } }) 
     notFound()
   }
 
-  // Mapeia os dados da API para o formato que o UserCard espera
+  // Mapeia os dados da API para o formato que o UserCard espera teste
   const cardUser = {
     avatar: user.avatar,
     name: user.name,
