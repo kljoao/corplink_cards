@@ -26,8 +26,9 @@ async function fetchUserBySlug(slug: string): Promise<ApiUser | null> {
   try {
     const res = await fetch(apiUrl, {
       headers: { Accept: "application/json" },
-      // Garante que os dados sejam buscados a cada requisição (SSR)
+      // Garante que os dados sejam buscados a cada requisição, sem cache.
       cache: 'no-store',
+      next: { revalidate: 0 },
     })
 
     if (!res.ok) {
