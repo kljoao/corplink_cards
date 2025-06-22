@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import UserPageClient from './UserPageClient'
+import type { Metadata } from "next"
 
 // Tipo de dados completo que vem da API
 type ApiUser = {
@@ -67,4 +68,34 @@ export default async function UserPage({ params }: { params: { slug:string } }) 
   }
 
   return <UserPageClient user={cardUser} />
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const user = await fetchUserBySlug(params.slug);
+
+  if (!user) {
+    return {
+      title: "Membro – CorpLink",
+      openGraph: {
+        title: "Membro – CorpLink",
+        images: [],
+      },
+    };
+  }
+
+  return {
+    title: `${user.name} – CorpLink`,
+    openGraph: {
+      title: `${user.name} – CorpLink`,
+      description: user.info?.occupation ? `${user.info.occupation} na ${user.info.company}` : undefined,
+      images: user.avatar ? [
+        {
+          url: user.avatar,
+          width: 1200,
+          height: 630,
+          alt: `Foto de ${user.name}`,
+        },
+      ] : [],
+    },
+  };
 } 

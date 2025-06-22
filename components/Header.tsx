@@ -10,7 +10,7 @@ export default function Header() {
           <Image src={logo} alt="CorpLink Logo" width={180} />
         </Link>
 
-        <Link href="https://www.corplink.co/u/join">
+        <Link href="https://corplink.co/u/login">
           <button className="flex items-center text-white px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition-colors">
             Login
           </button>
