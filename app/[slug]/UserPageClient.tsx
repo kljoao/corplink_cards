@@ -18,7 +18,7 @@ type User = {
     linkedin: string
   }
 }
-// Code
+// Codigo para UserPageClient
 export default function UserPageClient({ user }: { user: User }) {
   return (
     <div className="min-h-screen items-center justify-center overflow-hidden relative">
