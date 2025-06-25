@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
-import CallButton from "@/components/CallButton"
+import CallButtonWrapper from "@/components/CallButtonWrapper"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-[#000015]`}>
         {/* <Header /> */}
         {children}
-        <CallButton />
+        <CallButtonWrapper />
         <hr className="border-white/10 mt-12"/>
         <Footer />
         <hr className="border-white/10 mt-12"/>
