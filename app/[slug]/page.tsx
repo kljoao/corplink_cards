@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   if (!user) {
     return {
-      title: "Membro – CorpLink",
+      title: " – CorpLink",
       openGraph: {
         title: "Membro – CorpLink",
         images: [],

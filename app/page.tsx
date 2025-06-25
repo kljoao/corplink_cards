@@ -2,5 +2,5 @@ import { redirect } from "next/navigation"
 
 export default function Home() {
   // Redirect to members page
-  redirect("/eduardo.diniz")
+  redirect("http://corplink.co/")
 }

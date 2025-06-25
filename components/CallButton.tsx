@@ -1,5 +1,13 @@
+"use client"
+import { usePathname } from "next/navigation"
+
 // components/CallButton.tsx
 export default function CallToActionButton() {
+  const pathname = usePathname();
+  // Esconde o botão se estiver na rota de perfil (ex: /joao, /maria, etc)
+  const isProfile = /^\/[a-zA-Z0-9_.-]+$/.test(pathname) && pathname !== "/";
+  if (isProfile) return null;
+
   return (
     <div className="flex justify-center items-center mt-12">
         <a

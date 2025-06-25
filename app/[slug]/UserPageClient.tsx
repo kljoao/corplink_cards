@@ -33,7 +33,7 @@ export default function UserPageClient({ user }: { user: User }) {
       </div>
       <div className="flex flex-col items-center justify-center gap-10 relative z-10">
         <Header />
-        <div className="flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-col items-center justify-center gap-2 pt-[150px]">
           <h1 className="text-4xl font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
             Membros
           </h1>
