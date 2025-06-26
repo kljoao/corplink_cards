@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
 
   // If the path is the root, redirect to the default member
   if (path === "/") {
-    return NextResponse.redirect(new URL("/eduardo.diniz", request.url))
+    return NextResponse.redirect(new URL("http://corplink.co/", request.url))
   }
 
   return NextResponse.next()

@@ -84,6 +84,7 @@ export default function PerfilPage() {
   const [showSuccessIndicator, setShowSuccessIndicator] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [dragActive, setDragActive] = useState(false)
+  const [showDeactivateModal, setShowDeactivateModal] = useState(false)
 
   const handleInputChange = (field: string, value: string) => {
     setProfileData((prev) => ({
@@ -307,7 +308,7 @@ export default function PerfilPage() {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-xl border border-gray-800 overflow-hidden">
                 <TabsContent value="pessoal" className="m-0">
-                  <div className="p-6">
+                  <div className="p-6 relative">
                     <div className="flex items-center space-x-2 mb-6">
                       <User className="w-5 h-5 text-blue-400" />
                       <h2 className="text-xl font-medium">Informações Pessoais</h2>
@@ -478,24 +479,14 @@ export default function PerfilPage() {
                       </div>
 
                       <div className="pt-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <Switch id="notifications" />
-                            <Label htmlFor="notifications" className="text-sm text-gray-300">
-                              Receber notificações por e-mail
-                            </Label>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20"
-                          >
-                            Preferências de notificação
-                            <ChevronRight className="ml-1 h-4 w-4" />
-                          </Button>
-                        </div>
                       </div>
                     </div>
+                    <button
+                      onClick={() => setShowDeactivateModal(true)}
+                      className="absolute bottom-6 right-6 px-3 py-1.5 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
+                    >
+                      Inativar Conta
+                    </button>
                   </div>
                 </TabsContent>
 
