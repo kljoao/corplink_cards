@@ -78,6 +78,7 @@ export default function PerfilPage() {
     nomeEmpresa: "Tech Solutions Ltda",
     segmentoEmpresa: "Tecnologia da Informação",
     faturamentoAnual: "De 10 a 30 milhões",
+    occupation: "Diretor Executivo",
     instagram: "@techsolutions",
     linkedin: "linkedin.com/company/techsolutions",
   })
@@ -135,6 +136,7 @@ export default function PerfilPage() {
         nomeEmpresa: user.info?.company || prev.nomeEmpresa,
         segmentoEmpresa: user.info?.sector || prev.segmentoEmpresa,
         faturamentoAnual: user.info?.revenue ? convertRevenueToFaturamento(user.info.revenue) : prev.faturamentoAnual,
+        occupation: user.info?.occupation || prev.occupation,
         instagram: user.info?.social_links?.instagram ? `@${user.info.social_links.instagram}` : prev.instagram,
         linkedin: user.info?.social_links?.linkedin || prev.linkedin,
       }))
@@ -331,6 +333,7 @@ export default function PerfilPage() {
       company: String(profileData.nomeEmpresa || "").trim(),
       sector: String(profileData.segmentoEmpresa || "").trim(),
       revenue: convertFaturamentoToRevenue(profileData.faturamentoAnual),
+      occupation: String(profileData.occupation || "").trim(),
       social_links: {
         instagram: typeof profileData.instagram === 'string' 
           ? profileData.instagram.replace("@", "").trim() 
@@ -759,6 +762,27 @@ export default function PerfilPage() {
                             id="nomeEmpresa"
                             value={profileData.nomeEmpresa}
                             onChange={(e) => handleInputChange("nomeEmpresa", e.target.value)}
+                            className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="occupation" className="text-gray-300 font-medium">
+                              Cargo na Empresa
+                            </Label>
+                            <Badge
+                              variant="outline"
+                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                            >
+                              Editável
+                            </Badge>
+                          </div>
+                          <Input
+                            id="occupation"
+                            value={profileData.occupation}
+                            onChange={(e) => handleInputChange("occupation", e.target.value)}
+                            placeholder="Ex: Diretor Executivo, Gerente, Analista..."
                             className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
                           />
                         </div>

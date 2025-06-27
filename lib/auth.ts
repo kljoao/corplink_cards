@@ -39,6 +39,7 @@ export interface UpdateProfileData {
   sector?: string
   revenue?: string
   birthday?: string
+  occupation?: string
   social_links?: {
     instagram?: string
     linkedin?: string
