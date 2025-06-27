@@ -1,13 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Mail, Smartphone, CheckCircle, AlertCircle } from "lucide-react"
+import { ArrowLeft, Mail, Smartphone, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Header from "@/components/Header"
+import { useAuth } from "@/hooks/useAuth"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
   const [step, setStep] = useState<"email" | "sms">("email")
@@ -17,6 +19,24 @@ export default function LoginPage() {
   const [isCodeSent, setIsCodeSent] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [countdown, setCountdown] = useState(0)
+  const router = useRouter()
+  const { isAuthenticated, isLoading: authLoading, login, initAuth } = useAuth()
+
+  // Verificar se já está autenticado
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.push("/perfil")
+    }
+  }, [isAuthenticated, authLoading, router])
+
+  // Countdown para reenvio
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [countdown])
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,12 +49,26 @@ export default function LoginPage() {
 
     setIsLoading(true)
     
-    // Simular envio do código SMS
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    setIsLoading(false)
-    setIsCodeSent(true)
-    setStep("sms")
+    try {
+      const response = await initAuth(email)
+      
+      if (response.error) {
+        setError(response.error)
+      } else {
+        setIsCodeSent(true)
+        setStep("sms")
+        setSuccess(response.message || "Código enviado com sucesso!")
+        setCountdown(60) // 60 segundos para reenvio
+        
+        setTimeout(() => {
+          setSuccess("")
+        }, 3000)
+      }
+    } catch (error) {
+      setError("Erro inesperado. Tente novamente.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleSmsSubmit = async (e: React.FormEvent) => {
@@ -48,21 +82,22 @@ export default function LoginPage() {
 
     setIsLoading(true)
     
-    // Simular verificação do código
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // Simular sucesso (código 1234)
-    if (smsCode === "1234") {
-      setSuccess("Login realizado com sucesso!")
-      // Aqui você redirecionaria para a página principal
-      setTimeout(() => {
-        window.location.href = "/"
-      }, 2000)
-    } else {
-      setError("Código inválido. Tente novamente.")
+    try {
+      const response = await login(email, smsCode)
+      
+      if (response.error) {
+        setError(response.error)
+      } else {
+        setSuccess("Login realizado com sucesso!")
+        setTimeout(() => {
+          router.push("/perfil")
+        }, 1500)
+      }
+    } catch (error) {
+      setError("Erro inesperado. Tente novamente.")
+    } finally {
+      setIsLoading(false)
     }
-    
-    setIsLoading(false)
   }
 
   const handleBackToEmail = () => {
@@ -70,28 +105,50 @@ export default function LoginPage() {
     setSmsCode("")
     setError("")
     setSuccess("")
+    setIsCodeSent(false)
+    setCountdown(0)
   }
 
   const handleResendCode = async () => {
+    if (countdown > 0) return
+    
     setIsLoading(true)
     setError("")
     
-    // Simular reenvio do código
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    setIsLoading(false)
-    setSuccess("Código reenviado com sucesso!")
-    
-    setTimeout(() => {
-      setSuccess("")
-    }, 3000)
+    try {
+      const response = await initAuth(email)
+      
+      if (response.error) {
+        setError(response.error)
+      } else {
+        setSuccess("Código reenviado com sucesso!")
+        setCountdown(60)
+        
+        setTimeout(() => {
+          setSuccess("")
+        }, 3000)
+      }
+    } catch (error) {
+      setError("Erro ao reenviar código. Tente novamente.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Mostrar loading enquanto verifica autenticação
+  if (authLoading) {
+    return (
+      <div className="min-h-screen text-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-500 border-t-transparent"></div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen text-white">
       <Header />
       
-      <main className="container mx-auto px-4 py-12 max-w-md">
+      <main className="container mx-auto px-4 pt-[150px] max-w-md">
         <Card className="bg-gradient-to-br from-[#1a2332] to-[#131b2c] border-gray-800">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400">
@@ -105,7 +162,7 @@ export default function LoginPage() {
             </CardDescription>
           </CardHeader>
           
-          <CardContent className="space-y-6">
+          <CardContent>
             {step === "email" ? (
               <form onSubmit={handleEmailSubmit} className="space-y-4">
                 <div className="space-y-2">
@@ -146,7 +203,7 @@ export default function LoginPage() {
                   {isLoading ? (
                     <>
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 animate-pulse"></div>
-                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                      <Loader2 className="animate-spin h-4 w-4 mr-2" />
                       Enviando código...
                     </>
                   ) : (
@@ -206,7 +263,7 @@ export default function LoginPage() {
                     {isLoading ? (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 animate-pulse"></div>
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                        <Loader2 className="animate-spin h-4 w-4 mr-2" />
                         Verificando...
                       </>
                     ) : (
@@ -214,15 +271,21 @@ export default function LoginPage() {
                     )}
                   </Button>
 
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex justify-between">
                     <Button
                       type="button"
                       variant="ghost"
                       onClick={handleResendCode}
-                      disabled={isLoading}
+                      disabled={isLoading || countdown > 0}
                       className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20"
                     >
-                      {isLoading ? "Reenviando..." : "Reenviar código"}
+                      {isLoading ? (
+                        <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                      ) : countdown > 0 ? (
+                        `${countdown}s`
+                      ) : (
+                        "Reenviar código"
+                      )}
                     </Button>
 
                     <Button
@@ -243,9 +306,9 @@ export default function LoginPage() {
             {step === "sms" && (
               <div className="bg-gradient-to-r from-blue-900/20 to-indigo-900/20 rounded-lg p-4 border border-blue-900/30">
                 <div className="text-center">
-                  <p className="text-sm text-blue-400 font-medium">Código de teste</p>
+                  <p className="text-sm text-blue-400 font-medium">Verificação em duas etapas</p>
                   <p className="text-xs text-gray-400 mt-1">
-                    Para fins de demonstração, use o código: <span className="font-mono text-blue-300">1234</span>
+                    Um código de verificação foi enviado para o telefone cadastrado em sua conta.
                   </p>
                 </div>
               </div>
