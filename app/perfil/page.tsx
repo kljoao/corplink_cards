@@ -81,8 +81,10 @@ export default function PerfilPage() {
     occupation: "Diretor Executivo",
     instagram: "@techsolutions",
     linkedin: "linkedin.com/company/techsolutions",
+    whatsapp: false,
   })
 
+  const [selectedPhotoFile, setSelectedPhotoFile] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isDirty, setIsDirty] = useState(false)
   const [activeTab, setActiveTab] = useState("pessoal")
@@ -139,6 +141,7 @@ export default function PerfilPage() {
         occupation: user.info?.occupation || prev.occupation,
         instagram: user.info?.social_links?.instagram ? `@${user.info.social_links.instagram}` : prev.instagram,
         linkedin: user.info?.social_links?.linkedin || prev.linkedin,
+        whatsapp: user.info?.social_links?.whatsapp === '1' || prev.whatsapp,
       }))
     }
   }, [user, authLoading, router])
@@ -157,7 +160,7 @@ export default function PerfilPage() {
   const handleInputChange = (field: string, value: string) => {
     setProfileData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: field === 'whatsapp' ? value === 'true' : value,
     }))
     setIsDirty(true)
     setError("")
@@ -172,6 +175,7 @@ export default function PerfilPage() {
           ...prev,
           foto: e.target?.result as string,
         }))
+        setSelectedPhotoFile(file)
         setIsDirty(true)
       }
       reader.readAsDataURL(file)
@@ -201,6 +205,7 @@ export default function PerfilPage() {
           ...prev,
           foto: e.target?.result as string,
         }))
+        setSelectedPhotoFile(file)
         setIsDirty(true)
       }
       reader.readAsDataURL(file)
@@ -224,6 +229,15 @@ export default function PerfilPage() {
       } else {
         setIsDirty(false)
         setShowSuccessIndicator(true)
+        // Limpar arquivo selecionado após sucesso
+        setSelectedPhotoFile(null)
+        // Atualizar foto se backend retornar avatar_url
+        if (response.avatar_url) {
+          setProfileData(prev => ({
+            ...prev,
+            foto: response.avatar_url ?? prev.foto
+          }))
+        }
         setTimeout(() => {
           setShowSuccessIndicator(false)
         }, 3000)
@@ -339,7 +353,13 @@ export default function PerfilPage() {
           ? profileData.instagram.replace("@", "").trim() 
           : "",
         linkedin: String(profileData.linkedin || "").trim(),
+        whatsapp: profileData.whatsapp ? '1' : '0',
       },
+    }
+
+    // Adicionar foto se foi selecionada
+    if (selectedPhotoFile) {
+      updateData.foto = selectedPhotoFile
     }
 
     // Processar telefone se for uma string válida
@@ -363,6 +383,7 @@ export default function PerfilPage() {
 
     // Remover campos vazios para não sobrescrever dados existentes
     Object.keys(updateData).forEach(key => {
+      if (key === 'foto') return // Não remover foto
       if (updateData[key as keyof UpdateProfileData] === "") {
         delete updateData[key as keyof UpdateProfileData]
       }
@@ -370,6 +391,7 @@ export default function PerfilPage() {
 
     if (updateData.social_links) {
       Object.keys(updateData.social_links).forEach(key => {
+        if (key === 'whatsapp') return // Não remover whatsapp
         if (updateData.social_links![key as keyof typeof updateData.social_links] === "") {
           delete updateData.social_links![key as keyof typeof updateData.social_links]
         }
@@ -516,6 +538,13 @@ export default function PerfilPage() {
                 <p className="text-xs text-center text-gray-500">
                   Arraste uma imagem ou clique no ícone da câmera para alterar sua foto
                 </p>
+                {selectedPhotoFile && (
+                  <div className="mt-2 p-2 bg-blue-900/20 border border-blue-500/30 rounded-md">
+                    <p className="text-xs text-blue-400 text-center">
+                      📸 Nova foto selecionada: {selectedPhotoFile.name}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -684,6 +713,7 @@ export default function PerfilPage() {
                               id="dataNascimento"
                               type="date"
                               value={profileData.dataNascimento}
+                              onChange={(e) => handleInputChange("dataNascimento", e.target.value)}
                               max={new Date().toISOString().split('T')[0]}
                               min={new Date(new Date().getFullYear() - 95, 0, 1).toISOString().split('T')[0]}
                               className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 pl-10"
@@ -927,6 +957,37 @@ export default function PerfilPage() {
                             className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
                           />
                         </div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="whatsapp" className="text-gray-300 font-medium flex items-center">
+                              <img src="/icons/WhatsApp.svg" alt="WhatsApp" className="w-4 h-4 mr-2" />
+                              WhatsApp
+                            </Label>
+                            <Badge
+                              variant="outline"
+                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                            >
+                              Editável
+                            </Badge>
+                          </div>
+                          <div className="flex items-center space-x-3 p-3 bg-[#0d1326] border border-gray-700 rounded-md">
+                            <Switch
+                              id="whatsapp"
+                              checked={profileData.whatsapp}
+                              onCheckedChange={(checked) => handleInputChange("whatsapp", checked.toString())}
+                              className="data-[state=checked]:bg-green-500"
+                            />
+                            <Label htmlFor="whatsapp" className="text-sm text-gray-300">
+                              {profileData.whatsapp ? "Ativado" : "Desativado"}
+                            </Label>
+                            <span className="text-xs text-gray-500 ml-auto">
+                              {profileData.whatsapp 
+                                ? "Seu WhatsApp será exibido no seu cartão" 
+                                : "Seu WhatsApp não será exibido no seu cartão"}
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
                       <div className="pt-4 space-y-4">
@@ -955,7 +1016,7 @@ export default function PerfilPage() {
       </main>
       
       {/* Debug Panel - apenas em desenvolvimento */}
-      {/* <DebugPanel /> */}
+      <DebugPanel />
     </div>
   )
 }

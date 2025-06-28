@@ -1,0 +1,9 @@
+[
+{"type":"header","version":"5.2.2","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"corplink"},
+{"type":"table","name":"user_infos","database":"corplink","data":
+[
+{"user_id":"9f43a1a3-48e6-42a1-82b0-4d2fbcbe4df9","company":"Testerssss","revenue":"-10MM","occupation":"CEOO","sector":"Setor Automotivo","phone_prefix":"+55","phone":"21964865400","social_links":"{\"instagram\":\"kljoao\",\"linkedin\":\"askjdasdh\",\"whatsapp\":\"1\"}","birthday":"1999-11-27","numid":"MTg4MzEwMzA3MDE=","created_at":"2025-06-28 16:30:34","updated_at":"2025-06-28 17:35:25"}
+]
+}
+]

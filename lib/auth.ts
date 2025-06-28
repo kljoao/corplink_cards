@@ -4,6 +4,8 @@ export interface AuthResponse {
   message?: string
   token?: string
   error?: string
+  avatar_url?: string
+  avatar_thumb_url?: string
 }
 
 export interface User {
@@ -22,6 +24,7 @@ export interface User {
     social_links?: {
       instagram?: string
       linkedin?: string
+      whatsapp?: '0' | '1'
     }
     revenue?: string
     birthday?: string
@@ -43,7 +46,9 @@ export interface UpdateProfileData {
   social_links?: {
     instagram?: string
     linkedin?: string
+    whatsapp?: '0' | '1'
   }
+  foto?: File
 }
 
 class AuthService {
@@ -162,26 +167,75 @@ class AuthService {
         }
       }
 
-      const response = await fetch(`${API_BASE_URL}/v1/profile`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(profileData),
-      })
+      // Se há uma foto, usar FormData
+      if (profileData.foto) {
+        const formData = new FormData()
+        
+        // Adicionar campos de texto
+        Object.keys(profileData).forEach(key => {
+          if (key === 'foto') {
+            formData.append('foto', profileData.foto!)
+          } else if (key === 'social_links') {
+            // Adicionar campos de redes sociais individualmente
+            if (profileData.social_links) {
+              Object.keys(profileData.social_links).forEach(socialKey => {
+                const value = profileData.social_links![socialKey as keyof typeof profileData.social_links]
+                if (value !== undefined && value !== '') {
+                  formData.append(`social_links[${socialKey}]`, value)
+                }
+              })
+            }
+          } else {
+            const value = profileData[key as keyof UpdateProfileData]
+            if (value !== undefined && value !== '') {
+              formData.append(key, String(value))
+            }
+          }
+        })
 
-      const data = await response.json()
+        const response = await fetch(`${API_BASE_URL}/v1/profile`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+          },
+          body: formData,
+        })
 
-      if (!response.ok) {
-        return {
-          error: data.message || 'Erro ao atualizar perfil',
+        const data = await response.json()
+
+        if (!response.ok) {
+          return {
+            error: data.message || 'Erro ao atualizar perfil',
+          }
         }
-      }
 
-      return {
-        message: data.message || 'Perfil atualizado com sucesso',
+        return {
+          message: data.message || 'Perfil atualizado com sucesso',
+        }
+      } else {
+        // Sem foto, usar JSON normal
+        const response = await fetch(`${API_BASE_URL}/v1/profile`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(profileData),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          return {
+            error: data.message || 'Erro ao atualizar perfil',
+          }
+        }
+
+        return {
+          message: data.message || 'Perfil atualizado com sucesso',
+        }
       }
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error)

@@ -13,9 +13,11 @@ type User = {
   company: string
   sector: string
   phone: string | null
+  email: string
   social_links: {
     instagram: string
     linkedin: string
+    whatsapp: boolean
   }
 }
 // Codigo para UserPageClient

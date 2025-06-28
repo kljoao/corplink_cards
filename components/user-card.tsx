@@ -5,6 +5,7 @@ import InstagramIcon from "../public/icons/Instagram_icon.png"
 import Linkedin from "@/public/icons/linkedin.png"
 import Whatsapp from "@/public/zap.png"
 import { toast } from 'sonner'
+import { Mail } from 'lucide-react'
 
 type User = {
   avatar: string
@@ -13,14 +14,17 @@ type User = {
   company: string
   sector: string
   phone: string | null
+  email: string
   social_links: {
     instagram: string
     linkedin: string
+    whatsapp: boolean
   }
 }
 
 export default function UserCard({ user }: { user: User }) {
   const whatsappNumber = user.phone ? user.phone.replace(/\D/g, "") : ""
+  const isWhatsAppEnabled = Boolean(user.social_links?.whatsapp)
 
   const getInitials = (name: string | undefined) => {
     if (!name) return "?"
@@ -36,11 +40,19 @@ export default function UserCard({ user }: { user: User }) {
   }
 
   const handleNoWhatsapp = () => {
-    toast.info("Usuário não possui o WhatsApp cadastrado")
+    toast.info("O contato do usuário não está disponível")
   }
 
   const handleNoLinkedin = () => {
     toast.info("Usuário não possui o LinkedIn cadastrado")
+  }
+
+  const handleEmail = () => {
+    if (user.email) {
+      window.open(`mailto:${user.email}`, '_blank')
+    } else {
+      toast.info("E-mail não disponível")
+    }
   }
 
   return (
@@ -115,7 +127,7 @@ export default function UserCard({ user }: { user: User }) {
             </span>
           )}
 
-          {whatsappNumber ? (
+          {whatsappNumber && user.social_links?.whatsapp === true ? (
             <a
               href={`https://wa.me/${whatsappNumber}`}
               target="_blank"
@@ -128,10 +140,28 @@ export default function UserCard({ user }: { user: User }) {
           ) : (
             <span
               onClick={handleNoWhatsapp}
-              aria-label="WhatsApp não cadastrado"
+              aria-label="WhatsApp não disponível"
               className="flex items-center gap-2 text-gray-500 cursor-pointer"
             >
               <Image src={Whatsapp} alt="WhatsApp Icon" width={30} height={30} />
+            </span>
+          )}
+
+          {user.email ? (
+            <button
+              onClick={handleEmail}
+              aria-label={`Enviar e-mail para ${user.name}`}
+              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors bg-gray-600 rounded p-1"
+            >
+              <Mail size={25}/>
+            </button>
+          ) : (
+            <span
+              onClick={() => toast.info("E-mail não disponível")}
+              aria-label="E-mail não disponível"
+              className="flex items-center gap-2 text-gray-500 cursor-pointer bg-white rounded p-1"
+            >
+              <Mail size={30} />
             </span>
           )}
         </div>

@@ -7,6 +7,7 @@ type ApiUser = {
   id: string
   name: string
   avatar: string
+  email: string
   info: {
     company: string
     occupation: string
@@ -15,6 +16,7 @@ type ApiUser = {
     social_links: {
       instagram: string
       linkedin: string
+      whatsapp?: '0' | '1'
     }
   }
 }
@@ -57,13 +59,15 @@ export default async function UserPage({ params }: { params: { slug:string } }) 
   const cardUser = {
     avatar: user.avatar,
     name: user.name,
+    email: user.email,
     occupation: user.info?.occupation ?? '',
     company: user.info?.company ?? '',
     sector: user.info?.sector ?? '',
     phone: user.info?.phone ?? null,
     social_links: {
       instagram: user.info?.social_links?.instagram ?? '',
-      linkedin: user.info?.social_links?.linkedin ?? ''
+      linkedin: user.info?.social_links?.linkedin ?? '',
+      whatsapp: String(user.info?.social_links?.whatsapp) === '1'
     }
   }
 
