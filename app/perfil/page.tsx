@@ -141,7 +141,7 @@ export default function PerfilPage() {
         occupation: user.info?.occupation || prev.occupation,
         instagram: user.info?.social_links?.instagram ? `@${user.info.social_links.instagram}` : prev.instagram,
         linkedin: user.info?.social_links?.linkedin || prev.linkedin,
-        whatsapp: user.info?.social_links?.whatsapp === '1' || prev.whatsapp,
+        whatsapp: String(user.info?.social_links?.whatsapp) === '1' || prev.whatsapp,
       }))
     }
   }, [user, authLoading, router])
