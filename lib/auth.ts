@@ -216,7 +216,7 @@ class AuthService {
       } else {
         // Sem foto, usar JSON normal
         const response = await fetch(`${API_BASE_URL}/v1/profile`, {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
