@@ -37,6 +37,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
 import { UpdateProfileData } from "@/lib/auth"
 import DebugPanel from "@/components/DebugPanel"
+import { authService } from "@/lib/auth"
 
 const segmentosEmpresa = [
   "Agricultura",
@@ -108,7 +109,14 @@ export default function PerfilPage() {
       
       // Função para formatar telefone com máscara
       const formatPhone = (phone: string | number) => {
-        const cleanPhone = phone.toString().replace(/\D/g, '');
+        const phoneStr = phone.toString()
+        
+        // Se já tem prefixo internacional, manter como está
+        if (phoneStr.startsWith('+')) {
+          return phoneStr
+        }
+        
+        const cleanPhone = phoneStr.replace(/\D/g, '');
         if (cleanPhone.length < 10) return cleanPhone;
 
         const ddd = cleanPhone.slice(0, 2);
@@ -132,7 +140,7 @@ export default function PerfilPage() {
         email: user.email,
         foto: user.avatar || "/placeholder.svg?height=200&width=200",
         telefone: user.info?.phone
-          ? formatPhone(user.info.phone)
+          ? `${user.info.phone_prefix ?? ''}${user.info.phone}`
           : prev.telefone,
         dataNascimento: user.info?.birthday || prev.dataNascimento,
         nomeEmpresa: user.info?.company || prev.nomeEmpresa,
@@ -157,6 +165,27 @@ export default function PerfilPage() {
     }
   }
 
+  const handleTestUpload = async () => {
+    if (!selectedPhotoFile) {
+      alert('Selecione uma foto primeiro!')
+      return
+    }
+
+    try {
+      console.log('=== INICIANDO TESTE SIMPLES ===')
+      const response = await authService.testSimpleUpload(selectedPhotoFile)
+      
+      if (response.error) {
+        alert('Erro no teste: ' + response.error)
+      } else {
+        alert('Teste realizado com sucesso! Verifique os logs.')
+      }
+    } catch (error) {
+      console.error('Erro no teste:', error)
+      alert('Erro no teste: ' + error)
+    }
+  }
+
   const handleInputChange = (field: string, value: string) => {
     setProfileData((prev) => ({
       ...prev,
@@ -168,6 +197,15 @@ export default function PerfilPage() {
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
+    
+    // Logs para debug
+    console.log('=== ARQUIVO SELECIONADO ===')
+    console.log('Arquivo:', file)
+    console.log('Nome do arquivo:', file?.name)
+    console.log('Tamanho do arquivo:', file?.size)
+    console.log('Tipo do arquivo:', file?.type)
+    console.log('=== FIM LOGS ARQUIVO ===')
+    
     if (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
@@ -177,6 +215,7 @@ export default function PerfilPage() {
         }))
         setSelectedPhotoFile(file)
         setIsDirty(true)
+        console.log('Arquivo processado e salvo no estado')
       }
       reader.readAsDataURL(file)
     }
@@ -220,7 +259,18 @@ export default function PerfilPage() {
       // Preparar dados para envio usando a função utilitária
       const updateData = prepareProfileData()
 
-      console.log('Dados sendo enviados:', updateData) // Debug
+      // Logs detalhados para debug
+      console.log('=== DADOS SENDO ENVIADOS ===')
+      console.log('updateData completo:', updateData)
+      console.log('selectedPhotoFile:', selectedPhotoFile)
+      if (selectedPhotoFile) {
+        console.log('Detalhes do arquivo selecionado:')
+        console.log('- Nome:', selectedPhotoFile.name)
+        console.log('- Tamanho:', selectedPhotoFile.size)
+        console.log('- Tipo:', selectedPhotoFile.type)
+        console.log('- Última modificação:', selectedPhotoFile.lastModified)
+      }
+      console.log('=== FIM LOGS ENVIO ===')
 
       const response = await updateProfile(updateData)
       
@@ -319,6 +369,24 @@ export default function PerfilPage() {
   const formatPhoneInput = (value: string): string => {
     const numbers = value.replace(/\D/g, '')
     
+    // Se o usuário digitou um + no início, permitir prefixo internacional
+    if (value.startsWith('+')) {
+      // Manter o + e formatar o resto
+      const withoutPlus = value.slice(1)
+      const numbersWithoutPlus = withoutPlus.replace(/\D/g, '')
+      
+      if (numbersWithoutPlus.length <= 2) {
+        return `+${numbersWithoutPlus}`
+      } else if (numbersWithoutPlus.length <= 6) {
+        return `+${numbersWithoutPlus.slice(0, 2)} (${numbersWithoutPlus.slice(2)}`
+      } else if (numbersWithoutPlus.length <= 10) {
+        return `+${numbersWithoutPlus.slice(0, 2)} (${numbersWithoutPlus.slice(2, 6)}) ${numbersWithoutPlus.slice(6)}`
+      } else {
+        return `+${numbersWithoutPlus.slice(0, 2)} (${numbersWithoutPlus.slice(2, 4)}) ${numbersWithoutPlus.slice(4, 5)} ${numbersWithoutPlus.slice(5, 9)}-${numbersWithoutPlus.slice(9, 13)}`
+      }
+    }
+    
+    // Formatação padrão brasileira
     if (numbers.length <= 2) {
       return `(${numbers}`
     } else if (numbers.length <= 6) {
@@ -334,6 +402,18 @@ export default function PerfilPage() {
   // Função para extrair DDD e telefone da máscara
   const extractPhoneData = (phoneWithMask: string): { ddd: string; phone: string } => {
     const numbers = phoneWithMask.replace(/\D/g, '')
+    
+    // Se tem prefixo internacional (mais de 10 dígitos)
+    if (numbers.length > 10) {
+      // Assumir que os primeiros dígitos são o código do país
+      const countryCode = numbers.slice(0, numbers.length - 10)
+      const localNumber = numbers.slice(countryCode.length)
+      const ddd = localNumber.slice(0, 2)
+      const phone = localNumber.slice(2)
+      return { ddd, phone }
+    }
+    
+    // Formato brasileiro padrão
     const ddd = numbers.slice(0, 2)
     const phone = numbers.slice(2)
     
@@ -357,18 +437,35 @@ export default function PerfilPage() {
       },
     }
 
-    // Adicionar foto se foi selecionada
-    if (selectedPhotoFile) {
-      updateData.foto = selectedPhotoFile
-    }
-
     // Processar telefone se for uma string válida
     if (typeof profileData.telefone === 'string' && profileData.telefone.trim()) {
-      const { ddd, phone } = extractPhoneData(profileData.telefone)
-      if (ddd && phone) {
-        updateData.phone_prefix = `+55`
-        updateData.phone = ddd + phone
+      const tel = profileData.telefone.trim()
+      if (tel.startsWith('+')) {
+        // Internacional: enviar tudo em phone, sem phone_prefix
+        updateData.phone = tel.replace(/\D/g, '')
+        updateData.phone_prefix = ''
+      } else {
+        // Nacional: extrair DDD e número
+        const { ddd, phone } = extractPhoneData(profileData.telefone)
+        if (ddd && phone) {
+          updateData.phone_prefix = `+55`
+          updateData.phone = ddd + phone
+        }
       }
+    }
+
+    // Adicionar foto se foi selecionada
+    if (selectedPhotoFile) {
+      console.log('=== ADICIONANDO FOTO AOS DADOS ===')
+      console.log('selectedPhotoFile encontrado:', selectedPhotoFile)
+      console.log('Nome do arquivo:', selectedPhotoFile.name)
+      console.log('Tamanho do arquivo:', selectedPhotoFile.size)
+      console.log('Tipo do arquivo:', selectedPhotoFile.type)
+      updateData.foto = selectedPhotoFile
+      console.log('Foto adicionada ao updateData')
+      console.log('=== FIM LOGS FOTO ===')
+    } else {
+      console.log('Nenhum arquivo selecionado para upload')
     }
 
     // Processar data de nascimento se for uma string válida
@@ -402,6 +499,11 @@ export default function PerfilPage() {
         delete updateData.social_links
       }
     }
+
+    console.log('=== DADOS FINAIS PREPARADOS ===')
+    console.log('updateData final:', updateData)
+    console.log('Tem foto no final?', !!updateData.foto)
+    console.log('=== FIM LOGS PREPARAÇÃO ===')
 
     return updateData
   }
@@ -457,6 +559,16 @@ export default function PerfilPage() {
                 </>
               )}
             </Button>
+
+            {selectedPhotoFile && (
+              <Button
+                onClick={handleTestUpload}
+                variant="outline"
+                className="border-green-500/30 text-green-400 hover:bg-green-500/10 hover:text-green-300"
+              >
+                🧪 Teste Upload
+              </Button>
+            )}
 
             <Button
               onClick={handleLogout}
@@ -676,8 +788,8 @@ export default function PerfilPage() {
                                 const formatted = formatPhoneInput(e.target.value)
                                 handleInputChange("telefone", formatted)
                               }}
-                              placeholder="(21) 9 9999-9999"
-                              maxLength={16}
+                              placeholder="+XX (XX) XXXXX-XXXX"
+                              maxLength={20}
                               className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 pl-10"
                             />
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
