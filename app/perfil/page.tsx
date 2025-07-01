@@ -317,16 +317,25 @@ export default function PerfilPage() {
 
   const handleDeactivateAccount = async () => {
     setIsDeactivating(true)
-
-    // Simular processo de inativação
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    setIsDeactivating(false)
-    setIsDeactivateDialogOpen(false)
-
-    // Mata a sessão e redireciona para fora do app
-    await logout()
-    window.location.href = "https://corplink.co"
+    setDeleteError("")
+    try {
+      const response = await authService.deleteAccount()
+      if (response.error) {
+        setDeleteError(response.error)
+      } else {
+        toast.success(response.message || "Conta inativada com sucesso.", {
+          position: 'top-right',
+        })
+        setIsDeactivateDialogOpen(false)
+        setTimeout(() => {
+          router.push("/login")
+        }, 1500)
+      }
+    } catch (err: any) {
+      setDeleteError(err.message || "Erro inesperado ao inativar conta.")
+    } finally {
+      setIsDeactivating(false)
+    }
   }
 
   // Formatar data para exibição
@@ -1136,12 +1145,11 @@ export default function PerfilPage() {
                                       </div>
                                     </div>
 
-                                    <div className="mt-6 p-4 bg-red-900/20 border border-red-800/30 rounded-lg">
-                                      <p className="text-sm text-red-300">
-                                        <strong>Atenção:</strong> Esta ação é reversível, mas recomendamos que considere
-                                        cuidadosamente antes de prosseguir.
-                                      </p>
-                                    </div>
+                                    {deleteError && (
+                                      <div className="mb-4 p-2 bg-red-900/20 border border-red-800/30 rounded text-red-300 text-sm text-center">
+                                        {deleteError}
+                                      </div>
+                                    )}
                                   </div>
 
                                   {/* Footer */}

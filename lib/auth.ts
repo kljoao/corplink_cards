@@ -404,6 +404,46 @@ class AuthService {
       return null
     }
   }
+
+  // Deleta (inativa) a conta do usuário autenticado
+  async deleteAccount(): Promise<AuthResponse> {
+    try {
+      const token = this.getToken()
+      if (!token) {
+        return {
+          error: 'Usuário não autenticado',
+        }
+      }
+
+      const response = await fetch(`${API_BASE_URL}/v1/me`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        },
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        return {
+          error: data.message || 'Erro ao remover conta',
+        }
+      }
+
+      // Logout após remoção
+      await this.logout()
+
+      return {
+        message: data.message || 'Conta removida com sucesso',
+      }
+    } catch (error) {
+      console.error('Erro ao remover conta:', error)
+      return {
+        error: 'Erro de conexão. Tente novamente.',
+      }
+    }
+  }
 }
 
 export const authService = new AuthService() 
