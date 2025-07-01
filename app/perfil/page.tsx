@@ -38,6 +38,17 @@ import { useRouter } from "next/navigation"
 import { UpdateProfileData } from "@/lib/auth"
 import DebugPanel from "@/components/DebugPanel"
 import { authService } from "@/lib/auth"
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog"
 
 const segmentosEmpresa = [
   "Agricultura",
@@ -95,6 +106,10 @@ export default function PerfilPage() {
   const [dragActive, setDragActive] = useState(false)
   const router = useRouter()
   const { user, isLoading: authLoading, logout, updateProfile } = useAuth()
+
+  // Estado para loading e erro do delete
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [deleteError, setDeleteError] = useState("")
 
   // Verificar autenticação e carregar dados do usuário
   useEffect(() => {
@@ -553,6 +568,33 @@ export default function PerfilPage() {
     return `${digits.slice(0, 3)}.${"x".repeat(digits.length - 3)}`;
   }
 
+  // Função para deletar a conta
+  const handleDeleteAccount = async () => {
+    if (!user?.id) return;
+    setDeleteLoading(true)
+    setDeleteError("")
+    try {
+      const res = await fetch(`/api/v1/users/${user.id}`, {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+        },
+        credentials: "include", // para enviar cookies do sanctum
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.message || "Erro ao apagar conta.")
+      }
+      // Logout e redireciona
+      await logout()
+      router.push("/login")
+    } catch (err: any) {
+      setDeleteError(err.message || "Erro inesperado ao apagar conta.")
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#0a0f1c] to-[#0d1326] text-white flex items-center justify-center">
@@ -924,6 +966,40 @@ export default function PerfilPage() {
                         </div>
                       </div>
                     </div>
+                  </div>
+                  {/* Botão Inativar Conta */}
+                  <div className="p-3 flex justify-end">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          className="bg-red-700 hover:bg-red-800 text-white"
+                        >
+                          Inativar Conta
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Inativar Conta</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Tem certeza que deseja inativar sua conta? Esta ação não poderá ser desfeita.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction
+                            className="bg-red-700 hover:bg-red-800 text-white"
+                            onClick={handleDeleteAccount}
+                            disabled={deleteLoading}
+                          >
+                            {deleteLoading ? "Inativando..." : "Inativar Conta"}
+                          </AlertDialogAction>
+                          {deleteError && (
+                            <div className="text-red-500 text-xs mt-2 w-full text-right">{deleteError}</div>
+                          )}
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </TabsContent>
 
