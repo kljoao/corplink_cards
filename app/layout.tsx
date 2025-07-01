@@ -5,6 +5,7 @@ import { Inter } from "next/font/google"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import CallButtonWrapper from "@/components/CallButtonWrapper"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-[#000015]`}>
         {/* <Header /> */}
         {children}
+        <Toaster />
         <CallButtonWrapper />
         <hr className="border-white/10 mt-12"/>
         <Footer />

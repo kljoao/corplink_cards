@@ -4,6 +4,7 @@ import Image from "next/image"
 import InstagramIcon from "../public/icons/Instagram_icon.png"
 import Linkedin from "@/public/icons/linkedin.png"
 import Whatsapp from "@/public/zap.png"
+import Email from "@/public/mail.png"
 import { toast } from 'sonner'
 import { Mail } from 'lucide-react'
 
@@ -56,7 +57,7 @@ export default function UserCard({ user }: { user: User }) {
   }
 
   return (
-    <div className= "bg-gradient-to-b from-white/10 via-white/25 to-white/10 backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 max-w-sm w-full mx-auto overflow-hidden border-2 rounded-[24px]">
+    <div className= "bg-gradient-to-b from-white/5 via-white/15 to-white/10 backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 max-w-sm w-full mx-auto overflow-hidden border-2 rounded-[24px]">
       <div className="relative w-full h-[334px] rounded-t-2xl overflow-hidden">
         {user.avatar && user.avatar.trim() !== "" ? (
           <Image
@@ -151,9 +152,9 @@ export default function UserCard({ user }: { user: User }) {
             <button
               onClick={handleEmail}
               aria-label={`Enviar e-mail para ${user.name}`}
-              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors bg-gray-600 rounded p-1"
+              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
             >
-              <Mail size={25}/>
+              <Image src={Email} alt="Email Icon" width={39} height={39}/>
             </button>
           ) : (
             <span

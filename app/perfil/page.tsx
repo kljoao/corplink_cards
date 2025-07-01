@@ -30,6 +30,10 @@ import {
   AlertCircle,
   Info,
   LogOut,
+  Share,
+  UserX,
+  AlertTriangle,
+  X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Header from "@/components/Header"
@@ -49,6 +53,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog"
+import { toast, Toaster } from "sonner"
 
 const segmentosEmpresa = [
   "Agricultura",
@@ -101,6 +106,8 @@ export default function PerfilPage() {
   const [isDirty, setIsDirty] = useState(false)
   const [activeTab, setActiveTab] = useState("pessoal")
   const [showSuccessIndicator, setShowSuccessIndicator] = useState(false)
+  const [isDeactivateDialogOpen, setIsDeactivateDialogOpen] = useState(false)
+  const [isDeactivating, setIsDeactivating] = useState(false)
   const [error, setError] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [dragActive, setDragActive] = useState(false)
@@ -213,15 +220,7 @@ export default function PerfilPage() {
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    
-    // Logs para debug
-    console.log('=== ARQUIVO SELECIONADO ===')
-    console.log('Arquivo:', file)
-    console.log('Nome do arquivo:', file?.name)
-    console.log('Tamanho do arquivo:', file?.size)
-    console.log('Tipo do arquivo:', file?.type)
-    console.log('=== FIM LOGS ARQUIVO ===')
-    
+
     if (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
@@ -314,6 +313,20 @@ export default function PerfilPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleDeactivateAccount = async () => {
+    setIsDeactivating(true)
+
+    // Simular processo de inativação
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+
+    setIsDeactivating(false)
+    setIsDeactivateDialogOpen(false)
+
+    // Mata a sessão e redireciona para fora do app
+    await logout()
+    window.location.href = "https://corplink.co"
   }
 
   // Formatar data para exibição
@@ -574,26 +587,43 @@ export default function PerfilPage() {
     setDeleteLoading(true)
     setDeleteError("")
     try {
-      const res = await fetch(`/api/v1/users/${user.id}`, {
-        method: "DELETE",
+      const res = await fetch(`https://admin.corplink.co/api/v1/users/${user.id}`, {
+        method: "POST",
         headers: {
           "Accept": "application/json",
         },
-        credentials: "include", // para enviar cookies do sanctum
+        credentials: "include",
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error(data.message || "Erro ao apagar conta.")
       }
-      // Logout e redireciona
-      await logout()
-      router.push("/login")
+      toast.success("Conta inativada com sucesso.", {
+        position: 'top-right',
+      });
+      setTimeout(async () => {
+        await logout()
+        router.push("/login")
+      }, 1500)
     } catch (err: any) {
       setDeleteError(err.message || "Erro inesperado ao apagar conta.")
     } finally {
       setDeleteLoading(false)
     }
   }
+
+  // Função para compartilhar perfil
+  const handleShareProfile = () => {
+    if (!user) return;
+    // Monta o link: corplink.me/firstname.lastname
+    const slug = [user.firstname, user.lastname].filter(Boolean).join('.').toLowerCase();
+    const url = `https://corplink.me/${slug}`;
+    navigator.clipboard.writeText(url).then(() => {
+      toast.success('O link do seu perfil foi copiado para a área de transferência!', {
+        position: 'top-right',
+      });
+    });
+  };
 
   if (authLoading) {
     return (
@@ -604,655 +634,781 @@ export default function PerfilPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b bg-[#000015] text-white">
-      {/* Header */}
-      <Header />
-
-      <main className="container mx-auto px-4 pt-12 max-w-5xl">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12 pt-24">
-          <div>
-            <h1 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400">
-              Meu Perfil
-            </h1>
-            <p className="text-gray-400">Gerencie suas informações pessoais e empresariais</p>
-          </div>
-
-          <div className="mt-4 md:mt-0 flex gap-3">
-            <Button
-              onClick={handleSave}
-              disabled={isLoading || !isDirty}
-              className={cn(
-                "relative overflow-hidden transition-all duration-300",
-                isDirty
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
-                  : "bg-gray-800 text-gray-400",
-              )}
-            >
-              {isLoading ? (
-                <>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 animate-pulse"></div>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                  Salvando...
-                </>
-              ) : showSuccessIndicator ? (
-                <>
-                  <Check className="w-4 h-4 mr-2" />
-                  Salvo!
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Salvar Alterações
-                </>
-              )}
-            </Button>
-
-            {selectedPhotoFile && (
-              <Button
-                onClick={handleTestUpload}
-                variant="outline"
-                className="border-green-500/30 text-green-400 hover:bg-green-500/10 hover:text-green-300"
-              >
-                🧪 Teste Upload
-              </Button>
-            )}
-
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sair
-            </Button>
-          </div>
+    <div className="min-h-screen bg-gradient-to-b bg-[#000015] text-white overflow-hidden relative">
+      {/* Efeito de background animado */}
+      <div className="absolute inset-0 opacity-30 z-0 pointer-events-none">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+              linear-gradient(45deg, transparent 30%, rgba(59, 130, 246, 0.05) 50%, transparent 70%)
+            `,
+          }}
+        />
+        <div className="absolute inset-0 opacity-20">
+          <svg width="100%" height="100%" className="animate-pulse">
+            <defs>
+              <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="1" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
         </div>
+      </div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+      </div>
 
-        {error && (
-          <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
-            <div className="flex items-center space-x-2 text-red-400">
-              <AlertCircle className="h-4 w-4" />
-              <span>{error}</span>
+      {/* Conteúdo principal acima do background animado */}
+      <div className="relative z-10">
+        <Header />
+        <main className="container mx-auto px-4 pt-12 max-w-5xl">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12 pt-24">
+            <div>
+              <h1 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400">
+                Meu Perfil
+              </h1>
+              <p className="text-gray-400">Gerencie suas informações pessoais e empresariais</p>
+            </div>
+
+            <div className="mt-4 md:mt-0 flex gap-3">
+              <Button
+                onClick={handleSave}
+                disabled={isLoading || !isDirty}
+                className={cn(
+                  "relative overflow-hidden transition-all duration-300",
+                  isDirty
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white"
+                    : "bg-gray-800 text-gray-400",
+                )}
+              >
+                {isLoading ? (
+                  <>
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 animate-pulse"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                    Salvando...
+                  </>
+                ) : showSuccessIndicator ? (
+                  <>
+                    <Check className="w-4 h-4 mr-2" />
+                    Salvo!
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Salvar Alterações
+                  </>
+                )}
+              </Button>
+
+              {selectedPhotoFile && (
+                <Button
+                  onClick={handleTestUpload}
+                  variant="outline"
+                  className="border-green-500/30 text-green-400 hover:bg-green-500/10 hover:text-green-300"
+                >
+                  🧪 Teste Upload
+                </Button>
+              )}
+
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Sair
+              </Button>
             </div>
           </div>
-        )}
 
-        <div className="grid gap-8 md:grid-cols-12">
-          {/* Coluna da Esquerda - Foto e Navegação */}
-          <div className="md:col-span-4 space-y-6">
-            {/* Foto do Perfil */}
-            <div
-              className={cn(
-                "bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-xl p-6 border border-gray-800 transition-all duration-300",
-                dragActive ? "border-blue-500 ring-2 ring-blue-500/20" : "",
-              )}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
-              <div className="flex flex-col items-center space-y-6">
-                <div className="relative group">
-                  <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 opacity-30 blur-sm group-hover:opacity-70 transition duration-300"></div>
-                  <Avatar className="w-40 h-40 border-4 border-[#131b2c] relative">
-                    <AvatarImage
-                      src={profileData.foto || "/placeholder.svg"}
-                      alt="Foto do perfil"
-                      className="object-cover"
-                    />
-                    <AvatarFallback className="bg-gradient-to-br from-gray-700 to-gray-900 text-white text-4xl">
-                      <User className="w-16 h-16" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-1 right-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-full p-2.5 cursor-pointer transition-all duration-300 shadow-lg"
-                  >
-                    <Camera className="w-5 h-5" />
-                  </button>
-                  <input
-                    ref={fileInputRef}
-                    id="photo-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoUpload}
-                    className="hidden"
-                  />
-                </div>
-
-                <div className="text-center space-y-1">
-                  <h3 className="text-xl font-medium">{profileData.nomeCompleto}</h3>
-                  <p className="text-gray-400 text-sm">{profileData.nomeEmpresa}</p>
-                </div>
-
-                <div className="w-full text-center text-sm text-gray-400">
-                  <p className="flex items-center justify-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5" />
-                    {profileData.email}
-                  </p>
-                </div>
+          {error && (
+            <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
+              <div className="flex items-center space-x-2 text-red-400">
+                <AlertCircle className="h-4 w-4" />
+                <span>{error}</span>
               </div>
+            </div>
+          )}
 
-              <div className="mt-6 pt-6 border-t border-gray-800/50">
-                <p className="text-xs text-center text-gray-500">
-                  Arraste uma imagem ou clique no ícone da câmera para alterar sua foto
-                </p>
-                {selectedPhotoFile && (
-                  <div className="mt-2 p-2 bg-blue-900/20 border border-blue-500/30 rounded-md">
-                    <p className="text-xs text-blue-400 text-center">
-                      📸 Nova foto selecionada: {selectedPhotoFile.name}
+          <div className="grid gap-8 md:grid-cols-12">
+            {/* Coluna da Esquerda - Foto e Navegação */}
+            <div className="md:col-span-4 space-y-6">
+              {/* Foto do Perfil */}
+              <div
+                className={cn(
+                  "bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-xl p-6 border border-gray-800 transition-all duration-300",
+                  dragActive ? "border-blue-500 ring-2 ring-blue-500/20" : "",
+                )}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+              >
+                <div className="flex flex-col items-center space-y-6">
+                  <div className="relative group">
+                    <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 opacity-30 blur-sm group-hover:opacity-70 transition duration-300"></div>
+                    <Avatar className="w-40 h-40 border-4 border-[#131b2c] relative">
+                      <AvatarImage
+                        src={profileData.foto || "/placeholder.svg"}
+                        alt="Foto do perfil"
+                        className="object-cover"
+                      />
+                      <AvatarFallback className="bg-gradient-to-br from-gray-700 to-gray-900 text-white text-4xl">
+                        <User className="w-16 h-16" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="absolute bottom-1 right-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-full p-2.5 cursor-pointer transition-all duration-300 shadow-lg"
+                    >
+                      <Camera className="w-5 h-5" />
+                    </button>
+                    <input
+                      ref={fileInputRef}
+                      id="photo-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      className="hidden"
+                    />
+                  </div>
+
+                  <div className="text-center space-y-1">
+                    <h3 className="text-xl font-medium">{profileData.nomeCompleto}</h3>
+                    <p className="text-gray-400 text-sm">{profileData.nomeEmpresa}</p>
+                  </div>
+
+                  <div className="w-full text-center text-sm text-gray-400">
+                    <p className="flex items-center justify-center gap-1.5">
+                      <Mail className="w-3.5 h-3.5" />
+                      {profileData.email}
                     </p>
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* Navegação */}
-            <div className="bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-xl overflow-hidden">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="w-full grid grid-cols-3 bg-[#0d1326]/50 p-0 h-auto">
-                  <TabsTrigger
-                    value="pessoal"
-                    className="py-3 data-[state=active]:bg-gradient-to-b data-[state=active]:from-blue-600/20 data-[state=active]:to-transparent data-[state=active]:text-blue-400 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500"
-                  >
-                    Pessoal
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="empresa"
-                    className="py-3 data-[state=active]:bg-gradient-to-b data-[state=active]:from-blue-600/20 data-[state=active]:to-transparent data-[state=active]:text-blue-400 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500"
-                  >
-                    Empresa
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="redes"
-                    className="py-3 data-[state=active]:bg-gradient-to-b data-[state=active]:from-blue-600/20 data-[state=active]:to-transparent data-[state=active]:text-blue-400 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500"
-                  >
-                    Redes
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-
-              <div className="p-4">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-400">Perfil completo</span>
-                  <span className="text-blue-400 font-medium">{profileCompletion}%</span>
                 </div>
-                <div className="w-full h-1.5 bg-gray-800 rounded-full mt-2 overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
-                    style={{ width: `${profileCompletion}%` }}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* Coluna da Direita - Formulário */}
-          <div className="md:col-span-8">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <div className="bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-xl border border-gray-800 overflow-hidden">
-                <TabsContent value="pessoal" className="m-0">
-                  <div className="p-6">
-                    <div className="flex items-center space-x-2 mb-6">
-                      <User className="w-5 h-5 text-blue-400" />
-                      <h2 className="text-xl font-medium">Informações Pessoais</h2>
+                <div className="mt-6 pt-6 border-t border-gray-800/50">
+                  <p className="text-xs text-center text-gray-500">
+                    Arraste uma imagem ou clique no ícone da câmera para alterar sua foto
+                  </p>
+                  {selectedPhotoFile && (
+                    <div className="mt-2 p-2 bg-blue-900/20 border border-blue-500/30 rounded-md">
+                      <p className="text-xs text-blue-400 text-center">
+                        �� Nova foto selecionada: {selectedPhotoFile.name}
+                      </p>
                     </div>
+                  )}
+                </div>
+              </div>
 
-                    <div className="space-y-6">
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="nomeCompleto" className="text-gray-300 font-medium">
-                              Nome
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
+              {/* Navegação */}
+              <div className="bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-xl overflow-hidden">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="w-full grid grid-cols-3 bg-[#0d1326]/50 p-0 h-auto">
+                    <TabsTrigger
+                      value="pessoal"
+                      className="py-3 data-[state=active]:bg-gradient-to-b data-[state=active]:from-blue-600/20 data-[state=active]:to-transparent data-[state=active]:text-blue-400 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500"
+                    >
+                      Pessoal
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="empresa"
+                      className="py-3 data-[state=active]:bg-gradient-to-b data-[state=active]:from-blue-600/20 data-[state=active]:to-transparent data-[state=active]:text-blue-400 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500"
+                    >
+                      Empresa
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="redes"
+                      className="py-3 data-[state=active]:bg-gradient-to-b data-[state=active]:from-blue-600/20 data-[state=active]:to-transparent data-[state=active]:text-blue-400 rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500"
+                    >
+                      Redes
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+
+                <div className="p-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">Perfil completo</span>
+                    <span className="text-blue-400 font-medium">{profileCompletion}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-gray-800 rounded-full mt-2 overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+                      style={{ width: `${profileCompletion}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Coluna da Direita - Formulário */}
+            <div className="md:col-span-8">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <div className="bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-xl border border-gray-800 overflow-hidden">
+                  <TabsContent value="pessoal" className="m-0">
+                    <div className="p-6">
+                      <div className="flex items-center space-x-2 mb-6">
+                        <User className="w-5 h-5 text-blue-400" />
+                        <h2 className="text-xl font-medium">Informações Pessoais</h2>
+                      </div>
+
+                      <div className="space-y-6">
+                        <div className="grid gap-6 md:grid-cols-2">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="nomeCompleto" className="text-gray-300 font-medium">
+                                Nome
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
+                            </div>
+                            <div className="relative">
+                              <Input
+                                id="nomeCompleto"
+                                value={profileData.nomeCompleto}
+                                onChange={(e) => handleInputChange("nomeCompleto", e.target.value)}
+                                className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
+                              />
+                            </div>
                           </div>
-                          <div className="relative">
+
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="email" className="text-gray-300 font-medium flex items-center">
+                                E-mail
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Info className="w-3.5 h-3.5 ml-1.5 text-gray-500" />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="bg-gray-900 border-gray-800">
+                                      <p>O e-mail não pode ser alterado</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-gray-400 border-gray-700 bg-gray-800/30"
+                              >
+                                <Lock className="w-3 h-3 mr-1" />
+                                Bloqueado
+                              </Badge>
+                            </div>
+                            <div className="relative">
+                              <Input
+                                id="email"
+                                value={profileData.email}
+                                disabled
+                                className="bg-[#0d1326]/50 border-gray-700 text-gray-400 cursor-not-allowed"
+                              />
+                              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <Lock className="h-3.5 w-3.5 text-gray-500" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="telefone" className="text-gray-300 font-medium">
+                                Telefone
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
+                            </div>
+                            <div className="relative">
+                              <Input
+                                id="telefone"
+                                value={profileData.telefone}
+                                onChange={(e) => {
+                                  const formatted = formatPhoneInput(e.target.value)
+                                  handleInputChange("telefone", formatted)
+                                }}
+                                placeholder="+XX (XX) XXXXX-XXXX"
+                                maxLength={20}
+                                className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 pl-10"
+                              />
+                              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <Phone className="h-4 w-4 text-gray-500" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="dataNascimento" className="text-gray-300 font-medium flex items-center">
+                                Data de Nascimento
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Info className="w-3.5 h-3.5 ml-1.5 text-gray-500" />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="bg-gray-900 border-gray-800">
+                                      <p>Idade mínima: 16 anos, máxima: 95 anos</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
+                            </div>
+                            <div className="relative">
+                              <Input
+                                id="dataNascimento"
+                                type="date"
+                                value={profileData.dataNascimento}
+                                onChange={(e) => handleInputChange("dataNascimento", e.target.value)}
+                                max={new Date().toISOString().split('T')[0]}
+                                min={new Date(new Date().getFullYear() - 95, 0, 1).toISOString().split('T')[0]}
+                                className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 pl-10"
+                              />
+                              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <Calendar className="h-4 w-4 text-gray-500" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2 md:col-span-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="cpfCnpj" className="text-gray-300 font-medium flex items-center">
+                                CPF/CNPJ
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Info className="w-3.5 h-3.5 ml-1.5 text-gray-500" />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="bg-gray-900 border-gray-800">
+                                      <p>O CPF/CNPJ não pode ser alterado</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-gray-400 border-gray-700 bg-gray-800/30"
+                              >
+                                <Lock className="w-3 h-3 mr-1" />
+                                Bloqueado
+                              </Badge>
+                            </div>
+                            <div className="relative">
+                              <Input
+                                id="cpfCnpj"
+                                value={formatMaskedCpfCnpj(profileData.cpfCnpj)}
+                                disabled
+                                className="bg-[#0d1326]/50 border-gray-700 text-gray-400 cursor-not-allowed pl-10"
+                              />
+                              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <CreditCard className="h-4 w-4 text-gray-500" />
+                              </div>
+                              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <Lock className="h-3.5 w-3.5 text-gray-500" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Botão Inativar Conta */}
+                    <div className="p-4">
+                    <div className="grid grid-cols-2 gap-4">
+                          <Button
+                            variant="outline"
+                            className="bg-blue-600/10 border-blue-600/30 text-blue-400 hover:bg-blue-600/20 hover:border-blue-600/50 transition-all duration-300"
+                          >
+                            <Share className="w-4 h-4 mr-2" />
+                            Compartilhar Perfil
+                          </Button>
+
+                          <Button
+                            variant="outline"
+                            onClick={() => setIsDeactivateDialogOpen(true)}
+                            className="bg-red-600/10 border-red-600/30 text-red-400 hover:bg-red-600/20 hover:border-red-600/50 transition-all duration-300"
+                          >
+                            <UserX className="w-4 h-4 mr-2" />
+                            Inativar Conta
+                          </Button>
+
+                          {/* Modal de Inativação */}
+                          {isDeactivateDialogOpen && (
+                            <>
+                              {/* Backdrop */}
+                              <div
+                                className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-in fade-in-0 duration-300"
+                                onClick={() => setIsDeactivateDialogOpen(false)}
+                              />
+
+                              {/* Modal Content */}
+                              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in-0 zoom-in-95 duration-300">
+                                <div className="relative bg-gradient-to-br from-[#1a2332] to-[#131b2c] border border-gray-800 rounded-xl shadow-2xl max-w-lg w-full">
+                                  {/* Close Button */}
+                                  <button
+                                    onClick={() => setIsDeactivateDialogOpen(false)}
+                                    className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                  >
+                                    <X className="h-4 w-4 text-gray-400 hover:text-white" />
+                                  </button>
+
+                                  {/* Header */}
+                                  <div className="flex flex-col space-y-1.5 text-center sm:text-left p-6 pb-4">
+                                    <div className="flex items-center space-x-3 mb-2">
+                                      <div className="relative">
+                                        <div className="absolute inset-0 bg-red-500/20 rounded-full blur-lg animate-pulse" />
+                                        <div className="relative bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-full p-2">
+                                          <AlertTriangle className="h-6 w-6 text-red-400" />
+                                        </div>
+                                      </div>
+                                      <h2 className="text-lg font-semibold leading-none tracking-tight text-white">
+                                        Inativar Conta
+                                      </h2>
+                                    </div>
+                                    <p className="text-sm text-gray-400 text-left">
+                                      Tem certeza de que deseja inativar sua conta? Esta ação terá as seguintes
+                                      consequências:
+                                    </p>
+                                  </div>
+
+                                  {/* Content */}
+                                  <div className="px-6 py-4">
+                                    <div className="space-y-3 text-sm text-gray-300">
+                                      <div className="flex items-start space-x-2">
+                                        <div className="w-1.5 h-1.5 bg-red-400 rounded-full mt-2 flex-shrink-0" />
+                                        <p>Seu perfil ficará invisível para outros membros</p>
+                                      </div>
+                                      <div className="flex items-start space-x-2">
+                                        <div className="w-1.5 h-1.5 bg-red-400 rounded-full mt-2 flex-shrink-0" />
+                                        <p>Você perderá acesso a eventos e benefícios exclusivos</p>
+                                      </div>
+                                      <div className="flex items-start space-x-2">
+                                        <div className="w-1.5 h-1.5 bg-red-400 rounded-full mt-2 flex-shrink-0" />
+                                        <p>Suas conexões e histórico de networking serão suspensos</p>
+                                      </div>
+                                      <div className="flex items-start space-x-2">
+                                        <div className="w-1.5 h-1.5 bg-amber-400 rounded-full mt-2 flex-shrink-0" />
+                                        <p className="text-amber-400">
+                                          <strong>Você pode reativar sua conta a qualquer momento</strong> solicitando ao suporte
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div className="mt-6 p-4 bg-red-900/20 border border-red-800/30 rounded-lg">
+                                      <p className="text-sm text-red-300">
+                                        <strong>Atenção:</strong> Esta ação é reversível, mas recomendamos que considere
+                                        cuidadosamente antes de prosseguir.
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {/* Footer */}
+                                  <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 p-6 pt-4">
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => setIsDeactivateDialogOpen(false)}
+                                      disabled={isDeactivating}
+                                      className="bg-gray-600/10 border-gray-600/30 text-gray-300 hover:bg-gray-600/20 hover:border-gray-600/50 mb-2 sm:mb-0"
+                                    >
+                                      Cancelar
+                                    </Button>
+                                    <Button
+                                      onClick={handleDeactivateAccount}
+                                      disabled={isDeactivating}
+                                      className="bg-red-600 hover:bg-red-700 text-white"
+                                    >
+                                      {isDeactivating ? (
+                                        <>
+                                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                                          Inativando...
+                                        </>
+                                      ) : (
+                                        <>
+                                          <UserX className="w-4 h-4 mr-2" />
+                                          Confirmar Inativação
+                                        </>
+                                      )}
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="empresa" className="m-0">
+                    <div className="p-6">
+                      <div className="flex items-center space-x-2 mb-6">
+                        <Building className="w-5 h-5 text-blue-400" />
+                        <h2 className="text-xl font-medium">Informações da Empresa</h2>
+                      </div>
+
+                      <div className="space-y-6">
+                        <div className="grid gap-6 md:grid-cols-2">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="nomeEmpresa" className="text-gray-300 font-medium">
+                                Nome da Empresa
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
+                            </div>
                             <Input
-                              id="nomeCompleto"
-                              value={profileData.nomeCompleto}
-                              onChange={(e) => handleInputChange("nomeCompleto", e.target.value)}
+                              id="nomeEmpresa"
+                              value={profileData.nomeEmpresa}
+                              onChange={(e) => handleInputChange("nomeEmpresa", e.target.value)}
                               className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
                             />
                           </div>
-                        </div>
 
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="email" className="text-gray-300 font-medium flex items-center">
-                              E-mail
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Info className="w-3.5 h-3.5 ml-1.5 text-gray-500" />
-                                  </TooltipTrigger>
-                                  <TooltipContent className="bg-gray-900 border-gray-800">
-                                    <p>O e-mail não pode ser alterado</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-gray-400 border-gray-700 bg-gray-800/30"
-                            >
-                              <Lock className="w-3 h-3 mr-1" />
-                              Bloqueado
-                            </Badge>
-                          </div>
-                          <div className="relative">
-                            <Input
-                              id="email"
-                              value={profileData.email}
-                              disabled
-                              className="bg-[#0d1326]/50 border-gray-700 text-gray-400 cursor-not-allowed"
-                            />
-                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                              <Lock className="h-3.5 w-3.5 text-gray-500" />
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="occupation" className="text-gray-300 font-medium">
+                                Cargo na Empresa
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
                             </div>
+                            <Input
+                              id="occupation"
+                              value={profileData.occupation}
+                              onChange={(e) => handleInputChange("occupation", e.target.value)}
+                              placeholder="Ex: Diretor Executivo, Gerente, Analista..."
+                              className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
+                            />
                           </div>
-                        </div>
 
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="telefone" className="text-gray-300 font-medium">
-                              Telefone
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <div className="relative">
-                            <Input
-                              id="telefone"
-                              value={profileData.telefone}
-                              onChange={(e) => {
-                                const formatted = formatPhoneInput(e.target.value)
-                                handleInputChange("telefone", formatted)
-                              }}
-                              placeholder="+XX (XX) XXXXX-XXXX"
-                              maxLength={20}
-                              className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 pl-10"
-                            />
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                              <Phone className="h-4 w-4 text-gray-500" />
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="segmentoEmpresa" className="text-gray-300 font-medium">
+                                Segmento da Empresa
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
                             </div>
+                            <Select
+                              value={profileData.segmentoEmpresa}
+                              onValueChange={(value) => handleInputChange("segmentoEmpresa", value)}
+                            >
+                              <SelectTrigger className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-[#131b2c] border-gray-700 text-white">
+                                {segmentosEmpresa.map((segmento) => (
+                                  <SelectItem
+                                    key={segmento}
+                                    value={segmento}
+                                    className="text-white focus:bg-blue-900/30 focus:text-blue-100"
+                                  >
+                                    {segmento}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </div>
-                        </div>
 
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="dataNascimento" className="text-gray-300 font-medium flex items-center">
-                              Data de Nascimento
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Info className="w-3.5 h-3.5 ml-1.5 text-gray-500" />
-                                  </TooltipTrigger>
-                                  <TooltipContent className="bg-gray-900 border-gray-800">
-                                    <p>Idade mínima: 16 anos, máxima: 95 anos</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <div className="relative">
-                            <Input
-                              id="dataNascimento"
-                              type="date"
-                              value={profileData.dataNascimento}
-                              onChange={(e) => handleInputChange("dataNascimento", e.target.value)}
-                              max={new Date().toISOString().split('T')[0]}
-                              min={new Date(new Date().getFullYear() - 95, 0, 1).toISOString().split('T')[0]}
-                              className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 pl-10"
-                            />
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                              <Calendar className="h-4 w-4 text-gray-500" />
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="faturamentoAnual" className="text-gray-300 font-medium">
+                                Faturamento Anual
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
                             </div>
+                            <Select
+                              value={profileData.faturamentoAnual}
+                              onValueChange={(value) => handleInputChange("faturamentoAnual", value)}
+                            >
+                              <SelectTrigger className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-[#131b2c] border-gray-700 text-white">
+                                {faturamentoOptions.map((opcao) => (
+                                  <SelectItem
+                                    key={opcao}
+                                    value={opcao}
+                                    className="text-white focus:bg-blue-900/30 focus:text-blue-100"
+                                  >
+                                    {opcao}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </div>
                         </div>
 
-                        <div className="space-y-2 md:col-span-2">
+                        <div className="pt-4 space-y-4">
+                          <Separator className="bg-gray-800/50" />
+
                           <div className="flex items-center justify-between">
-                            <Label htmlFor="cpfCnpj" className="text-gray-300 font-medium flex items-center">
-                              CPF/CNPJ
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Info className="w-3.5 h-3.5 ml-1.5 text-gray-500" />
-                                  </TooltipTrigger>
-                                  <TooltipContent className="bg-gray-900 border-gray-800">
-                                    <p>O CPF/CNPJ não pode ser alterado</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-gray-400 border-gray-700 bg-gray-800/30"
-                            >
-                              <Lock className="w-3 h-3 mr-1" />
-                              Bloqueado
-                            </Badge>
-                          </div>
-                          <div className="relative">
-                            <Input
-                              id="cpfCnpj"
-                              value={formatMaskedCpfCnpj(profileData.cpfCnpj)}
-                              disabled
-                              className="bg-[#0d1326]/50 border-gray-700 text-gray-400 cursor-not-allowed pl-10"
-                            />
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                              <CreditCard className="h-4 w-4 text-gray-500" />
-                            </div>
-                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                              <Lock className="h-3.5 w-3.5 text-gray-500" />
+                            <div className="flex items-center space-x-2">
+                              <AlertCircle className="w-4 h-4 text-amber-400" />
+                              <span className="text-sm text-amber-400">
+                                Informações adicionais podem ser solicitadas para verificação
+                              </span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  {/* Botão Inativar Conta */}
-                  <div className="p-3 flex justify-end">
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="destructive"
-                          className="bg-red-700 hover:bg-red-800 text-white"
-                        >
-                          Inativar Conta
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Inativar Conta</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Tem certeza que deseja inativar sua conta? Esta ação não poderá ser desfeita.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                          <AlertDialogAction
-                            className="bg-red-700 hover:bg-red-800 text-white"
-                            onClick={handleDeleteAccount}
-                            disabled={deleteLoading}
-                          >
-                            {deleteLoading ? "Inativando..." : "Inativar Conta"}
-                          </AlertDialogAction>
-                          {deleteError && (
-                            <div className="text-red-500 text-xs mt-2 w-full text-right">{deleteError}</div>
-                          )}
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
-                </TabsContent>
+                  </TabsContent>
 
-                <TabsContent value="empresa" className="m-0">
-                  <div className="p-6">
-                    <div className="flex items-center space-x-2 mb-6">
-                      <Building className="w-5 h-5 text-blue-400" />
-                      <h2 className="text-xl font-medium">Informações da Empresa</h2>
-                    </div>
-
-                    <div className="space-y-6">
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="nomeEmpresa" className="text-gray-300 font-medium">
-                              Nome da Empresa
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <Input
-                            id="nomeEmpresa"
-                            value={profileData.nomeEmpresa}
-                            onChange={(e) => handleInputChange("nomeEmpresa", e.target.value)}
-                            className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="occupation" className="text-gray-300 font-medium">
-                              Cargo na Empresa
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <Input
-                            id="occupation"
-                            value={profileData.occupation}
-                            onChange={(e) => handleInputChange("occupation", e.target.value)}
-                            placeholder="Ex: Diretor Executivo, Gerente, Analista..."
-                            className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="segmentoEmpresa" className="text-gray-300 font-medium">
-                              Segmento da Empresa
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <Select
-                            value={profileData.segmentoEmpresa}
-                            onValueChange={(value) => handleInputChange("segmentoEmpresa", value)}
-                          >
-                            <SelectTrigger className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent className="bg-[#131b2c] border-gray-700 text-white">
-                              {segmentosEmpresa.map((segmento) => (
-                                <SelectItem
-                                  key={segmento}
-                                  value={segmento}
-                                  className="text-white focus:bg-blue-900/30 focus:text-blue-100"
-                                >
-                                  {segmento}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="faturamentoAnual" className="text-gray-300 font-medium">
-                              Faturamento Anual
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <Select
-                            value={profileData.faturamentoAnual}
-                            onValueChange={(value) => handleInputChange("faturamentoAnual", value)}
-                          >
-                            <SelectTrigger className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent className="bg-[#131b2c] border-gray-700 text-white">
-                              {faturamentoOptions.map((opcao) => (
-                                <SelectItem
-                                  key={opcao}
-                                  value={opcao}
-                                  className="text-white focus:bg-blue-900/30 focus:text-blue-100"
-                                >
-                                  {opcao}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
+                  <TabsContent value="redes" className="m-0">
+                    <div className="p-6">
+                      <div className="flex items-center space-x-2 mb-6">
+                        <Instagram className="w-5 h-5 text-blue-400" />
+                        <h2 className="text-xl font-medium">Redes Sociais</h2>
                       </div>
 
-                      <div className="pt-4 space-y-4">
-                        <Separator className="bg-gray-800/50" />
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <AlertCircle className="w-4 h-4 text-amber-400" />
-                            <span className="text-sm text-amber-400">
-                              Informações adicionais podem ser solicitadas para verificação
-                            </span>
+                      <div className="space-y-6">
+                        <div className="grid gap-6 md:grid-cols-2">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="instagram" className="text-gray-300 font-medium flex items-center">
+                                <Instagram className="w-4 h-4 mr-2 text-pink-400" />
+                                Instagram
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
+                            </div>
+                            <div className="relative">
+                              <Input
+                                id="instagram"
+                                value={profileData.instagram}
+                                onChange={(e) => handleInputChange("instagram", e.target.value)}
+                                placeholder="@seuusuario"
+                                className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 pl-10"
+                              />
+                              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <span className="text-gray-500">@</span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
 
-                <TabsContent value="redes" className="m-0">
-                  <div className="p-6">
-                    <div className="flex items-center space-x-2 mb-6">
-                      <Instagram className="w-5 h-5 text-blue-400" />
-                      <h2 className="text-xl font-medium">Redes Sociais</h2>
-                    </div>
-
-                    <div className="space-y-6">
-                      <div className="grid gap-6 md:grid-cols-2">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="instagram" className="text-gray-300 font-medium flex items-center">
-                              <Instagram className="w-4 h-4 mr-2 text-pink-400" />
-                              Instagram
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <div className="relative">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="linkedin" className="text-gray-300 font-medium flex items-center">
+                                <Linkedin className="w-4 h-4 mr-2 text-blue-400" />
+                                LinkedIn
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
+                            </div>
                             <Input
-                              id="instagram"
-                              value={profileData.instagram}
-                              onChange={(e) => handleInputChange("instagram", e.target.value)}
-                              placeholder="@seuusuario"
-                              className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 pl-10"
+                              id="linkedin"
+                              value={profileData.linkedin}
+                              onChange={(e) => handleInputChange("linkedin", e.target.value)}
+                              placeholder="linkedin.com/in/seuusuario"
+                              className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
                             />
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                              <span className="text-gray-500">@</span>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="whatsapp" className="text-gray-300 font-medium flex items-center">
+                                <img src="/icons/WhatsApp.svg" alt="WhatsApp" className="w-4 h-4 mr-2" />
+                                WhatsApp
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
+                            </div>
+                            <div className="flex items-center space-x-3 p-3 bg-[#0d1326] border border-gray-700 rounded-md">
+                              <Switch
+                                id="whatsapp"
+                                checked={profileData.whatsapp}
+                                onCheckedChange={(checked) => handleInputChange("whatsapp", checked.toString())}
+                                className="data-[state=checked]:bg-green-500"
+                              />
+                              <Label htmlFor="whatsapp" className="text-sm text-gray-300">
+                                {profileData.whatsapp ? "Ativado" : "Desativado"}
+                              </Label>
+                              <span className="text-xs text-gray-500 ml-auto">
+                                {profileData.whatsapp 
+                                  ? "Seu WhatsApp será exibido no seu cartão" 
+                                  : "Seu WhatsApp não será exibido no seu cartão"}
+                              </span>
                             </div>
                           </div>
                         </div>
 
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="linkedin" className="text-gray-300 font-medium flex items-center">
-                              <Linkedin className="w-4 h-4 mr-2 text-blue-400" />
-                              LinkedIn
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <Input
-                            id="linkedin"
-                            value={profileData.linkedin}
-                            onChange={(e) => handleInputChange("linkedin", e.target.value)}
-                            placeholder="linkedin.com/in/seuusuario"
-                            className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20"
-                          />
-                        </div>
+                        <div className="pt-4 space-y-4">
+                          <Separator className="bg-gray-800/50" />
 
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="whatsapp" className="text-gray-300 font-medium flex items-center">
-                              <img src="/icons/WhatsApp.svg" alt="WhatsApp" className="w-4 h-4 mr-2" />
-                              WhatsApp
-                            </Label>
-                            <Badge
-                              variant="outline"
-                              className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
-                            >
-                              Editável
-                            </Badge>
-                          </div>
-                          <div className="flex items-center space-x-3 p-3 bg-[#0d1326] border border-gray-700 rounded-md">
-                            <Switch
-                              id="whatsapp"
-                              checked={profileData.whatsapp}
-                              onCheckedChange={(checked) => handleInputChange("whatsapp", checked.toString())}
-                              className="data-[state=checked]:bg-green-500"
-                            />
-                            <Label htmlFor="whatsapp" className="text-sm text-gray-300">
-                              {profileData.whatsapp ? "Ativado" : "Desativado"}
-                            </Label>
-                            <span className="text-xs text-gray-500 ml-auto">
-                              {profileData.whatsapp 
-                                ? "Seu WhatsApp será exibido no seu cartão" 
-                                : "Seu WhatsApp não será exibido no seu cartão"}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="pt-4 space-y-4">
-                        <Separator className="bg-gray-800/50" />
-
-                        <div className="bg-gradient-to-r from-blue-900/20 to-indigo-900/20 rounded-lg p-4 border border-blue-900/30">
-                          <div className="flex items-start space-x-3">
-                            <Info className="w-5 h-5 text-blue-400 mt-0.5" />
-                            <div>
-                              <h4 className="text-sm font-medium text-blue-400">Conecte suas redes sociais</h4>
-                              <p className="text-xs text-gray-400 mt-1">
-                                Conectar suas redes sociais ajuda a aumentar sua visibilidade na plataforma e facilita o
-                                networking com outros membros.
-                              </p>
+                          <div className="bg-gradient-to-r from-blue-900/20 to-indigo-900/20 rounded-lg p-4 border border-blue-900/30">
+                            <div className="flex items-start space-x-3">
+                              <Info className="w-5 h-5 text-blue-400 mt-0.5" />
+                              <div>
+                                <h4 className="text-sm font-medium text-blue-400">Conecte suas redes sociais</h4>
+                                <p className="text-xs text-gray-400 mt-1">
+                                  Conectar suas redes sociais ajuda a aumentar sua visibilidade na plataforma e facilita o
+                                  networking com outros membros.
+                                </p>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </TabsContent>
-              </div>
-            </Tabs>
+                  </TabsContent>
+                </div>
+              </Tabs>
+            </div>
           </div>
-        </div>
-      </main>
-      
-      {/* Debug Panel - apenas em desenvolvimento */}
-      <DebugPanel />
+        </main>
+        <Toaster position="top-right" />
+        {/* Debug Panel - apenas em desenvolvimento */}
+        <DebugPanel />
+      </div>
     </div>
   )
 }
