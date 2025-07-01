@@ -150,6 +150,7 @@ export default function PerfilPage() {
         instagram: user.info?.social_links?.instagram ? `@${user.info.social_links.instagram}` : prev.instagram,
         linkedin: user.info?.social_links?.linkedin || prev.linkedin,
         whatsapp: String(user.info?.social_links?.whatsapp) === '1' || prev.whatsapp,
+        cpfCnpj: user.info?.numid || prev.cpfCnpj,
       }))
     }
   }, [user, authLoading, router])
@@ -508,6 +509,50 @@ export default function PerfilPage() {
     return updateData
   }
 
+  const requiredFields = [
+    "nomeCompleto",
+    "email",
+    "telefone",
+    "dataNascimento",
+    "nomeEmpresa",
+    "segmentoEmpresa",
+    "faturamentoAnual",
+    "occupation",
+    "instagram",
+    "linkedin",
+  ];
+
+  const getProfileCompletion = () => {
+    let filled = 0;
+    requiredFields.forEach((field) => {
+      const value = profileData[field as keyof typeof profileData];
+      if (typeof value === "string") {
+        if (value.trim() !== "") filled++;
+      } else if (typeof value === "boolean") {
+        // Se quiser considerar booleanos, ajuste aqui
+        filled++;
+      }
+    });
+    return Math.round((filled / requiredFields.length) * 100);
+  };
+
+  const profileCompletion = getProfileCompletion();
+
+  function formatMaskedCpfCnpj(value: string) {
+    if (!value) return "";
+    const digits = value.replace(/\D/g, "");
+    if (digits.length === 11) {
+      // CPF: 123.456.789-00 → 123.xxx.xxx-xx
+      return `${digits.slice(0, 3)}.xxx.xxx-xx`;
+    }
+    if (digits.length === 14) {
+      // CNPJ: 12.345.678/0001-00 → 123.xxx.xxx/xxxx-xx
+      return `${digits.slice(0, 3)}.xxx.xxx/xxxx-xx`;
+    }
+    // fallback: mostra só os 3 primeiros e mascara o resto
+    return `${digits.slice(0, 3)}.${"x".repeat(digits.length - 3)}`;
+  }
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#0a0f1c] to-[#0d1326] text-white flex items-center justify-center">
@@ -688,10 +733,13 @@ export default function PerfilPage() {
               <div className="p-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-400">Perfil completo</span>
-                  <span className="text-blue-400 font-medium">85%</span>
+                  <span className="text-blue-400 font-medium">{profileCompletion}%</span>
                 </div>
                 <div className="w-full h-1.5 bg-gray-800 rounded-full mt-2 overflow-hidden">
-                  <div className="h-full w-[85%] bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"></div>
+                  <div
+                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+                    style={{ width: `${profileCompletion}%` }}
+                  ></div>
                 </div>
               </div>
             </div>
@@ -862,7 +910,7 @@ export default function PerfilPage() {
                           <div className="relative">
                             <Input
                               id="cpfCnpj"
-                              value={profileData.cpfCnpj}
+                              value={formatMaskedCpfCnpj(profileData.cpfCnpj)}
                               disabled
                               className="bg-[#0d1326]/50 border-gray-700 text-gray-400 cursor-not-allowed pl-10"
                             />
