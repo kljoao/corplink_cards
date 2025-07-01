@@ -38,7 +38,7 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, authLoading, router])
 
-  // Countdown para reenvio
+  // Countdown para reenvio do 2FA
   useEffect(() => {
     if (resendTimer > 0) {
       const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000)
