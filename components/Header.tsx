@@ -7,7 +7,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full flex justify-center z-50 pt-5">
       <div className="w-[1136px] flex items-center justify-between border border-white/10 rounded-full bg-[#000015BF] py-4 px-8 shadow-lg">
         <Link href="/" className="flex items-center gap-2">
-          <Image src={logo} alt="CorpLink Logo" width={180} />
+          <Image src={logo} alt="CorpLink Logo" width={220} />
         </Link>
 
         <Link href="https://corplink.co/u/login">
