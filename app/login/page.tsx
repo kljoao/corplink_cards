@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils"
 import Header from "@/components/Header"
 import { useAuth } from "@/hooks/useAuth"
 import { useRouter } from "next/navigation"
+import { Toaster } from "sonner"
 
 export default function LoginPage() {
   const [step, setStep] = useState<"email" | "twofa" | "success">("email")
@@ -369,6 +370,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <Toaster/ >
     </div>
   )
 } 

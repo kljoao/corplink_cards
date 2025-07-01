@@ -614,15 +614,34 @@ export default function PerfilPage() {
 
   // Função para compartilhar perfil
   const handleShareProfile = () => {
-    if (!user) return;
-    // Monta o link: corplink.me/firstname.lastname
+    console.log('Botão compartilhar clicado');
+    if (!user) {
+      console.log('Usuário não encontrado');
+      return;
+    }
     const slug = [user.firstname, user.lastname].filter(Boolean).join('.').toLowerCase();
     const url = `https://corplink.me/${slug}`;
-    navigator.clipboard.writeText(url).then(() => {
-      toast.success('O link do seu perfil foi copiado para a área de transferência!', {
+    console.log('URL gerada:', url);
+
+    if (!navigator.clipboard) {
+      toast.error('Clipboard API não disponível. Copie manualmente: ' + url, {
         position: 'top-right',
       });
-    });
+      return;
+    }
+
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        toast.success('O link do seu perfil foi copiado para a área de transferência!', {
+          position: 'top-right',
+        });
+      })
+      .catch((err) => {
+        console.error('Erro ao copiar:', err);
+        toast.error('Não foi possível copiar o link. Copie manualmente: ' + url, {
+          position: 'top-right',
+        });
+      });
   };
 
   if (authLoading) {
@@ -634,8 +653,8 @@ export default function PerfilPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b bg-[#000015] text-white overflow-hidden relative">
-      {/* Efeito de background animado */}
+    <div className="min-h-screen bg-gradient-to-br bg-[#000015] text-white overflow-hidden relative">
+      {/* Background Pattern */}
       <div className="absolute inset-0 opacity-30 z-0 pointer-events-none">
         <div
           className="absolute inset-0"
@@ -647,6 +666,7 @@ export default function PerfilPage() {
             `,
           }}
         />
+        {/* Animated Grid */}
         <div className="absolute inset-0 opacity-20">
           <svg width="100%" height="100%" className="animate-pulse">
             <defs>
@@ -658,6 +678,7 @@ export default function PerfilPage() {
           </svg>
         </div>
       </div>
+      {/* Floating Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
         <div
@@ -805,7 +826,7 @@ export default function PerfilPage() {
                   {selectedPhotoFile && (
                     <div className="mt-2 p-2 bg-blue-900/20 border border-blue-500/30 rounded-md">
                       <p className="text-xs text-blue-400 text-center">
-                        �� Nova foto selecionada: {selectedPhotoFile.name}
+                        Nova foto selecionada: {selectedPhotoFile.name}
                       </p>
                     </div>
                   )}
@@ -1037,7 +1058,8 @@ export default function PerfilPage() {
                     <div className="grid grid-cols-2 gap-4">
                           <Button
                             variant="outline"
-                            className="bg-blue-600/10 border-blue-600/30 text-blue-400 hover:bg-blue-600/20 hover:border-blue-600/50 transition-all duration-300"
+                            onClick={handleShareProfile}
+                            className="bg-blue-600/10 border-blue-600/30 text-blue-400 hover:bg-blue-600/20 hover:border-blue-600/50 transition-all duration-300 hover:text-white"
                           >
                             <Share className="w-4 h-4 mr-2" />
                             Compartilhar Perfil
@@ -1046,7 +1068,7 @@ export default function PerfilPage() {
                           <Button
                             variant="outline"
                             onClick={() => setIsDeactivateDialogOpen(true)}
-                            className="bg-red-600/10 border-red-600/30 text-red-400 hover:bg-red-600/20 hover:border-red-600/50 transition-all duration-300"
+                            className="bg-red-600/10 border-red-600/30 text-red-400 hover:bg-red-600/20 hover:border-red-600/50 transition-all duration-300 hover:text-white"
                           >
                             <UserX className="w-4 h-4 mr-2" />
                             Inativar Conta
@@ -1155,6 +1177,45 @@ export default function PerfilPage() {
                             </>
                           )}
                         </div>
+                        {/* Card do link do perfil */}
+                        {user && (
+                          <div className="col-span-2 mt-6">
+                            <div className="flex flex-col md:flex-row items-center justify-between bg-gradient-to-br from-[#1a2332] to-[#131b2c] border border-blue-900/30 rounded-xl p-4 shadow-lg">
+                              <div className="flex items-center gap-3">
+                                <span className="text-gray-400 text-sm">Seu link público:</span>
+                                <a
+                                  href={`https://corplink.me/${[user.firstname, user.lastname].filter(Boolean).join('.').toLowerCase()}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-400 hover:underline font-mono text-sm break-all"
+                                >
+                                  {`corplink.me/${[user.firstname, user.lastname].filter(Boolean).join('.').toLowerCase()}`}
+                                </a>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="ml-0 md:ml-4 mt-3 md:mt-0 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300"
+                                onClick={() => {
+                                  const url = `https://corplink.me/${[user.firstname, user.lastname].filter(Boolean).join('.').toLowerCase()}`;
+                                  if (!navigator.clipboard) {
+                                    toast.error('Clipboard API não disponível. Copie manualmente: ' + url, { position: 'top-right' });
+                                    return;
+                                  }
+                                  navigator.clipboard.writeText(url)
+                                    .then(() => {
+                                      toast.success('Link copiado para a área de transferência!', { position: 'top-right' });
+                                    })
+                                    .catch(() => {
+                                      toast.error('Não foi possível copiar o link. Copie manualmente: ' + url, { position: 'top-right' });
+                                    });
+                                }}
+                              >
+                                Copiar link
+                              </Button>
+                            </div>
+                          </div>
+                        )}
                     </div>
                   </TabsContent>
 
