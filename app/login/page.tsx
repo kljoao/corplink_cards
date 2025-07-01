@@ -200,7 +200,7 @@ export default function LoginPage() {
       <Header/>
       {/* Main Content */}
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-120px)] px-4">
-        <div className="w-full max-w-md">
+        <div className={`w-full max-w-md ${step === "twofa" ? "mt-[150px]" : ""}`}>
           {/* Login Card */}
           <div className="relative">
             {/* Glass Effect Background */}
@@ -271,8 +271,7 @@ export default function LoginPage() {
                       </div>
                     </div>
                     <h1 className="text-2xl font-bold text-white">Código de verificação</h1>
-                    <p className="text-gray-400">Digite o código de 4 dígitos enviado para</p>
-                    <p className="text-blue-400 font-medium">{email}</p>
+                    <p className="text-gray-400">Digite o código de 4 dígitos enviado para seu dispositivo cadastrado</p>
                   </div>
                   <form onSubmit={handleTwoFASubmit} className="space-y-6">
                     <div className="space-y-4">
