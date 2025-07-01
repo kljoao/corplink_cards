@@ -10,7 +10,7 @@ interface User {
     created_at: string
     updated_at: string
   }
-  
+  //fetch user
   export async function fetchUserData(handle: string): Promise<User> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/by-instagram/${handle}`, {
       headers: {
