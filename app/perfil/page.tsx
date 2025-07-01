@@ -1200,27 +1200,6 @@ export default function PerfilPage() {
                                   {`corplink.me/${[user.firstname, user.lastname].filter(Boolean).join('.').toLowerCase()}`}
                                 </a>
                               </div>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="ml-0 md:ml-4 mt-3 md:mt-0 border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300"
-                                onClick={() => {
-                                  const url = `https://corplink.me/${[user.firstname, user.lastname].filter(Boolean).join('.').toLowerCase()}`;
-                                  if (!navigator.clipboard) {
-                                    toast.error('Clipboard API não disponível. Copie manualmente: ' + url, { position: 'top-right' });
-                                    return;
-                                  }
-                                  navigator.clipboard.writeText(url)
-                                    .then(() => {
-                                      toast.success('Link copiado para a área de transferência!', { position: 'top-right' });
-                                    })
-                                    .catch(() => {
-                                      toast.error('Não foi possível copiar o link. Copie manualmente: ' + url, { position: 'top-right' });
-                                    });
-                                }}
-                              >
-                                Copiar link
-                              </Button>
                             </div>
                           </div>
                         )}
