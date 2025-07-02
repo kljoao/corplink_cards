@@ -5,11 +5,6 @@ export function middleware(request: NextRequest) {
   // Get the pathname
   const path = request.nextUrl.pathname
 
-  // If the path is the root, redirect to the default member
-  if (path === "/") {
-    return NextResponse.redirect(new URL("https://corplink.co/", request.url))
-  }
-
   // Protected routes that require authentication
   const protectedRoutes = ["/perfil"]
   const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route))
