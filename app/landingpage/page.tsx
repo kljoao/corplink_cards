@@ -20,6 +20,8 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Header from "@/components/Header"
+import Light from "@/components/light"
+import Header2 from "@/components/Header2"
 
 // Dados dos depoimentos
 const testimonials = [
@@ -59,40 +61,38 @@ const testimonials = [
 
 // Dados das empresas parceiras
 const partners = [
-  { name: "Microsoft", logo: "/placeholder.svg?height=40&width=120" },
-  { name: "Google", logo: "/placeholder.svg?height=40&width=120" },
-  { name: "Amazon", logo: "/placeholder.svg?height=40&width=120" },
-  { name: "Meta", logo: "/placeholder.svg?height=40&width=120" },
-  { name: "Apple", logo: "/placeholder.svg?height=40&width=120" },
-  { name: "Tesla", logo: "/placeholder.svg?height=40&width=120" },
+  { name: "Sicoob", logo: "/logos/sicoob.avif" },
+  { name: "Transfero", logo: "/logos/transfero.avif" },
+  { name: "Brewteco", logo: "/logos/brewteco.avif" },
+  { name: "Maravalley", logo: "/logos/maravalley.avif" },
 ]
 
 // Dados do FAQ
 const faqData = [
   {
-    question: "Como funciona o processo de seleção?",
+    question: "O que é a CorpLink",
     answer:
-      "Nosso processo é cuidadoso e personalizado. Após a inscrição, realizamos uma entrevista para entender seu perfil e objetivos, garantindo que você se conecte com pessoas alinhadas aos seus valores e metas de negócio.",
+      "Somos uma plataforma de conexão corporativa, voltada para convidados selecionados, que se encontram em eventos e interagem pelas redes sociais para ampliar seus relacionamentos e gerar novos negócios estratégicos. Nossa missão é promover parcerias sólidas e confiáveis entre nossos membros.",
   },
   {
-    question: "Qual é o investimento para fazer parte?",
+    question: "Como se tornar membro?",
     answer:
-      "Oferecemos diferentes planos de associação para atender diversos perfis de empresários. Entre em contato conosco para conhecer as opções e encontrar a que melhor se adequa ao seu momento e objetivos.",
+      "A CorpLink é exclusiva para convidados por membros atuais. É necessário passar por um processo de indicação e avaliação, no qual o seu perfil será analisado para garantir sinergia com os demais membros.",
   },
   {
-    question: "Quantos eventos acontecem por mês?",
+    question: "Quais os benefícios do membro?",
     answer:
-      "Realizamos em média 4-6 eventos por mês, incluindo encontros presenciais, webinars exclusivos, workshops e experiências diferenciadas. Todos os eventos são planejados para maximizar as oportunidades de networking e aprendizado.",
+      "Acesso a um grupo exclusivo em uma área restrita do site, com informações de contato e links para suas redes sociais. A rede também oferecerá uma agenda de eventos fechados, proporcionando oportunidades de networking para parcerias e novos negócios.",
   },
   {
-    question: "Posso participar dos eventos online?",
+    question: "Existe algum valor de adesão?",
     answer:
-      "Sim! Oferecemos eventos híbridos e exclusivamente online para garantir que você possa participar independente da sua localização. Nossa plataforma digital facilita as conexões mesmo à distância.",
+      "Durante a fase de pré-lançamento, não há investimento para fazer parte da CorpLink. Após o lançamento, novos membros estarão sujeitos a um valor de adesão e anuidade para acesso a todos os benefícios exclusivos nas verticais de Educação, Lifestyle, Viagens, Eventos e Networking.",
   },
   {
-    question: "Como são selecionados os membros?",
+    question: "Posso indicar novos membros?",
     answer:
-      "Priorizamos qualidade sobre quantidade. Buscamos empresários e executivos que compartilhem nossos valores de ética, inovação e crescimento mútuo. O processo inclui análise de perfil, entrevista e referências.",
+      "Como membro, você terá direito de indicar novos membros. Os indicados passarão pelo mesmo processode seleção aplicado a todos os demais. O link de envio do convite está na área restrita à membros.",
   },
 ]
 
@@ -143,13 +143,12 @@ const useCountUp = (end: number, duration = 2000) => {
   return { count, ref }
 }
 
-// Componente para stats com count up
 const StatsItem = ({ end, suffix, label }: { end: number; suffix: string; label: string }) => {
   const { count, ref } = useCountUp(end)
 
   return (
     <div ref={ref} className="text-center">
-      <div className="text-2xl md:text-3xl font-bold text-blue-400">
+      <div className="text-2xl md:text-3xl font-bold text-gray-300">
         {count}
         {suffix}
       </div>
@@ -200,8 +199,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b bg-[#000015] text-white overflow-x-hidden">
-      {/* Header */}
-      <Header/>
+      <Light />
+      <Header2/>
 
       {/* Hero Section */}
       <section id="hero" className="relative min-h-screen flex items-center pt-16">
@@ -265,7 +264,7 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   onClick={() => scrollToSection("beneficios")}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium px-8 py-4 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 rounded"
+                  className="bg-[#000014] hover:bg-[#000029] border text-white font-medium p-6 text-lg transition-all duration-300 hover:scale-105 rounded-full"
                 >
                   Quero fazer parte
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -273,10 +272,10 @@ export default function HomePage() {
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-8">
-                <StatsItem end={500} suffix="+" label="Membros ativos" />
+              <div className="grid grid-cols-3 gap-6 pt-8 ">
+                <StatsItem end={500} suffix="+" label="Membros ativos"/>
                 <StatsItem end={50} suffix="+" label="Eventos/ano" />
-                <StatsItem end={95} suffix="%" label="Satisfação" />
+                <StatsItem end={100} suffix="%" label="Networking" />
               </div>
             </div>
 
@@ -288,41 +287,52 @@ export default function HomePage() {
               )}
             >
               <div className="relative">
-                {/* Main Image */}
-                <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-blue-900/20 to-indigo-900/20 backdrop-blur-sm border border-white/10">
-                  <img src="/empresarios.png" alt="Empresários da CorpLink" className="w-full h-auto object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                {/* Main Image com glow/shadow branco */}
+                <div className="relative rounded-2xl bg-gradient-to-br from-blue-900/20 to-indigo-900/20 backdrop-blur-sm border border-white/10">
+                  {/* Glow branco atrás da imagem */}
+                  <div
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    aria-hidden="true"
+                  >
+                    <div className="w-[90%] h-[90%] rounded-2xl shadow-[0_0_80px_30px_rgba(255,255,255,0.25)]"></div>
+                  </div>
+                  <img
+                    src="/empresarios.png"
+                    alt="Empresários da CorpLink"
+                    className="w-full h-auto object-cover relative z-10 rounded-2xl"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-20 rounded-2xl" />
                 </div>
 
                 {/* Floating Avatars */}
                 <div className="absolute -top-4 -left-4 animate-float">
-                  <Avatar className="w-16 h-16 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/placeholder.svg?height=64&width=64" />
-                    <AvatarFallback>JS</AvatarFallback>
+                  <Avatar className="w-24 h-24 border-4 border-white/20 shadow-xl">
+                    <AvatarImage src="/edu.jpeg" />
+                    <AvatarFallback>ED</AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="absolute top-8 -right-6 animate-float" style={{ animationDelay: "1s" }}>
-                  <Avatar className="w-12 h-12 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/placeholder.svg?height=48&width=48" />
-                    <AvatarFallback>MC</AvatarFallback>
+                  <Avatar className="w-16 h-16 border-4 border-white/20 shadow-xl">
+                    <AvatarImage src="/joao.png" />
+                    <AvatarFallback>JO</AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="absolute -bottom-6 right-8 animate-float" style={{ animationDelay: "2s" }}>
-                  <Avatar className="w-14 h-14 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/placeholder.svg?height=56&width=56" />
-                    <AvatarFallback>AS</AvatarFallback>
-                  </Avatar>
-                </div>
-                <div className="absolute bottom-12 -left-8 animate-float" style={{ animationDelay: "0.5s" }}>
-                  <Avatar className="w-10 h-10 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/placeholder.svg?height=40&width=40" />
+                  <Avatar className="w-24 h-24 border-4 border-white/20 shadow-xl">
+                    <AvatarImage src="/rodrigo.jpg" />
                     <AvatarFallback>RO</AvatarFallback>
                   </Avatar>
                 </div>
+                <div className="absolute bottom-12 -left-8 animate-float" style={{ animationDelay: "0.5s" }}>
+                  <Avatar className="w-20 h-20 border-4 border-white/20 shadow-xl">
+                    <AvatarImage src="/grossi.jpg" />
+                    <AvatarFallback>GR</AvatarFallback>
+                  </Avatar>
+                </div>
                 <div className="absolute top-1/2 -left-12 animate-float" style={{ animationDelay: "1.5s" }}>
-                  <Avatar className="w-12 h-12 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/placeholder.svg?height=48&width=48" />
-                    <AvatarFallback>LM</AvatarFallback>
+                  <Avatar className="w-16 h-16 border-4 border-white/20 shadow-xl">
+                    <AvatarImage src="/suzana.jpg" />
+                    <AvatarFallback>SU</AvatarFallback>
                   </Avatar>
                 </div>
               </div>
@@ -335,14 +345,10 @@ export default function HomePage() {
       <section className="py-20 relative">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-300">Empresas que confiam na CorpLink</h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Grandes organizações escolhem nossa plataforma para conectar seus executivos e expandir suas redes de
-              negócios.
-            </p>
+            <h2 className="text-sm font-bold mb-4 text-gray-300">EMPRESAS PARCEIRAS</h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8 items-center justify-items-center">
             {partners.map((partner, index) => (
               <div
                 key={index}
@@ -351,7 +357,11 @@ export default function HomePage() {
                 <img
                   src={partner.logo || "/placeholder.svg"}
                   alt={partner.name}
-                  className="h-8 md:h-10 w-auto object-contain filter brightness-0 invert"
+                  className={`w-auto object-contain filter brightness-0 invert ${
+                    partner.name === "Brewteco" 
+                      ? "h-24 md:h-24" 
+                      : "h-24 md:h-10"
+                  }`}
                 />
               </div>
             ))}
@@ -362,16 +372,6 @@ export default function HomePage() {
       {/* Testimonials Section */}
       <section id="depoimentos" className="py-20 relative overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400">
-                O que nossos membros dizem
-              </span>
-            </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Histórias reais de transformação e crescimento através das conexões da CorpLink.
-            </p>
-          </div>
 
           <div className="relative">
             {/* Blur gradients nas bordas - versão mais intensa */}
@@ -427,7 +427,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400">
+              <span className="bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
                 Benefícios exclusivos
               </span>
             </h2>
@@ -547,13 +547,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400">
+              <span className="bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
                 Perguntas frequentes
               </span>
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Tire suas dúvidas sobre como fazer parte da CorpLink e aproveitar todos os benefícios.
-            </p>
           </div>
 
           <div className="max-w-3xl mx-auto space-y-4">
@@ -594,11 +591,11 @@ export default function HomePage() {
             <div className="relative bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-3xl p-12 md:p-16 border border-gray-800/50 text-center">
               <div className="max-w-3xl mx-auto space-y-8">
                 <h2 className="text-3xl md:text-5xl font-bold">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400">
+                  <span className="bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
                     Pronto para transformar
                   </span>
                   <br />
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
+                  <span className="bg-gradient-to-r to-[#F8F8F8] from-[#71717A] text-transparent bg-clip-text">
                     suas conexões?
                   </span>
                 </h2>
@@ -609,7 +606,7 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium px-8 py-4 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25"
+                    className="bg-[#000014] hover:bg-[#000029] border text-white font-medium px-8 py-4 text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25"
                   >
                     Começar agora
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -627,107 +624,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-[#0a0f1c] border-t border-gray-800/50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            {/* Logo and Description */}
-            <div className="md:col-span-2 space-y-6">
-              <div className="flex items-center space-x-2">
-                <div className="relative w-10 h-10">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur-sm opacity-50"></div>
-                  <div className="relative w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                    <div className="w-7 h-7 bg-[#0a0f1c] rounded-full flex items-center justify-center">
-                      <div className="w-3.5 h-3.5 bg-white rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
-                <span className="text-2xl font-bold text-white tracking-tight">CORPLINK</span>
-              </div>
-              <p className="text-gray-400 leading-relaxed max-w-md">
-                Conectando empresários visionários para construir o futuro dos negócios. Cada conexão é uma oportunidade
-                de crescimento mútuo.
-              </p>
-              <div className="flex space-x-4">
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-all duration-300 hover:scale-110 transform"
-                  aria-label="Instagram"
-                >
-                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-3 rounded-full hover:from-pink-600 hover:to-purple-600">
-                    <Instagram className="w-5 h-5" />
-                  </div>
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-all duration-300 hover:scale-110 transform"
-                  aria-label="LinkedIn"
-                >
-                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-3 rounded-full hover:from-blue-600 hover:to-blue-700">
-                    <Linkedin className="w-5 h-5" />
-                  </div>
-                </a>
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <div className="space-y-4">
-              <h4 className="text-white font-semibold">Links rápidos</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <button onClick={() => scrollToSection("depoimentos")} className="hover:text-white transition-colors">
-                    Depoimentos
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection("beneficios")} className="hover:text-white transition-colors">
-                    Benefícios
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection("faq")} className="hover:text-white transition-colors">
-                    FAQ
-                  </button>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Contato
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Contact */}
-            <div className="space-y-4">
-              <h4 className="text-white font-semibold">Contato</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li>contato@corplink.com.br</li>
-                <li>(11) 9999-9999</li>
-                <li>
-                  Av. das Américas, 3500
-                  <br />
-                  Barra da Tijuca, Rio de Janeiro - RJ
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <Separator className="bg-gray-800/50 mb-8" />
-
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-500 text-sm">© 2025 CorpLink & Co. Todos os direitos reservados.</p>
-            <div className="flex space-x-6 text-sm text-gray-500">
-              <a href="#" className="hover:text-white transition-colors">
-                Política de Privacidade
-              </a>
-              <a href="#" className="hover:text-white transition-colors">
-                Termos de Uso
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }
