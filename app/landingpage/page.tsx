@@ -26,36 +26,40 @@ import Header2 from "@/components/Header2"
 // Dados dos depoimentos
 const testimonials = [
   {
-    name: "Maria Silva",
-    role: "CEO, TechStart",
+    name: "Eduardo Diniz",
+    role: "Presidente, Sicoob Empresas RJ",
     content:
-      "A CorpLink transformou minha rede de contatos. Em 6 meses, fechei 3 parcerias estratégicas que mudaram o rumo da minha empresa.",
-    avatar: "/placeholder.svg?height=60&width=60",
+      "Com a CorpLink, o sistema cooperativo e corporativo se transforma em uma elite construtora: distribui, investe e ativa novas fronteiras de desenvolvimento. É hora de transformar.",
+    avatar: "/edu.jpeg",
     rating: 5,
+    logo: "/logos/sicoob.avif",
   },
   {
-    name: "João Santos",
-    role: "Diretor, InvestCorp",
+    name: "Rafael Amaral",
+    role: "Sócio, Brewteco",
     content:
-      "Os eventos da CorpLink são únicos. Cada encontro é uma oportunidade real de crescimento pessoal e profissional.",
-    avatar: "/placeholder.svg?height=60&width=60",
+      "Participamos no networking gerado pelos eventos da CorpLink. Foi uma excelente iniciativa e apoiamos a evolução do projeto indicando novos empresários para fazer parte.",
+    avatar: "/rafaelAmaral.avif",
     rating: 5,
+    logo: "/logos/brewteco.avif",
   },
   {
-    name: "Ana Costa",
-    role: "Fundadora, GreenTech",
+    name: "Márlyson Silva",
+    role: "Sócio, Transfero Group",
     content:
-      "Encontrei meus principais investidores através da rede CorpLink. A qualidade das conexões é incomparável.",
-    avatar: "/placeholder.svg?height=60&width=60",
+      " Portal exclusivo de membros é uma oportunidade incrível para conexão com os membros, ampliando a carteira de clientes da nossa empresa e ao mesmo tempo ampliar a rede de contatos.",
+    avatar: "/marlyson.avif",
     rating: 5,
+    logo: "/logos/transfero.avif",
   },
   {
-    name: "Carlos Oliveira",
-    role: "VP, FinanceGroup",
+    name: "Felippe Bastos",
+    role: "Sócio, Solve Energies",
     content:
-      "A CorpLink não é apenas networking, é uma comunidade que realmente se importa com o sucesso de cada membro.",
-    avatar: "/placeholder.svg?height=60&width=60",
+      "Os relacionamentos criados pelos membros da CorpLink geraram, além de grandes parceiros de negócios, novos amigos. Indico a todos a conhecerem esse grupo.",
+    avatar: "/fellipe.avif",
     rating: 5,
+    logo: "/logos/solves.svg",
   },
 ]
 
@@ -64,6 +68,7 @@ const partners = [
   { name: "Sicoob", logo: "/logos/sicoob.avif" },
   { name: "Transfero", logo: "/logos/transfero.avif" },
   { name: "Brewteco", logo: "/logos/brewteco.avif" },
+  { name: "Solves", logo: "/logos/solves.svg" },
   { name: "Maravalley", logo: "/logos/maravalley.avif" },
 ]
 
@@ -348,7 +353,7 @@ export default function HomePage() {
             <h2 className="text-sm font-bold mb-4 text-gray-300">EMPRESAS PARCEIRAS</h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8 items-center justify-items-center">
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 items-center justify-items-center">
             {partners.map((partner, index) => (
               <div
                 key={index}
@@ -369,50 +374,61 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="depoimentos" className="py-20 relative overflow-hidden">
+      {/* Testimonials Section (Redesign) */}
+      <section id="depoimentos" className="py-24 relative overflow-hidden">
         <div className="container mx-auto px-4">
+          {/* Título */}
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold">
+              <span className="bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
+                O que dizem nossos membros
+              </span>
+            </h2>
+          </div>
 
-          <div className="relative">
-            {/* Blur gradients nas bordas - versão mais intensa */}
-            <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-[#0d1326] via-[#0d1326]/80 to-transparent z-20 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-[#0d1326] via-[#0d1326]/80 to-transparent z-20 pointer-events-none" />
+          {/* Fades laterais */}
+          <div className="relative group testimonials-container">
+            <div className="absolute left-0 top-0 bottom-0 w-32 z-20 pointer-events-none testimonials-fade-left" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 z-20 pointer-events-none testimonials-fade-right" />
 
-            <div className="flex animate-testimonial-scroll space-x-6 items-stretch">
-              {[...testimonials, ...testimonials].map((testimonial, index) => (
+            {/* Carrossel com estilo aprimorado */}
+            <div className="testimonial-track space-x-6">
+              {[...testimonials, ...testimonials].map((item, index) => (
                 <div
                   key={index}
-                  className="flex-shrink-0 w-80 md:w-96 h-64 bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-2xl p-6 border border-gray-800/50 backdrop-blur-sm flex flex-col justify-between"
+                  className="flex-shrink-0 w-80 md:w-96 bg-gradient-to-br from-[#0f172a] to-[#1e293b] border border-gray-700/30 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:shadow-blue-500/10 transition-all duration-300 flex flex-col justify-between"
                 >
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div className="flex justify-center space-x-1 mb-4">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      ))}
+                  {/* Avaliação */}
+                  <div className="flex justify-center space-x-1 mb-4">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+
+                  {/* Conteúdo */}
+                  <blockquote className="text-gray-300 leading-relaxed text-sm text-center italic mb-6">
+                    “{item.content}”
+                  </blockquote>
+
+                  {/* Rodapé com avatar e logo */}
+                  <div className="flex items-center justify-between border-t border-gray-700/30 pt-4 mt-auto">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={item.avatar}
+                        alt={item.name}
+                        className="w-12 h-12 rounded-full border-2 border-blue-500/30 object-cover"
+                      />
+                      <div>
+                        <div className="text-white font-semibold text-sm">{item.name}</div>
+                        <div className="text-blue-400 text-xs">{item.role}</div>
+                      </div>
                     </div>
-
-                    <blockquote className="text-gray-200 leading-relaxed italic text-center flex-1 flex items-center justify-center text-sm">
-                      "{testimonial.content}"
-                    </blockquote>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-700/30">
-                      <div className="flex items-center space-x-3">
-                        <Avatar className="w-12 h-12 border-2 border-blue-500/30">
-                          <AvatarImage src={testimonial.avatar || "/placeholder.svg"} />
-                          <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div className="text-left">
-                          <div className="font-semibold text-white text-sm">{testimonial.name}</div>
-                          <div className="text-blue-400 text-xs">{testimonial.role}</div>
-                        </div>
-                      </div>
-
-                      {/* Logo da empresa (placeholder) */}
-                      <div className="w-16 h-8 bg-gray-700/30 rounded flex items-center justify-center">
-                        <div className="w-12 h-6 bg-gray-600/50 rounded text-xs text-gray-400 flex items-center justify-center">
-                          LOGO
-                        </div>
-                      </div>
+                    <div className="w-16 h-8 rounded bg-white/10 flex items-center justify-center p-1">
+                      <img
+                        src={item.logo}
+                        alt={`${item.name} logo`}
+                        className="object-contain max-h-full"
+                      />
                     </div>
                   </div>
                 </div>
@@ -544,44 +560,65 @@ export default function HomePage() {
 
       {/* FAQ Section */}
       <section id="faq" className="py-20 relative">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
-                Perguntas frequentes
-              </span>
-            </h2>
-          </div>
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
+              Perguntas frequentes
+            </span>
+          </h2>
+        </div>
 
-          <div className="max-w-3xl mx-auto space-y-4">
-            {faqData.map((faq, index) => (
+        <div className="max-w-3xl mx-auto space-y-4">
+          {faqData.map((faq, index) => {
+            const isOpen = openFaq === index;
+            const contentRef = useRef<HTMLDivElement>(null);
+            const [height, setHeight] = useState("0px");
+
+            useEffect(() => {
+              if (isOpen && contentRef.current) {
+                const scrollHeight = contentRef.current.scrollHeight;
+                setHeight(`${scrollHeight}px`);
+              } else {
+                setHeight("0px");
+              }
+            }, [isOpen]);
+
+            return (
               <div
                 key={index}
                 className="bg-gradient-to-br from-[#1a2332] to-[#131b2c] rounded-xl border border-gray-800/50 overflow-hidden"
               >
                 <button
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  onClick={() => setOpenFaq(isOpen ? null : index)}
                   className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
                 >
                   <span className="font-medium text-white">{faq.question}</span>
-                  {openFaq === index ? (
+                  {isOpen ? (
                     <ChevronUp className="w-5 h-5 text-blue-400" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-gray-400" />
                   )}
                 </button>
-                {openFaq === index && (
-                  <div className="px-6 pb-4 animate-in slide-in-from-top-4 duration-500 ease-out">
-                    <div className="pt-2 border-t border-gray-700/50 mt-2">
-                      <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+
+                <div
+                  style={{ height, transition: "height 0.4s ease" }}
+                  className="px-6 overflow-hidden"
+                >
+                  <div ref={contentRef}>
+                    <div className="pt-2 pb-5 border-t border-gray-700/50 mt-2">
+                      <p className="text-gray-300 leading-relaxed py-2">
+                        {faq.answer}
+                      </p>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* CTA Section */}
       <section className="py-20 relative">
