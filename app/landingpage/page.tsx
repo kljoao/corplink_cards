@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils"
 import Header from "@/components/Header"
 import Light from "@/components/light"
 import Header2 from "@/components/Header2"
+import RotatingText from '@/components/landingpage/RotatingText'
 
 // Dados dos depoimentos
 const testimonials = [
@@ -75,7 +76,7 @@ const partners = [
 // Dados do FAQ
 const faqData = [
   {
-    question: "O que é a CorpLink",
+    question: "O que é a CorpLink?",
     answer:
       "Somos uma plataforma de conexão corporativa, voltada para convidados selecionados, que se encontram em eventos e interagem pelas redes sociais para ampliar seus relacionamentos e gerar novos negócios estratégicos. Nossa missão é promover parcerias sólidas e confiáveis entre nossos membros.",
   },
@@ -246,9 +247,25 @@ export default function HomePage() {
               )}
             >
               <div className="space-y-6">
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight flex">
                   <span className="text-6xl font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
-                  Conexões que <br></br>geram valor.
+                  Conexões que
+                    <div className="flex items-center">
+                      <span className="flex items-center flex-wrap text-6xl font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">geram
+                      <RotatingText
+                        texts={['valor.', 'negócios.', 'resultados.', 'progresso.']}
+                        mainClassName="text-6xl px-2 sm:px-2 md:px-3 text-white overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center"
+                        staggerFrom={"last"}
+                        initial={{ y: "100%" }}
+                        animate={{ y: 0 }}
+                        exit={{ y: "-120%" }}
+                        staggerDuration={0.025}
+                        splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                        transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                        rotationInterval={3000}
+                      />
+                      </span>
+                    </div>
                   </span>
                 </h1>
 
@@ -269,10 +286,10 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   onClick={() => scrollToSection("beneficios")}
-                  className="bg-[#000014] hover:bg-[#000029] border text-white font-medium p-6 text-lg transition-all duration-300 hover:scale-105 rounded-full"
+                  className="bg-[#000014] hover:bg-[#000029] border text-white font-medium p-6 text-lg transition-all duration-300 hover:scale-105 rounded-full relative overflow-hidden"
                 >
-                  Quero fazer parte
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <span className="shiny-text relative z-10">Quero fazer parte</span>
+                  <ArrowRight className="ml-2 h-5 w-5 relative z-10" />
                 </Button>
               </div>
 
@@ -423,7 +440,7 @@ export default function HomePage() {
                         <div className="text-blue-400 text-xs">{item.role}</div>
                       </div>
                     </div>
-                    <div className="w-16 h-8 rounded bg-white/10 flex items-center justify-center p-1">
+                    <div className="w-16 h-8 rounded flex items-center justify-center p-1">
                       <img
                         src={item.logo}
                         alt={`${item.name} logo`}

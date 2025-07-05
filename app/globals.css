@@ -314,3 +314,35 @@ html {
 .testimonials-fade-right {
   background: linear-gradient(to left, #0d1326, transparent);
 }
+
+@keyframes shiny {
+  0% {
+    background-position: 200%;
+  }
+  100% {
+    background-position: -200%;
+  }
+}
+
+@keyframes shiny {
+  0% {
+    background-position: 200%;
+  }
+  100% {
+    background-position: -200%;
+  }
+}
+
+.shiny-text {
+  background: linear-gradient(
+    120deg,
+    #f8f8f8 0%,
+    #d4d4d8 40%,
+    #f8f8f8 60%,
+    #d4d4d8 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny 5s linear infinite;
+}
