@@ -22,7 +22,12 @@ import { cn } from "@/lib/utils"
 import Header from "@/components/Header"
 import Light from "@/components/light"
 import Header2 from "@/components/Header2"
-import RotatingText from '@/components/landingpage/RotatingText'
+import dynamic from "next/dynamic"
+import type { ComponentProps } from "react"
+import type { RotatingTextProps } from '@/components/landingpage/RotatingText'
+import Image from 'next/image'
+
+const RotatingText = dynamic<RotatingTextProps>(() => import('@/components/landingpage/RotatingText'), { ssr: false })
 
 // Dados dos depoimentos
 const testimonials = [
@@ -318,9 +323,12 @@ export default function HomePage() {
                   >
                     <div className="w-[90%] h-[90%] rounded-2xl shadow-[0_0_80px_30px_rgba(255,255,255,0.25)]"></div>
                   </div>
-                  <img
+                  <Image
                     src="/empresarios.png"
                     alt="Empresários da CorpLink"
+                    width={600}
+                    height={400}
+                    priority
                     className="w-full h-auto object-cover relative z-10 rounded-2xl"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-20 rounded-2xl" />
@@ -329,31 +337,31 @@ export default function HomePage() {
                 {/* Floating Avatars */}
                 <div className="absolute -top-4 -left-4 animate-float">
                   <Avatar className="w-24 h-24 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/edu.jpeg" />
+                    <Image src="/edu.jpeg" alt="ED" width={96} height={96} className="w-24 h-24 rounded-full" />
                     <AvatarFallback>ED</AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="absolute top-8 -right-6 animate-float" style={{ animationDelay: "1s" }}>
                   <Avatar className="w-16 h-16 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/joao.png" />
+                    <Image src="/joao.png" alt="JO" width={64} height={64} className="w-16 h-16 rounded-full" />
                     <AvatarFallback>JO</AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="absolute -bottom-6 right-8 animate-float" style={{ animationDelay: "2s" }}>
                   <Avatar className="w-24 h-24 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/rodrigo.jpg" />
+                    <Image src="/rodrigo.jpg" alt="RO" width={96} height={96} className="w-24 h-24 rounded-full" />
                     <AvatarFallback>RO</AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="absolute bottom-12 -left-8 animate-float" style={{ animationDelay: "0.5s" }}>
                   <Avatar className="w-20 h-20 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/grossi.jpg" />
+                    <Image src="/grossi.jpg" alt="GR" width={80} height={80} className="w-20 h-20 rounded-full" />
                     <AvatarFallback>GR</AvatarFallback>
                   </Avatar>
                 </div>
                 <div className="absolute top-1/2 -left-12 animate-float" style={{ animationDelay: "1.5s" }}>
                   <Avatar className="w-16 h-16 border-4 border-white/20 shadow-xl">
-                    <AvatarImage src="/suzana.jpg" />
+                    <Image src="/suzana.jpg" alt="SU" width={64} height={64} className="w-16 h-16 rounded-full" />
                     <AvatarFallback>SU</AvatarFallback>
                   </Avatar>
                 </div>
@@ -376,9 +384,11 @@ export default function HomePage() {
                 key={index}
                 className="grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100 hover:scale-110"
               >
-                <img
+                <Image
                   src={partner.logo || "/placeholder.svg"}
                   alt={partner.name}
+                  width={120}
+                  height={48}
                   className={`w-auto object-contain filter brightness-0 invert ${
                     partner.name === "Brewteco" 
                       ? "h-24 md:h-24" 
@@ -430,9 +440,11 @@ export default function HomePage() {
                   {/* Rodapé com avatar e logo */}
                   <div className="flex items-center justify-between border-t border-gray-700/30 pt-4 mt-auto">
                     <div className="flex items-center space-x-3">
-                      <img
+                      <Image
                         src={item.avatar}
                         alt={item.name}
+                        width={48}
+                        height={48}
                         className="w-12 h-12 rounded-full border-2 border-blue-500/30 object-cover"
                       />
                       <div>
@@ -441,9 +453,11 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="w-16 h-8 rounded flex items-center justify-center p-1">
-                      <img
+                      <Image
                         src={item.logo}
                         alt={`${item.name} logo`}
+                        width={64}
+                        height={32}
                         className="object-contain max-h-full"
                       />
                     </div>

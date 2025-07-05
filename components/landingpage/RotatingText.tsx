@@ -16,7 +16,27 @@ function cn(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const RotatingText = forwardRef((props, ref) => {
+export interface RotatingTextProps {
+  texts: string[];
+  transition?: any;
+  initial?: any;
+  animate?: any;
+  exit?: any;
+  animatePresenceMode?: string;
+  animatePresenceInitial?: boolean;
+  rotationInterval?: number;
+  staggerDuration?: number;
+  staggerFrom?: string;
+  loop?: boolean;
+  auto?: boolean;
+  splitBy?: string;
+  onNext?: (index: number) => void;
+  mainClassName?: string;
+  splitLevelClassName?: string;
+  elementLevelClassName?: string;
+}
+
+const RotatingText = forwardRef<any, RotatingTextProps>((props, ref) => {
   const {
     texts,
     transition = { type: "spring", damping: 25, stiffness: 300 },
@@ -216,7 +236,7 @@ const RotatingText = forwardRef((props, ref) => {
       </AnimatePresence>
     </motion.span>
   );
-});
+}) as React.ForwardRefExoticComponent<RotatingTextProps & React.RefAttributes<any>>;
 
 RotatingText.displayName = "RotatingText";
 export default RotatingText;
