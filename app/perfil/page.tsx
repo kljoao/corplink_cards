@@ -34,6 +34,10 @@ import {
   UserX,
   AlertTriangle,
   X,
+  RotateCw,
+  ZoomIn,
+  ZoomOut,
+  Crop,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Header from "@/components/Header"
@@ -54,6 +58,13 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog"
 import { toast, Toaster } from "sonner"
+import dynamic from "next/dynamic"
+
+// Importar AvatarEditor dinamicamente para evitar problemas de SSR
+const AvatarEditor = dynamic(() => import('react-avatar-editor'), {
+  ssr: false,
+  loading: () => <div className="w-40 h-40 bg-gray-800 rounded-full animate-pulse" />
+})
 
 const segmentosEmpresa = [
   "Agricultura",
@@ -111,6 +122,13 @@ export default function PerfilPage() {
   const [error, setError] = useState("")
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [dragActive, setDragActive] = useState(false)
+  
+  // Estados para o editor de avatar
+  const [showAvatarEditor, setShowAvatarEditor] = useState(false)
+  const [avatarEditorScale, setAvatarEditorScale] = useState(1)
+  const [avatarEditorRotation, setAvatarEditorRotation] = useState(0)
+  const [tempImageFile, setTempImageFile] = useState<File | null>(null)
+  const avatarEditorRef = useRef<any>(null)
   const router = useRouter()
   const { user, isLoading: authLoading, logout, updateProfile } = useAuth()
 
@@ -222,17 +240,21 @@ export default function PerfilPage() {
     const file = event.target.files?.[0]
 
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setProfileData((prev) => ({
-          ...prev,
-          foto: e.target?.result as string,
-        }))
-        setSelectedPhotoFile(file)
-        setIsDirty(true)
-        console.log('Arquivo processado e salvo no estado')
+      // Validar tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        toast.error('Por favor, selecione apenas arquivos de imagem.')
+        return
       }
-      reader.readAsDataURL(file)
+
+      // Validar tamanho (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('A imagem deve ter no máximo 5MB.')
+        return
+      }
+
+      setTempImageFile(file)
+      setShowAvatarEditor(true)
+      console.log('Arquivo selecionado para edição')
     }
   }
 
@@ -253,17 +275,78 @@ export default function PerfilPage() {
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0]
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setProfileData((prev) => ({
-          ...prev,
-          foto: e.target?.result as string,
-        }))
-        setSelectedPhotoFile(file)
-        setIsDirty(true)
+      
+      // Validar tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        toast.error('Por favor, selecione apenas arquivos de imagem.')
+        return
       }
-      reader.readAsDataURL(file)
+
+      // Validar tamanho (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('A imagem deve ter no máximo 5MB.')
+        return
+      }
+
+      setTempImageFile(file)
+      setShowAvatarEditor(true)
     }
+  }
+
+  // Funções para controlar o editor de avatar
+  const handleAvatarEditorSave = () => {
+    if (avatarEditorRef.current) {
+      const canvas = avatarEditorRef.current.getImageScaledToCanvas()
+      
+      // Converter canvas para blob
+      canvas.toBlob((blob: Blob | null) => {
+        if (blob) {
+          // Criar um novo arquivo a partir do blob
+          const editedFile = new File([blob], tempImageFile?.name || 'avatar.jpg', {
+            type: 'image/jpeg',
+            lastModified: Date.now(),
+          })
+
+          // Criar URL para preview
+          const imageUrl = URL.createObjectURL(blob)
+          
+          setProfileData((prev) => ({
+            ...prev,
+            foto: imageUrl,
+          }))
+          setSelectedPhotoFile(editedFile)
+          setIsDirty(true)
+          setShowAvatarEditor(false)
+          setTempImageFile(null)
+          setAvatarEditorScale(1)
+          setAvatarEditorRotation(0)
+          
+          toast.success('Foto editada com sucesso!')
+        }
+      }, 'image/jpeg', 0.9)
+    }
+  }
+
+  const handleAvatarEditorCancel = () => {
+    setShowAvatarEditor(false)
+    setTempImageFile(null)
+    setAvatarEditorScale(1)
+    setAvatarEditorRotation(0)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const handleAvatarEditorRotate = () => {
+    setAvatarEditorRotation((prev) => (prev + 90) % 360)
+  }
+
+  const handleAvatarEditorZoomIn = () => {
+    setAvatarEditorScale((prev) => Math.min(prev + 0.1, 3))
+  }
+
+  const handleAvatarEditorZoomOut = () => {
+    setAvatarEditorScale((prev) => Math.max(prev - 0.1, 0.5))
   }
 
   const handleSave = async () => {
@@ -830,7 +913,7 @@ export default function PerfilPage() {
 
                 <div className="mt-6 pt-6 border-t border-gray-800/50">
                   <p className="text-xs text-center text-gray-500">
-                    Arraste uma imagem ou clique no ícone da câmera para alterar sua foto
+                    Arraste uma imagem ou clique no ícone da câmera para editar sua foto
                   </p>
                   {selectedPhotoFile && (
                     <div className="mt-2 p-2 bg-blue-900/20 border border-blue-500/30 rounded-md">
@@ -1456,6 +1539,139 @@ export default function PerfilPage() {
         <Toaster position="top-right" />
         {/* Debug Panel - apenas em desenvolvimento */}
         <DebugPanel />
+
+        {/* Modal do Editor de Avatar */}
+        {showAvatarEditor && (
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-in fade-in-0 duration-300"
+              onClick={handleAvatarEditorCancel}
+            />
+
+            {/* Modal Content */}
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in-0 zoom-in-95 duration-300">
+              <div className="relative bg-gradient-to-br from-[#1a2332] to-[#131b2c] border border-gray-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+                {/* Close Button */}
+                <button
+                  onClick={handleAvatarEditorCancel}
+                  className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-10"
+                >
+                  <X className="h-4 w-4 text-gray-400 hover:text-white" />
+                </button>
+
+                {/* Header */}
+                <div className="flex flex-col space-y-1.5 p-6 pb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-lg animate-pulse" />
+                      <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/20 rounded-full p-2">
+                        <Crop className="h-6 w-6 text-blue-400" />
+                      </div>
+                    </div>
+                    <h2 className="text-lg font-semibold leading-none tracking-tight text-white">
+                      Editar Foto do Perfil
+                    </h2>
+                  </div>
+                  <p className="text-sm text-gray-400">
+                    Ajuste, recorte e rotacione sua foto para o melhor resultado
+                  </p>
+                </div>
+
+                {/* Editor Content */}
+                <div className="px-6 pb-6">
+                  <div className="flex flex-col items-center space-y-6">
+                    {/* Avatar Editor */}
+                    <div className="relative">
+                      <AvatarEditor
+                        ref={avatarEditorRef}
+                        image={tempImageFile || undefined}
+                        width={300}
+                        height={300}
+                        border={50}
+                        borderRadius={150}
+                        color={[59, 130, 246, 0.6]}
+                        scale={avatarEditorScale}
+                        rotate={avatarEditorRotation}
+                        className="rounded-full"
+                      />
+                    </div>
+
+                    {/* Controls */}
+                    <div className="flex flex-col space-y-4 w-full max-w-md">
+                      {/* Zoom Controls */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-300">Zoom</span>
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleAvatarEditorZoomOut}
+                            disabled={avatarEditorScale <= 0.5}
+                            className="w-8 h-8 p-0 border-gray-600 text-gray-300 hover:bg-gray-700"
+                          >
+                            <ZoomOut className="w-4 h-4" />
+                          </Button>
+                          <span className="text-sm text-gray-400 min-w-[3rem] text-center">
+                            {Math.round(avatarEditorScale * 100)}%
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleAvatarEditorZoomIn}
+                            disabled={avatarEditorScale >= 3}
+                            className="w-8 h-8 p-0 border-gray-600 text-gray-300 hover:bg-gray-700"
+                          >
+                            <ZoomIn className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Rotation Control */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-300">Rotação</span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleAvatarEditorRotate}
+                          className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                        >
+                          <RotateCw className="w-4 h-4 mr-2" />
+                          Rotacionar
+                        </Button>
+                      </div>
+
+                      {/* Instructions */}
+                      <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-3">
+                        <p className="text-xs text-blue-300 text-center">
+                          💡 Arraste a imagem para posicioná-la, use os controles para ajustar o zoom e rotação
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex space-x-3 w-full max-w-md">
+                      <Button
+                        variant="outline"
+                        onClick={handleAvatarEditorCancel}
+                        className="flex-1 bg-gray-600/10 border-gray-600/30 text-gray-300 hover:bg-gray-600/20"
+                      >
+                        Cancelar
+                      </Button>
+                      <Button
+                        onClick={handleAvatarEditorSave}
+                        className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white transition hover:from-blue-700 hover:to-indigo-700"
+                      >
+                        <Save className="w-4 h-4 mr-2" />
+                        Salvar Foto
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )
