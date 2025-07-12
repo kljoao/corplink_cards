@@ -415,8 +415,8 @@ class AuthService {
         }
       }
 
-      const response = await fetch(`${API_BASE_URL}/v1/me`, {
-        method: 'DELETE',
+      const response = await fetch(`${API_BASE_URL}/v1/deactivate`, {
+        method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json',
@@ -427,18 +427,18 @@ class AuthService {
 
       if (!response.ok) {
         return {
-          error: data.message || 'Erro ao remover conta',
+          error: data.message || 'Erro ao inativar conta',
         }
       }
 
-      // Logout após remoção
+      // Logout após inativação
       await this.logout()
 
       return {
-        message: data.message || 'Conta removida com sucesso',
+        message: data.message || 'Conta inativada com sucesso',
       }
     } catch (error) {
-      console.error('Erro ao remover conta:', error)
+      console.error('Erro ao inativar conta:', error)
       return {
         error: 'Erro de conexão. Tente novamente.',
       }

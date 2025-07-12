@@ -132,8 +132,7 @@ export default function PerfilPage() {
   const router = useRouter()
   const { user, isLoading: authLoading, logout, updateProfile } = useAuth()
 
-  // Estado para loading e erro do delete
-  const [deleteLoading, setDeleteLoading] = useState(false)
+  // Estado para erro do delete
   const [deleteError, setDeleteError] = useState("")
 
   // Verificar autenticação e carregar dados do usuário
@@ -673,36 +672,7 @@ export default function PerfilPage() {
     return `${digits.slice(0, 3)}.${"x".repeat(digits.length - 3)}`;
   }
 
-  // Função para deletar a conta
-  const handleDeleteAccount = async () => {
-    if (!user?.id) return;
-    setDeleteLoading(true)
-    setDeleteError("")
-    try {
-      const res = await fetch(`https://admin.corplink.co/api/v1/users/${user.id}`, {
-        method: "POST",
-        headers: {
-          "Accept": "application/json",
-        },
-        credentials: "include",
-      })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.message || "Erro ao apagar conta.")
-      }
-      toast.success("Conta inativada com sucesso.", {
-        position: 'top-right',
-      });
-      setTimeout(async () => {
-        await logout()
-        router.push("/login")
-      }, 1500)
-    } catch (err: any) {
-      setDeleteError(err.message || "Erro inesperado ao apagar conta.")
-    } finally {
-      setDeleteLoading(false)
-    }
-  }
+
 
   // Função para compartilhar perfil
   const handleShareProfile = () => {
