@@ -561,16 +561,25 @@ export default function PerfilPage() {
     if (typeof profileData.telefone === 'string' && profileData.telefone.trim()) {
       const tel = profileData.telefone.trim()
       if (tel.startsWith('+')) {
-        // Internacional: enviar tudo em phone, sem phone_prefix
-        updateData.phone = tel.replace(/\D/g, '')
-        updateData.phone_prefix = ''
+        // Internacional: separar código do país e número local
+        const numbers = tel.replace(/\D/g, '')
+        // Tenta pegar até 3 dígitos de código do país
+        let countryCode = ''
+        let rest = ''
+        for (let i = 1; i <= 3; i++) {
+          countryCode = numbers.slice(0, i)
+          rest = numbers.slice(i)
+          // Considera número local válido se rest >= 8 dígitos
+          if (rest.length >= 8) break
+        }
+        updateData.phone_prefix = `+${countryCode}`
+        updateData.phone = rest
       } else {
         // Nacional: extrair DDD e número
         const { ddd, phone } = extractPhoneData(profileData.telefone)
-        if (ddd && phone) {
-          updateData.phone_prefix = `+55`
-          updateData.phone = ddd + phone
-        }
+        let phoneNumber = ddd + phone
+        updateData.phone_prefix = '+55'
+        updateData.phone = phoneNumber
       }
     }
 
@@ -794,16 +803,6 @@ export default function PerfilPage() {
                   </>
                 )}
               </Button>
-
-              {selectedPhotoFile && (
-                <Button
-                  onClick={handleTestUpload}
-                  variant="outline"
-                  className="border-green-500/30 text-green-400 hover:bg-green-500/10 hover:text-green-300"
-                >
-                  🧪 Teste Upload
-                </Button>
-              )}
 
               <Button
                 onClick={handleLogout}
@@ -1520,8 +1519,8 @@ export default function PerfilPage() {
             />
 
             {/* Modal Content */}
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in-0 zoom-in-95 duration-300">
-              <div className="relative bg-gradient-to-br from-[#1a2332] to-[#131b2c] border border-gray-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 animate-in fade-in-0 zoom-in-95 duration-300">
+              <div className="relative bg-gradient-to-br from-[#1a2332] to-[#131b2c] border border-gray-800 rounded-none sm:rounded-xl shadow-2xl w-full h-full sm:max-w-2xl sm:w-full sm:h-auto max-h-screen overflow-y-auto flex flex-col">
                 {/* Close Button */}
                 <button
                   onClick={handleAvatarEditorCancel}
@@ -1549,8 +1548,8 @@ export default function PerfilPage() {
                 </div>
 
                 {/* Editor Content */}
-                <div className="px-6 pb-6">
-                  <div className="flex flex-col items-center space-y-6">
+                <div className="px-6 pb-6 flex-1 flex flex-col items-center overflow-y-auto">
+                  <div className="flex flex-col items-center space-y-6 w-full">
                     {/* Avatar Editor */}
                     <div className="relative">
                       <AvatarEditor
@@ -1618,25 +1617,25 @@ export default function PerfilPage() {
                         </p>
                       </div>
                     </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex space-x-3 w-full max-w-md">
-                      <Button
-                        variant="outline"
-                        onClick={handleAvatarEditorCancel}
-                        className="flex-1 bg-gray-600/10 border-gray-600/30 text-gray-300 hover:bg-gray-600/20"
-                      >
-                        Cancelar
-                      </Button>
-                      <Button
-                        onClick={handleAvatarEditorSave}
-                        className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white transition hover:from-blue-700 hover:to-indigo-700"
-                      >
-                        <Save className="w-4 h-4 mr-2" />
-                        Salvar Foto
-                      </Button>
-                    </div>
                   </div>
+                </div>
+
+                {/* Action Buttons - sempre visíveis no mobile */}
+                <div className="flex space-x-3 w-full max-w-md mx-auto px-6 pb-6 pt-2 bg-[#1a2332] sm:bg-transparent sticky bottom-0 sm:static z-10">
+                  <Button
+                    variant="outline"
+                    onClick={handleAvatarEditorCancel}
+                    className="flex-1 bg-gray-600/10 border-gray-600/30 text-gray-300 hover:bg-gray-600/20"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    onClick={handleAvatarEditorSave}
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white transition hover:from-blue-700 hover:to-indigo-700"
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Salvar Foto
+                  </Button>
                 </div>
               </div>
             </div>
