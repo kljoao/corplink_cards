@@ -29,6 +29,7 @@ export interface User {
     revenue?: string
     birthday?: string
     numid?: string
+    bio?: string
     created_at?: string
     updated_at?: string
   }
@@ -43,6 +44,7 @@ export interface UpdateProfileData {
   revenue?: string
   birthday?: string
   occupation?: string
+  bio?: string
   social_links?: {
     instagram?: string
     linkedin?: string
@@ -273,7 +275,7 @@ class AuthService {
         }
 
         const response = await fetch(`${API_BASE_URL}/v1/profile`, {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json',
@@ -303,7 +305,7 @@ class AuthService {
         console.log('Enviando dados sem foto (JSON)')
         
         const response = await fetch(`${API_BASE_URL}/v1/profile`, {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',

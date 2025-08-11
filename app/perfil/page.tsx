@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Camera,
   Instagram,
@@ -110,6 +111,7 @@ export default function PerfilPage() {
     instagram: "@techsolutions",
     linkedin: "linkedin.com/company/techsolutions",
     whatsapp: false,
+    bio: "",
   })
 
   const [selectedPhotoFile, setSelectedPhotoFile] = useState<File | null>(null)
@@ -190,6 +192,7 @@ export default function PerfilPage() {
         linkedin: user.info?.social_links?.linkedin || prev.linkedin,
         whatsapp: String(user.info?.social_links?.whatsapp) === '1' || prev.whatsapp,
         cpfCnpj: user.info?.numid || prev.cpfCnpj,
+        bio: user.info?.bio || prev.bio,
       }))
     }
   }, [user, authLoading, router])
@@ -555,6 +558,7 @@ export default function PerfilPage() {
         linkedin: String(profileData.linkedin || "").trim(),
         whatsapp: profileData.whatsapp ? '1' : '0',
       },
+      bio: String(profileData.bio || "").trim(),
     }
 
     // Processar telefone se for uma string válida
@@ -648,6 +652,7 @@ export default function PerfilPage() {
     "occupation",
     "instagram",
     "linkedin",
+    "bio",
   ];
 
   const getProfileCompletion = () => {
@@ -1108,6 +1113,44 @@ export default function PerfilPage() {
                               </div>
                               <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                 <Lock className="h-3.5 w-3.5 text-gray-500" />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Bio Field */}
+                          <div className="space-y-2 md:col-span-2">
+                            <div className="flex items-center justify-between">
+                              <Label htmlFor="bio" className="text-gray-300 font-medium flex items-center">
+                                Bio
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Info className="w-3.5 h-3.5 ml-1.5 text-gray-500" />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="bg-gray-900 border-gray-800">
+                                      <p>Conte um pouco sobre você (máximo 1000 caracteres)</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </Label>
+                              <Badge
+                                variant="outline"
+                                className="text-xs font-normal text-blue-400 border-blue-800 bg-blue-950/30"
+                              >
+                                Editável
+                              </Badge>
+                            </div>
+                            <div className="relative">
+                              <Textarea
+                                id="bio"
+                                value={profileData.bio}
+                                onChange={(e) => handleInputChange("bio", e.target.value)}
+                                placeholder="Conte um pouco sobre você, sua experiência, interesses..."
+                                maxLength={1000}
+                                className="bg-[#0d1326] border-gray-700 text-white focus:border-blue-500 focus:ring-blue-500/20 min-h-[120px] resize-none"
+                              />
+                              <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                                {profileData.bio.length}/1000
                               </div>
                             </div>
                           </div>
