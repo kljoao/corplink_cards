@@ -301,7 +301,7 @@ class AuthService {
           avatar_thumb_url: data.avatar_thumb_url,
         }
       } else {
-        // Sem foto, usar JSON normal
+        // Sem foto, usar JSON
         console.log('Enviando dados sem foto (JSON)')
         
         const response = await fetch(`${API_BASE_URL}/v1/profile`, {
