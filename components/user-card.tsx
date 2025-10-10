@@ -6,7 +6,8 @@ import Linkedin from "@/public/icons/linkedin.png"
 import Whatsapp from "@/public/zap.png"
 import Email from "@/public/mail.png"
 import { toast } from 'sonner'
-import { Mail } from 'lucide-react'
+import { Mail, ChevronDown, ChevronUp } from 'lucide-react'
+import { useState } from 'react'
 
 type User = {
   avatar: string
@@ -16,6 +17,7 @@ type User = {
   sector: string
   phone: string | null
   email: string
+  bio: string
   social_links: {
     instagram: string
     linkedin: string
@@ -24,8 +26,20 @@ type User = {
 }
 
 export default function UserCard({ user }: { user: User }) {
+  const [isBioExpanded, setIsBioExpanded] = useState(false)
   const whatsappNumber = user.phone ? user.phone.replace(/\D/g, "") : ""
   const isWhatsAppEnabled = Boolean(user.social_links?.whatsapp)
+  
+  // Função para truncar texto
+  const truncateText = (text: string, maxLength: number = 80) => {
+    if (text.length <= maxLength) return text
+    return text.substring(0, maxLength) + '...'
+  }
+
+  // Função para alternar bio
+  const handleToggleBio = () => {
+    setIsBioExpanded(!isBioExpanded)
+  }
 
   const getInitials = (name: string | undefined) => {
     if (!name) return "?"
@@ -57,14 +71,14 @@ export default function UserCard({ user }: { user: User }) {
   }
 
   return (
-    <div className= "bg-gradient-to-b from-white/5 via-white/15 to-white/10 backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 max-w-sm w-full mx-auto overflow-hidden border-2 rounded-[24px]">
+    <div className="bg-gradient-to-b from-white/5 via-white/15 to-white/10 backdrop-blur-lg rounded-2xl shadow-xl border border-white/10 max-w-sm w-full mx-auto overflow-hidden border-2 rounded-[24px] group hover:shadow-2xl transition-all duration-300 sm:max-w-md lg:max-w-sm">
       <div className="relative w-full h-[334px] rounded-t-2xl overflow-hidden">
         {user.avatar && user.avatar.trim() !== "" ? (
           <Image
             src={user.avatar}
             alt={`Foto de ${user.name}`}
             fill
-            className="object-cover object-[50%_35%]"
+            className="object-cover object-[50%_35%] group-hover:scale-105 transition-transform duration-300"
             sizes="w-full"
           />
         ) : (
@@ -74,8 +88,8 @@ export default function UserCard({ user }: { user: User }) {
         )}
       </div>
 
-      <div className="p-6 space-y-4 z-10">
-        <h2 className="text-[24px] font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
+      <div className="p-4 sm:p-6 space-y-4 z-10">
+        <h2 className="text-xl sm:text-2xl font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
           {user.name}
         </h2>
 
@@ -85,6 +99,50 @@ export default function UserCard({ user }: { user: User }) {
             <p className="font-medium">{user.sector}</p>
           )}
         </div>
+
+        {/* Bio com preview e expansão */}
+        {user.bio && user.bio.trim() !== '' && (
+          <div className="space-y-2">
+            {/* Indicador de Bio */}
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-1 h-4 bg-gradient-to-b from-blue-400 to-purple-400 rounded-full"></div>
+              <span className="text-xs font-semibold text-blue-400/80 uppercase tracking-wider">BIO</span>
+            </div>
+            
+            {/* Container da bio com animação */}
+            <div className="overflow-hidden">
+              <div 
+                className={`transition-all duration-500 ease-in-out ${
+                  isBioExpanded 
+                    ? 'max-h-96 opacity-100' 
+                    : 'max-h-16 opacity-90'
+                }`}
+                style={{
+                  maxHeight: isBioExpanded ? '400px' : '64px'
+                }}
+              >
+                <div className="text-gray-300 text-sm leading-relaxed pl-3 border-l-2 border-blue-400/30 bg-gradient-to-r from-blue-500/5 to-transparent rounded-r-lg p-2 sm:p-3">
+                  {isBioExpanded ? user.bio : truncateText(user.bio)}
+                </div>
+              </div>
+            </div>
+            
+            {/* Botão de expansão */}
+            {user.bio.length > 80 && (
+              <button
+                onClick={handleToggleBio}
+                className="bio-button flex items-center gap-2 text-blue-400/70 hover:text-blue-400 text-xs font-medium transition-all duration-300 hover:bg-blue-400/10 px-2 py-1 rounded-lg"
+              >
+                <div className={`transition-transform duration-500 ease-in-out ${isBioExpanded ? 'rotate-180' : 'rotate-0'}`}>
+                  <ChevronDown size={14} />
+                </div>
+                <span className="transition-all duration-300">
+                  {isBioExpanded ? 'Ver menos' : 'Ver mais'}
+                </span>
+              </button>
+            )}
+          </div>
+        )}
 
         <hr className="border-t border-white/20" />
         <div className="flex flex-wrap gap-4 pt-2">

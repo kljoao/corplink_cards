@@ -13,6 +13,7 @@ type ApiUser = {
     occupation: string
     sector: string
     phone: string | null
+    bio?: string
     social_links: {
       instagram: string
       linkedin: string
@@ -64,6 +65,7 @@ export default async function UserPage({ params }: { params: { slug:string } }) 
     company: user.info?.company ?? '',
     sector: user.info?.sector ?? '',
     phone: user.info?.phone ?? null,
+    bio: user.info?.bio ?? '',
     social_links: {
       instagram: user.info?.social_links?.instagram ?? '',
       linkedin: user.info?.social_links?.linkedin ?? '',

@@ -14,6 +14,7 @@ type User = {
   sector: string
   phone: string | null
   email: string
+  bio: string
   social_links: {
     instagram: string
     linkedin: string
@@ -59,14 +60,16 @@ export default function UserPageClient({ user }: { user: User }) {
         />
       </div>
       {/* Conteúdo principal */}
-      <div className="flex flex-col items-center justify-center gap-10 relative z-10">
+      <div className="flex flex-col items-center justify-center gap-10 relative z-10 px-4 sm:px-6 lg:px-8">
         <Header />
         <div className="flex flex-col items-center justify-center gap-2 pt-[150px]">
-          <h1 className="text-6xl font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-goldman-sans font-bold bg-gradient-to-r from-[#F8F8F8] to-[#71717A] text-transparent bg-clip-text">
             Membros
           </h1>
-          <p className="text-white/50">Perfil do usuário</p>
+          <p className="text-white/50 text-sm sm:text-base">Perfil do usuário</p>
         </div>
+        
+        
         <UserCard user={user} />
         <Toaster position="top-right" />
       </div>
