@@ -1128,7 +1128,7 @@ export default function PerfilPage() {
                                       <Info className="w-3.5 h-3.5 ml-1.5 text-gray-500" />
                                     </TooltipTrigger>
                                     <TooltipContent className="bg-gray-900 border-gray-800">
-                                      <p>Conte um pouco sobre você (máximo 1000 caracteres)</p>
+                                      <p>Conte um pouco sobre você (máximo 500 caracteres)</p>
                                     </TooltipContent>
                                   </Tooltip>
                                 </TooltipProvider>
