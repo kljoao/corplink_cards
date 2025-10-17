@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Read(/C:\\Users\\João\\Desktop\\corplink_cards\\app/**)",
+      "Read(/C:\\Users\\João\\Desktop\\corplink_cards\\components/**)",
+      "Read(/C:\\Users\\João\\Desktop\\corplink_cards\\hooks/**)",
+      "Read(/C:\\Users\\João\\Desktop\\corplink_cards/**)",
+      "Read(/C:\\Users\\João\\Desktop\\corplink_cards\\app/**)",
+      "Read(/C:\\Users\\João\\Desktop\\corplink_cards/**)",
+      "Read(/C:\\Users\\João\\Desktop\\corplink_cards\\hooks/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
