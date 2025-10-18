@@ -4,6 +4,16 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
 import { Check } from "lucide-react"
 
+const COLORS = {
+  vipBlue: "#000016",
+  titanium: "#17313c",
+  royal: "#26425e",
+  marfim: "#bebdb2",
+  clarity: "#f8f8f8",
+  gold: "#d4af37",
+  goldLight: "#f4e5b8",
+}
+
 const features = [
   "Limite de crédito personalizado",
   "Programa de pontos Coopera",
@@ -67,7 +77,7 @@ export default function Exclusive() {
             >
               Feito para quem
               <br />
-              <span className="text-gold" style={{ fontWeight: 500 }}>
+              <span className="text-gold" style={{ fontWeight: 600, color: COLORS.gold }}>
                 não aceita limites
               </span>
             </h2>
