@@ -5,6 +5,7 @@ import InstagramIcon from "../public/icons/Instagram_icon.png"
 import Linkedin from "@/public/icons/linkedin.png"
 import Whatsapp from "@/public/zap.png"
 import Email from "@/public/mail.png"
+import IconeCorp from "@/public/logos/icone_corp.png"
 import { toast } from 'sonner'
 import { Mail, ChevronDown, ChevronUp } from 'lucide-react'
 import { useState } from 'react'
@@ -67,6 +68,16 @@ export default function UserCard({ user }: { user: User }) {
       window.open(`mailto:${user.email}`, '_blank')
     } else {
       toast.info("E-mail não disponível")
+    }
+  }
+
+  const handleCopyUrl = async () => {
+    try {
+      const currentUrl = window.location.href
+      await navigator.clipboard.writeText(currentUrl)
+      toast.success("URL copiada para a área de transferência!")
+    } catch (error) {
+      toast.error("Erro ao copiar URL")
     }
   }
 
@@ -223,6 +234,14 @@ export default function UserCard({ user }: { user: User }) {
               <Mail size={30} />
             </span>
           )}
+
+          <button
+            onClick={handleCopyUrl}
+            aria-label="Copiar URL do perfil"
+            className="flex items-center gap-2 text-yellow-400 hover:text-yellow-300 transition-colors "
+          >
+            <Image src={IconeCorp} alt="Ícone Corp" width={30} height={30} className="rounded-[5px]" />
+          </button>
         </div>
       </div>
     </div>
