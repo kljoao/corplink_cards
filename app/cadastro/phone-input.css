@@ -1,0 +1,51 @@
+/* Enhanced phone input styles for better integration */
+.PhoneInput {
+    display: flex;
+    align-items: center;
+  }
+  
+  .PhoneInputInput {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .PhoneInputCountry {
+    margin-right: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: #26425e;
+    transition: all 0.3s ease;
+  }
+  
+  .PhoneInputCountry:hover {
+    background-color: #17313c;
+  }
+  
+  .PhoneInputCountryIcon {
+    width: 1.75rem;
+    height: 1.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .PhoneInputCountrySelect {
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .PhoneInputCountrySelect:focus {
+    outline: none;
+  }
+  
+  .PhoneInputCountrySelectArrow {
+    color: #bebdb2;
+    margin-left: 0.5rem;
+    opacity: 0.8;
+  }
+  
+  .phone-input-custom .PhoneInputInput {
+    height: 3.5rem;
+  }
+  

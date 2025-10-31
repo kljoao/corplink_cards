@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { motion, useInView } from "framer-motion"
 import { Award, Plane, Globe, type LucideIcon } from "lucide-react"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
 const COLORS = {
   vipBlue: "#000016",
@@ -75,15 +75,25 @@ export default function CardShowcase() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              className="space-y-3 sm:space-y-4"
             >
               <Image
                 src="/visa_logo.png"
                 alt="VISA"
                 width={120}
                 height={40}
-                className="h-8 sm:h-10 md:h-12 w-auto"
+                className="h-6 sm:h-7 md:h-9 lg:h-10 w-auto"
                 priority
               />
+
+              <Image
+                src="/zenith.svg"
+                alt="Zenith"
+                width={300}
+                height={90}
+                className="h-auto w-32 sm:w-40 md:w-52 lg:w-64 xl:w-72"
+                priority
+               />
             </motion.div>
 
             {/* Título principal */}
@@ -91,7 +101,7 @@ export default function CardShowcase() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="leading-none"
+              className="leading-none mt-[-30px]"
               style={{
                 fontSize: "clamp(2rem, 8vw, 4.5rem)",
                 fontWeight: 700,
@@ -174,9 +184,33 @@ export default function CardShowcase() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-8 sm:mt-12 md:mt-16"
+          className="mt-12 sm:mt-16 md:mt-20"
         >
-          <div className="grid gap-3 sm:gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Título da seção */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-center mb-8 sm:mb-12"
+          >
+            <h2 
+              className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4"
+              style={{
+                background: `linear-gradient(135deg, ${COLORS.clarity} 0%, ${COLORS.gold} 100%)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Benefícios Exclusivos
+            </h2>
+            <div 
+              className="w-24 h-1 mx-auto rounded-full"
+              style={{ background: `linear-gradient(90deg, ${COLORS.gold}, ${COLORS.royal})` }}
+            />
+          </motion.div>
+
+          <div className="grid gap-6 sm:gap-8 md:gap-10 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
             {highlightBenefits.map((item, index) => (
               <HighlightBenefitCard key={item.title} benefit={item} index={index} />
             ))}
@@ -190,99 +224,216 @@ export default function CardShowcase() {
 function HighlightBenefitCard({ benefit, index }: { benefit: HighlightBenefit; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const isCardInView = useInView(cardRef, { once: true, margin: "-50px" })
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
     <motion.div
       ref={cardRef}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isCardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-      className="group relative"
+      initial={{ opacity: 0, y: 50, rotateX: 15 }}
+      animate={isCardInView ? { opacity: 1, y: 0, rotateX: 0 } : { opacity: 0, y: 50, rotateX: 15 }}
+      transition={{ duration: 0.8, delay: index * 0.15, ease: "easeOut" }}
+      className="group relative perspective-1000"
+      style={{ perspective: "1000px" }}
     >
+      {/* Card principal com glassmorphism */}
       <motion.div
-        whileHover={{ y: -6, scale: 1.02 }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        animate={isHovered ? {
+          y: -12,
+          scale: 1.03,
+          rotateY: 5,
+          rotateX: -2
+        } : {
+          y: 0,
+          scale: 1,
+          rotateY: 0,
+          rotateX: 0
+        }}
         whileTap={{ scale: 0.98 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl p-5 sm:p-6 md:p-8 h-full backdrop-blur-sm cursor-pointer"
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="relative overflow-hidden rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 h-full cursor-pointer"
         style={{
-          border: `1px solid ${COLORS.royal}40`,
-          background: `linear-gradient(135deg, ${COLORS.titanium}80 0%, ${COLORS.royal}40 100%)`,
-          boxShadow: `0 4px 20px ${COLORS.vipBlue}40`,
+          background: `
+            linear-gradient(135deg, 
+              rgba(23, 49, 60, 0.4) 0%, 
+              rgba(38, 66, 94, 0.3) 50%, 
+              rgba(0, 0, 22, 0.2) 100%
+            )
+          `,
+          backdropFilter: "blur(20px)",
+          border: `1px solid rgba(212, 175, 55, 0.2)`,
+          boxShadow: `
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1)
+          `,
         }}
       >
-        {/* Hover overlay com efeito gradiente */}
+        {/* Gradiente animado de fundo */}
+        <motion.div
+          className="absolute inset-0 opacity-30"
+          animate={{
+            background: [
+              `linear-gradient(45deg, ${COLORS.gold}10, ${COLORS.royal}20, ${COLORS.titanium}10)`,
+              `linear-gradient(45deg, ${COLORS.royal}20, ${COLORS.gold}10, ${COLORS.titanium}20)`,
+              `linear-gradient(45deg, ${COLORS.titanium}10, ${COLORS.royal}20, ${COLORS.gold}10)`,
+            ],
+          }}
+          transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+        />
+
+        {/* Overlay de hover com efeito neon */}
         <motion.div
           className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          whileHover={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.5 }}
           style={{
-            background: `linear-gradient(135deg, ${COLORS.gold}15 0%, ${COLORS.gold}05 100%)`,
+            background: `
+              radial-gradient(circle at 50% 50%,
+                rgba(212, 175, 55, 0.15) 0%,
+                transparent 70%
+              )
+            `,
+            boxShadow: `
+              inset 0 0 60px rgba(212, 175, 55, 0.1),
+              0 0 40px rgba(212, 175, 55, 0.2)
+            `,
           }}
         />
 
-        {/* Border glow no hover */}
+        {/* Border neon no hover */}
         <motion.div
-          className="absolute inset-0 rounded-lg sm:rounded-xl md:rounded-2xl"
-          initial={{ opacity: 0 }}
-          whileHover={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
+          className="absolute inset-0 rounded-2xl sm:rounded-3xl"
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.5 }}
           style={{
-            border: `1px solid ${COLORS.gold}60`,
-            boxShadow: `0 0 30px ${COLORS.gold}20, inset 0 0 30px ${COLORS.gold}10`,
+            border: `2px solid transparent`,
+            background: `
+              linear-gradient(135deg,
+                rgba(212, 175, 55, 0.6),
+                rgba(38, 66, 94, 0.4),
+                rgba(212, 175, 55, 0.6)
+              ) border-box
+            `,
+            mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
+            maskComposite: "xor",
+            WebkitMaskComposite: "xor",
+            boxShadow: `
+              0 0 30px rgba(212, 175, 55, 0.4),
+              inset 0 0 30px rgba(212, 175, 55, 0.1)
+            `,
           }}
         />
 
-        <div className="relative z-10 flex flex-col items-center text-center">
-          {/* Ícone centralizado com animação pulsante */}
+        {/* Conteúdo principal */}
+        <div className="relative z-10 flex flex-col items-center text-center h-full justify-center">
+          {/* Container do ícone com efeito 3D */}
           <motion.div
-            className="mb-4 sm:mb-5 inline-flex h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 items-center justify-center rounded-lg sm:rounded-xl"
-            style={{
-              background: `${COLORS.gold}20`,
-              color: COLORS.gold,
-              boxShadow: `0 0 20px ${COLORS.gold}20`,
+            className="mb-6 sm:mb-8 relative"
+            animate={isHovered ? {
+              scale: 1.2,
+              rotateY: 360,
+              rotateZ: 5,
+            } : {
+              scale: 1,
+              rotateY: 0,
+              rotateZ: 0,
             }}
-            whileHover={{
-              scale: 1.15,
-              rotate: [0, -8, 8, 0],
-              boxShadow: `0 0 40px ${COLORS.gold}40`,
-            }}
-            animate={{
-              boxShadow: [
-                `0 0 20px ${COLORS.gold}20`,
-                `0 0 30px ${COLORS.gold}30`,
-                `0 0 20px ${COLORS.gold}20`,
-              ],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <benefit.icon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" strokeWidth={1.5} />
+            {/* Glow effect atrás do ícone */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl blur-xl"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+              style={{
+                background: `radial-gradient(circle, ${COLORS.gold} 0%, transparent 70%)`,
+              }}
+            />
+
+            {/* Ícone principal */}
+            <motion.div
+              className="relative inline-flex h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 items-center justify-center rounded-2xl"
+              style={{
+                background: `
+                  linear-gradient(135deg,
+                    rgba(212, 175, 55, 0.2) 0%,
+                    rgba(212, 175, 55, 0.1) 100%
+                  )
+                `,
+                border: `1px solid rgba(212, 175, 55, 0.3)`,
+              }}
+              animate={{
+                boxShadow: isHovered
+                  ? `0 12px 48px rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)`
+                  : `0 8px 32px rgba(212, 175, 55, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+              }}
+              transition={{ duration: 0.4 }}
+            >
+              <benefit.icon 
+                className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12" 
+                strokeWidth={1.5}
+                style={{ color: COLORS.gold }}
+              />
+            </motion.div>
           </motion.div>
 
+          {/* Título com efeito de gradiente */}
           <motion.h3
-            className="mb-1.5 sm:mb-2 text-sm sm:text-base md:text-lg lg:text-xl font-semibold leading-snug"
-            style={{ color: COLORS.clarity }}
-            whileHover={{ color: COLORS.gold }}
+            className="text-lg sm:text-xl md:text-2xl font-bold leading-tight mb-2 transition-colors duration-300"
+            style={{
+              background: `linear-gradient(135deg, ${COLORS.clarity} 0%, ${COLORS.gold} 100%)`,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+            animate={{
+              scale: isHovered ? 1.05 : 1,
+            }}
             transition={{ duration: 0.3 }}
           >
             {benefit.title}
           </motion.h3>
+
+          {/* Linha decorativa */}
+          <motion.div
+            className="w-12 h-0.5 rounded-full mt-2"
+            animate={{
+              scaleX: isHovered ? 1.5 : 1,
+            }}
+            style={{
+              background: isHovered
+                ? `linear-gradient(90deg, ${COLORS.gold}, ${COLORS.clarity})`
+                : `linear-gradient(90deg, ${COLORS.gold}, ${COLORS.royal})`,
+            }}
+            transition={{ duration: 0.3 }}
+          />
         </div>
 
-        {/* Efeito de brilho no canto */}
+        {/* Partículas flutuantes */}
         <motion.div
-          className="absolute -right-6 -top-6 sm:-right-8 sm:-top-8 h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 rounded-full"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileHover={{ opacity: 1, scale: 1.2 }}
-          transition={{ duration: 0.4 }}
-          style={{
-            background: `radial-gradient(circle, ${COLORS.gold}25 0%, transparent 70%)`,
-            filter: "blur(20px)",
+          className="absolute top-4 right-4 w-2 h-2 rounded-full"
+          style={{ background: COLORS.gold }}
+          animate={{
+            y: [0, -10, 0],
+            opacity: [0.3, 0.8, 0.3],
+            scale: [1, 1.2, 1],
           }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-6 left-6 w-1 h-1 rounded-full"
+          style={{ background: COLORS.royal }}
+          animate={{
+            y: [0, -8, 0],
+            opacity: [0.2, 0.6, 0.2],
+            scale: [1, 1.5, 1],
+          }}
+          transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 0.5 }}
         />
       </motion.div>
     </motion.div>
