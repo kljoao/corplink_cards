@@ -1,51 +1,145 @@
-/* Enhanced phone input styles for better integration */
+/* Updated phone input styles for dark theme with proper contrast and gold accents */
+
+/* Dark theme phone input styles matching CorpLink luxury brand identity */
 .PhoneInput {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+}
+
+.PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Country selector with dark theme styling */
+.PhoneInputCountry {
+  margin-right: 0.75rem;
+  padding: 0.5rem 0;
+  border-radius: 0;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid rgba(38, 66, 94, 0.5);
+}
+
+.PhoneInputCountry:hover {
+  border-bottom-color: #d4af37;
+}
+
+.PhoneInputCountryIcon {
+  width: 1.5rem;
+  height: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+}
+
+.PhoneInputCountrySelect {
+  border: none;
+  background: transparent;
+  color: #f8f8f8;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 300;
+  padding: 0.25rem;
+}
+
+.PhoneInputCountrySelect:focus {
+  outline: none;
+}
+
+.PhoneInputCountrySelectArrow {
+  color: #bebdb2;
+  margin-left: 0.5rem;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.PhoneInputCountry:hover .PhoneInputCountrySelectArrow {
+  opacity: 1;
+  color: #d4af37;
+}
+
+/* Dark theme class for phone input with proper focus states */
+.phone-input-dark .PhoneInputInput {
+  height: 3.5rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(38, 66, 94, 0.5);
+  border-radius: 0;
+  padding: 0;
+  color: #f8f8f8;
+  font-size: 1rem;
+  font-weight: 300;
+  transition: all 0.3s ease;
+}
+
+.phone-input-dark .PhoneInputInput:focus {
+  outline: none;
+  border-bottom-color: #d4af37;
+  box-shadow: 0 1px 0 0 #d4af37;
+}
+
+.phone-input-dark .PhoneInputInput::placeholder {
+  color: #26425e;
+  opacity: 0.8;
+  font-weight: 300;
+}
+
+.phone-input-dark .PhoneInputCountry {
+  border-bottom-color: rgba(38, 66, 94, 0.5);
+}
+
+.phone-input-dark .PhoneInputCountrySelect {
+  color: #f8f8f8;
+}
+
+/* Country dropdown with dark luxury styling */
+.PhoneInputCountrySelectDropdown {
+  background-color: #f8f8f8;
+  border: 1px solid #bebdb2;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0, 0, 22, 0.4);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.PhoneInputCountryOption {
+  padding: 0.875rem 1rem;
+  color: #000016;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 300;
+}
+
+.PhoneInputCountryOption:hover {
+  background-color: rgba(212, 175, 55, 0.1);
+  color: #000016;
+}
+
+.PhoneInputCountryOption--selected {
+  background-color: #000016;
+  color: #d4af37;
+  font-weight: 400;
+}
+
+.PhoneInputCountryOption--focused {
+  background-color: rgba(212, 175, 55, 0.15);
+  color: #000016;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .phone-input-dark .PhoneInputInput {
+    height: 3rem;
+    font-size: 0.875rem;
   }
-  
-  .PhoneInputInput {
-    flex: 1;
-    min-width: 0;
-  }
-  
-  .PhoneInputCountry {
-    margin-right: 0.75rem;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    background-color: #26425e;
-    transition: all 0.3s ease;
-  }
-  
-  .PhoneInputCountry:hover {
-    background-color: #17313c;
-  }
-  
+
   .PhoneInputCountryIcon {
-    width: 1.75rem;
-    height: 1.25rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width: 1.25rem;
+    height: 0.875rem;
   }
-  
-  .PhoneInputCountrySelect {
-    border: none;
-    background: transparent;
-    color: white;
-    cursor: pointer;
-    font-size: 1rem;
+
+  .PhoneInputCountry {
+    margin-right: 0.5rem;
   }
-  
-  .PhoneInputCountrySelect:focus {
-    outline: none;
-  }
-  
-  .PhoneInputCountrySelectArrow {
-    color: #bebdb2;
-    margin-left: 0.5rem;
-    opacity: 0.8;
-  }
-  
-  .phone-input-custom .PhoneInputInput {
-    height: 3.5rem;
-  }
-  
+}
