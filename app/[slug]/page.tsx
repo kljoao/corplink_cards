@@ -25,10 +25,16 @@ type ApiUser = {
 // Busca os dados de um único usuário pelo slug
 async function fetchUserBySlug(slug: string): Promise<ApiUser | null> {
   const sanitizedSlug = slug.toLowerCase().trim()
-  const apiUrl = `${process.env.NEXT_PUBLIC_API}/v1/users/${sanitizedSlug}`
+  const apiUrl = process.env.NEXT_PUBLIC_API
+
+  if (!apiUrl) {
+    return null
+  }
+
+  const fullUrl = `${apiUrl}/v1/users/${sanitizedSlug}`
 
   try {
-    const res = await fetch(apiUrl, {
+    const res = await fetch(fullUrl, {
       headers: { Accept: "application/json" },
       // Garante que os dados sejam buscados a cada requisição, sem cache.
       cache: 'no-store',
@@ -48,8 +54,10 @@ async function fetchUserBySlug(slug: string): Promise<ApiUser | null> {
   }
 }
 
-export default async function UserPage({ params }: { params: { slug:string } }) {
-  const user = await fetchUserBySlug(params.slug)
+export default async function UserPage({ params }: { params: Promise<{ slug: string }> }) {
+  // No Next.js 15, params é uma Promise e precisa ser aguardado
+  const { slug } = await params
+  const user = await fetchUserBySlug(slug)
 
   // Se o usuário não for encontrado, exibe a página 404
   if (!user) {
@@ -76,8 +84,10 @@ export default async function UserPage({ params }: { params: { slug:string } }) 
   return <UserPageClient user={cardUser} />
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const user = await fetchUserBySlug(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  // No Next.js 15, params é uma Promise e precisa ser aguardado
+  const { slug } = await params
+  const user = await fetchUserBySlug(slug);
 
   if (!user) {
     return {
