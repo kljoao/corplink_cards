@@ -5,7 +5,7 @@ import InstagramIcon from "../public/icons/Instagram_icon.png"
 import Linkedin from "@/public/icons/linkedin.png"
 import Whatsapp from "@/public/zap.png"
 import Email from "@/public/mail.png"
-import IconeCorp from "@/public/logos/icone_corp.png"
+import IconeCorp from "@/public/icons/copy.png"
 import { toast } from 'sonner'
 import { Mail, ChevronDown, ChevronUp } from 'lucide-react'
 import { useState } from 'react'
