@@ -22,30 +22,89 @@ type ApiUser = {
   }
 }
 
-// Busca os dados de um único usuário pelo slug
-async function fetchUserBySlug(slug: string): Promise<ApiUser | null> {
+// Cache em memória para evitar requisições duplicadas durante o build/render
+const userCache = new Map<string, { data: ApiUser | null; timestamp: number }>()
+const CACHE_TTL = 5000 // 5 segundos de cache
+
+// Busca os dados de um único usuário pelo slug com retry logic
+async function fetchUserBySlug(slug: string, retries = 3): Promise<ApiUser | null> {
   const sanitizedSlug = slug.toLowerCase().trim()
+  
+  // Verifica cache
+  const cached = userCache.get(sanitizedSlug)
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data
+  }
+
   const apiUrl = `${process.env.NEXT_PUBLIC_API}/v1/users/${sanitizedSlug}`
 
-  try {
-    const res = await fetch(apiUrl, {
-      headers: { Accept: "application/json" },
-      // Garante que os dados sejam buscados a cada requisição, sem cache.
-      cache: 'no-store',
-      next: { revalidate: 0 },
-    })
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      // AbortController com timeout de 15 segundos
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 15000)
 
-    if (!res.ok) {
-      console.error(`Falha ao buscar usuário com slug ${sanitizedSlug}. Status: ${res.status}`)
-      return null
+      const res = await fetch(apiUrl, {
+        headers: { 
+          Accept: "application/json",
+          'Content-Type': 'application/json'
+        },
+        signal: controller.signal,
+        // Configurações de cache otimizadas
+        cache: 'no-store',
+        next: { revalidate: 0 },
+      })
+
+      clearTimeout(timeoutId)
+
+      if (!res.ok) {
+        console.error(`Falha ao buscar usuário com slug ${sanitizedSlug}. Status: ${res.status} (Tentativa ${attempt}/${retries})`)
+        
+        // Se for 404, não precisa tentar novamente
+        if (res.status === 404) {
+          userCache.set(sanitizedSlug, { data: null, timestamp: Date.now() })
+          return null
+        }
+        
+        // Para outros erros, tenta novamente
+        if (attempt < retries) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt)) // Backoff exponencial
+          continue
+        }
+        return null
+      }
+
+      const user: ApiUser = await res.json()
+      
+      // Armazena no cache
+      userCache.set(sanitizedSlug, { data: user, timestamp: Date.now() })
+      
+      return user
+    } catch (error) {
+      const isTimeout = error instanceof Error && error.name === 'AbortError'
+      const isConnectionError = error instanceof Error && 'cause' in error
+      
+      console.error(
+        `Erro ao buscar usuário com slug ${sanitizedSlug} (Tentativa ${attempt}/${retries}):`,
+        isTimeout ? 'Timeout - API demorou mais de 15s para responder' : error
+      )
+
+      // Se for timeout ou erro de conexão e ainda temos tentativas, tenta novamente
+      if ((isTimeout || isConnectionError) && attempt < retries) {
+        console.log(`Tentando novamente em ${attempt} segundo(s)...`)
+        await new Promise(resolve => setTimeout(resolve, 1000 * attempt))
+        continue
+      }
+
+      // Se esgotou as tentativas, retorna null
+      if (attempt === retries) {
+        userCache.set(sanitizedSlug, { data: null, timestamp: Date.now() })
+        return null
+      }
     }
-
-    const user: ApiUser = await res.json()
-    return user
-  } catch (error) {
-    console.error(`Erro ao buscar usuário com slug ${sanitizedSlug}:`, error)
-    return null
   }
+
+  return null
 }
 
 export default async function UserPage({ params }: { params: { slug:string } }) {
