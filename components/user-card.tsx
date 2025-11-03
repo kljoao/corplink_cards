@@ -5,6 +5,7 @@ import InstagramIcon from "../public/icons/Instagram_icon.png"
 import Linkedin from "@/public/icons/linkedin.png"
 import Whatsapp from "@/public/zap.png"
 import Email from "@/public/mail.png"
+import CopyIcon from "@/public/icons/copy.png"
 import { toast } from 'sonner'
 import { Mail, ChevronDown, ChevronUp } from 'lucide-react'
 import { useState } from 'react'
@@ -18,6 +19,7 @@ type User = {
   phone: string | null
   email: string
   bio: string
+  corplinkurl?: string
   social_links: {
     instagram: string
     linkedin: string
@@ -67,6 +69,27 @@ export default function UserCard({ user }: { user: User }) {
       window.open(`mailto:${user.email}`, '_blank')
     } else {
       toast.info("E-mail não disponível")
+    }
+  }
+
+  const handleCopyLink = async () => {
+    try {
+      // Obtém a URL atual da página
+      const currentUrl = window.location.href
+      
+      // Copia para a área de transferência
+      await navigator.clipboard.writeText(currentUrl)
+      
+      // Exibe notificação de sucesso
+      toast.success("Link copiado para a área de transferência!", {
+        duration: 3000,
+      })
+    } catch (error) {
+      // Fallback caso o navigator.clipboard não esteja disponível
+      console.error("Erro ao copiar link:", error)
+      toast.error("Não foi possível copiar o link", {
+        duration: 3000,
+      })
     }
   }
 
@@ -223,6 +246,15 @@ export default function UserCard({ user }: { user: User }) {
               <Mail size={30} />
             </span>
           )}
+
+          {/* Botão de copiar link */}
+          <button
+            onClick={handleCopyLink}
+            aria-label={`Copiar link do perfil de ${user.name}`}
+            className="flex items-center gap-2"
+          >
+            <Image src={CopyIcon} alt="Copiar Link" width={30} height={30}/>
+          </button>
         </div>
       </div>
     </div>

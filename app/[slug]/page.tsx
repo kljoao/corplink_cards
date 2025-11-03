@@ -8,6 +8,7 @@ type ApiUser = {
   name: string
   avatar: string
   email: string
+  corplinkurl?: string
   info: {
     company: string
     occupation: string
@@ -120,6 +121,7 @@ export default async function UserPage({ params }: { params: { slug:string } }) 
     avatar: user.avatar,
     name: user.name,
     email: user.email,
+    corplinkurl: user.corplinkurl ?? '',
     occupation: user.info?.occupation ?? '',
     company: user.info?.company ?? '',
     sector: user.info?.sector ?? '',

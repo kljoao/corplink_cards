@@ -15,6 +15,7 @@ type User = {
   phone: string | null
   email: string
   bio: string
+  corplinkurl?: string
   social_links: {
     instagram: string
     linkedin: string
