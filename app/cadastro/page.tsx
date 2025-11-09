@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -14,10 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ArrowLeft, ArrowRight, Check, Upload, User } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+import { ArrowLeft, ArrowRight, Check, Loader2, CheckCircle, XCircle } from "lucide-react"
 import Header from "@/components/Header"
 
 const COLORS = {
@@ -41,11 +38,10 @@ const step2Schema = z.object({
   position: z.string().min(2, "Cargo é obrigatório"),
   segment: z.string().min(1, "Selecione um segmento"),
   company: z.string().min(2, "Nome da empresa é obrigatório"),
-  revenue: z.string().min(1, "Faturamento anual é obrigatório"),
+  revenue: z.string().min(1, "Selecione uma faixa de faturamento"),
 })
 
 const step3Schema = z.object({
-  profilePhoto: z.string().optional(),
   instagram: z.string().optional(),
   linkedin: z.string().optional(),
   bio: z.string().max(1000, "Bio deve ter no máximo 1000 caracteres").optional(),
@@ -58,7 +54,114 @@ type Step3Data = z.infer<typeof step3Schema>
 export default function CadastroPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState<Partial<Step1Data & Step2Data & Step3Data>>({})
-  const [profileImage, setProfileImage] = useState<string>("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  // Injeta estilos ULTRA agressivos e observer para corrigir dropdown de países
+  useEffect(() => {
+    const styleId = 'phone-input-dropdown-ultimate-fix'
+    
+    // Remove estilo anterior se existir
+    const existingStyle = document.getElementById(styleId)
+    if (existingStyle) {
+      existingStyle.remove()
+    }
+
+    // Cria estilo ULTRA agressivo
+    const style = document.createElement('style')
+    style.id = styleId
+    style.textContent = `
+      /* FORÇA MÁXIMA nos estilos do dropdown */
+      .PhoneInputCountrySelectDropdown,
+      .PhoneInputCountrySelect option,
+      select.PhoneInputCountrySelect option {
+        background-color: #17313c !important;
+        background: #17313c !important;
+        color: #f8f8f8 !important;
+      }
+      
+      .PhoneInputCountrySelect {
+        background-color: transparent !important;
+        color: #f8f8f8 !important;
+      }
+      
+      /* Força cor em TODAS as options do select */
+      .PhoneInputCountrySelect option,
+      select.PhoneInputCountrySelect option,
+      .PhoneInputCountry select option {
+        background-color: #17313c !important;
+        color: #f8f8f8 !important;
+        padding: 0.5rem !important;
+      }
+      
+      .PhoneInputCountrySelect option:hover,
+      select.PhoneInputCountrySelect option:hover {
+        background-color: rgba(212, 175, 55, 0.2) !important;
+        color: #f8f8f8 !important;
+      }
+      
+      .PhoneInputCountrySelect option:checked,
+      select.PhoneInputCountrySelect option:checked {
+        background-color: #d4af37 !important;
+        color: #000016 !important;
+        font-weight: 600 !important;
+      }
+    `
+    
+    document.head.appendChild(style)
+
+    // Observer para aplicar estilos inline diretos quando o select abrir
+    const applyStylesToSelect = () => {
+      const selects = document.querySelectorAll('.PhoneInputCountrySelect, select.PhoneInputCountrySelect')
+      selects.forEach((select) => {
+        const selectElement = select as HTMLSelectElement
+        selectElement.style.backgroundColor = 'transparent'
+        selectElement.style.color = '#f8f8f8'
+        
+        // Aplica estilos em cada option
+        const options = selectElement.querySelectorAll('option')
+        options.forEach((option) => {
+          option.style.backgroundColor = '#17313c'
+          option.style.color = '#f8f8f8'
+          option.style.padding = '0.5rem'
+        })
+      })
+    }
+
+    // Aplica imediatamente
+    applyStylesToSelect()
+
+    // Observa mudanças no DOM
+    const observer = new MutationObserver(() => {
+      applyStylesToSelect()
+    })
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    })
+
+    // Aplica também quando o usuário interagir
+    const handleFocus = () => {
+      setTimeout(applyStylesToSelect, 50)
+    }
+
+    document.addEventListener('focusin', handleFocus)
+    document.addEventListener('click', handleFocus)
+
+    return () => {
+      observer.disconnect()
+      document.removeEventListener('focusin', handleFocus)
+      document.removeEventListener('click', handleFocus)
+      const styleToRemove = document.getElementById(styleId)
+      if (styleToRemove) {
+        styleToRemove.remove()
+      }
+    }
+  }, [])
 
   const {
     register,
@@ -94,15 +197,73 @@ export default function CadastroPage() {
     }).format(amount)
   }
 
+  // Converte data de DD/MM/AAAA para AAAA-MM-DD
+  const convertDateToAPI = (dateStr: string): string => {
+    const [day, month, year] = dateStr.split('/')
+    return `${year}-${month}-${day}`
+  }
+
+  const submitToAPI = async (allData: Step1Data & Step2Data & Step3Data) => {
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    setErrorMessage('')
+
+    try {
+      // Prepara o payload para a API
+      const payload = {
+        nome_completo: allData.fullName,
+        e_mail: allData.email,
+        celular_1: allData.phone,
+        data_de_nascimento_1: convertDateToAPI(allData.birthDate),
+        cpf_1: allData.cpf,
+        instagram_1: allData.instagram ? `https://instagram.com/${allData.instagram}` : '',
+        linkedin_1: allData.linkedin ? `https://www.linkedin.com/in/${allData.linkedin}` : '',
+        cargo_1: allData.position,
+        segmento_1: allData.segment,
+        empresa_1: allData.company,
+        faturamento_anual_1: allData.revenue,
+        mini_bio_1: allData.bio || '',
+      }
+
+      console.log('Enviando dados:', payload)
+
+      const response = await fetch('https://admin.corplink.co/api/v1/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        console.log('Cadastro realizado com sucesso:', result)
+        setSubmitStatus('success')
+      } else {
+        console.error('Erro no cadastro:', result)
+        setErrorMessage(result.message || 'Erro ao cadastrar. Tente novamente.')
+        setSubmitStatus('error')
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error)
+      setErrorMessage('Erro de conexão. Verifique sua internet e tente novamente.')
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const onSubmit = (data: any) => {
-    setFormData({ ...formData, ...data })
+    const updatedFormData = { ...formData, ...data }
+    setFormData(updatedFormData)
 
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1)
     } else {
-      // Final submission
-      console.log("Form submitted:", { ...formData, ...data })
-      // Here you would send to your backend
+      // Final submission - enviar para API
+      submitToAPI(updatedFormData as Step1Data & Step2Data & Step3Data)
     }
   }
 
@@ -112,23 +273,87 @@ export default function CadastroPage() {
     }
   }
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string)
-        setValue("profilePhoto", reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
   const steps = [
     { number: 1, title: "Informações Pessoais" },
     { number: 2, title: "Empresa & Faturamento" },
     { number: 3, title: "Redes Sociais" },
   ]
+
+  // Modal de Sucesso/Erro
+  if (submitStatus !== 'idle') {
+    return (
+      <div className="min-h-screen font-sans relative overflow-x-hidden flex items-center justify-center" style={{ backgroundColor: COLORS.vipBlue }}>
+        <Header />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md mx-4 p-8 rounded-sm text-center"
+          style={{
+            backgroundColor: `${COLORS.titanium}40`,
+            backdropFilter: "blur(20px)",
+            border: `1px solid ${COLORS.royal}60`,
+          }}
+        >
+          {submitStatus === 'success' ? (
+            <>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", delay: 0.2 }}
+              >
+                <CheckCircle className="w-20 h-20 mx-auto mb-6" style={{ color: COLORS.gold }} />
+              </motion.div>
+              <h2 className="text-3xl font-light mb-4" style={{ color: COLORS.clarity }}>
+                Cadastro Realizado!
+              </h2>
+              <p className="text-base mb-8 font-light" style={{ color: COLORS.marfim }}>
+                Seu cadastro foi enviado com sucesso. Em breve entraremos em contato.
+              </p>
+              <Button
+                onClick={() => window.location.href = '/'}
+                className="h-12 px-8 font-light rounded-sm"
+                style={{
+                  backgroundColor: COLORS.gold,
+                  color: COLORS.vipBlue,
+                }}
+              >
+                Voltar ao Início
+              </Button>
+            </>
+          ) : (
+            <>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", delay: 0.2 }}
+              >
+                <XCircle className="w-20 h-20 mx-auto mb-6" style={{ color: '#ef4444' }} />
+              </motion.div>
+              <h2 className="text-3xl font-light mb-4" style={{ color: COLORS.clarity }}>
+                Erro no Cadastro
+              </h2>
+              <p className="text-base mb-8 font-light" style={{ color: COLORS.marfim }}>
+                {errorMessage}
+              </p>
+              <Button
+                onClick={() => {
+                  setSubmitStatus('idle')
+                  setCurrentStep(3)
+                }}
+                className="h-12 px-8 font-light rounded-sm"
+                style={{
+                  backgroundColor: COLORS.gold,
+                  color: COLORS.vipBlue,
+                }}
+              >
+                Tentar Novamente
+              </Button>
+            </>
+          )}
+        </motion.div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen font-sans relative overflow-x-hidden" style={{ backgroundColor: COLORS.vipBlue }}>
@@ -638,15 +863,33 @@ export default function CadastroPage() {
                                 <SelectValue placeholder="Selecione o segmento" />
                               </SelectTrigger>
                               <SelectContent
-                                className="border rounded-sm"
+                                className="border rounded-sm max-h-[300px] overflow-y-auto"
                                 style={{
                                   backgroundColor: COLORS.clarity,
                                   borderColor: COLORS.marfim,
                                 }}
                               >
                                 <SelectItem
-                                  value="automotivo"
-                                  className="cursor-pointer focus:bg-gold/10 transition-colors"
+                                  value="Agricultura e Pecuária"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Agricultura e Pecuária
+                                </SelectItem>
+                                <SelectItem
+                                  value="Alimentício e Bebidas"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Alimentício e Bebidas
+                                </SelectItem>
+                                <SelectItem
+                                  value="Automotivo"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
                                   style={{
                                     color: COLORS.vipBlue,
                                   }}
@@ -654,8 +897,98 @@ export default function CadastroPage() {
                                   Automotivo
                                 </SelectItem>
                                 <SelectItem
-                                  value="financeiro"
-                                  className="cursor-pointer focus:bg-gold/10 transition-colors"
+                                  value="Beleza e Estética"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Beleza e Estética
+                                </SelectItem>
+                                <SelectItem
+                                  value="Comunicação e Mídia"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Comunicação e Mídia
+                                </SelectItem>
+                                <SelectItem
+                                  value="Comércio Varejista"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Comércio Varejista
+                                </SelectItem>
+                                <SelectItem
+                                  value="Construção Civil"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Construção Civil
+                                </SelectItem>
+                                <SelectItem
+                                  value="Consultoria de Negócios"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Consultoria de Negócios
+                                </SelectItem>
+                                <SelectItem
+                                  value="Cultura e Lazer"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Cultura e Lazer
+                                </SelectItem>
+                                <SelectItem
+                                  value="Educação e Cursos"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Educação e Cursos
+                                </SelectItem>
+                                <SelectItem
+                                  value="Energia e Mineração"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Energia e Mineração
+                                </SelectItem>
+                                <SelectItem
+                                  value="Entretenimento e Esportes"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Entretenimento e Esportes
+                                </SelectItem>
+                                <SelectItem
+                                  value="Farmacêutico e Biotec"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Farmacêutico e Biotec
+                                </SelectItem>
+                                <SelectItem
+                                  value="Financeiro"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
                                   style={{
                                     color: COLORS.vipBlue,
                                   }}
@@ -663,13 +996,139 @@ export default function CadastroPage() {
                                   Financeiro
                                 </SelectItem>
                                 <SelectItem
-                                  value="pecuario"
-                                  className="cursor-pointer focus:bg-gold/10 transition-colors"
+                                  value="Imobiliário"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
                                   style={{
                                     color: COLORS.vipBlue,
                                   }}
                                 >
-                                  Pecuário
+                                  Imobiliário
+                                </SelectItem>
+                                <SelectItem
+                                  value="Indústria Geral"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Indústria Geral
+                                </SelectItem>
+                                <SelectItem
+                                  value="Indústria Química"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Indústria Química
+                                </SelectItem>
+                                <SelectItem
+                                  value="Logística e Transportes"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Logística e Transportes
+                                </SelectItem>
+                                <SelectItem
+                                  value="Meio Ambiente"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Meio Ambiente
+                                </SelectItem>
+                                <SelectItem
+                                  value="Moda e Vestuário"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Moda e Vestuário
+                                </SelectItem>
+                                <SelectItem
+                                  value="Petróleo e Gás"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Petróleo e Gás
+                                </SelectItem>
+                                <SelectItem
+                                  value="Restaurantes e Bares"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Restaurantes e Bares
+                                </SelectItem>
+                                <SelectItem
+                                  value="Saúde e Clínicas"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Saúde e Clínicas
+                                </SelectItem>
+                                <SelectItem
+                                  value="Segurança Patrimonial"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Segurança Patrimonial
+                                </SelectItem>
+                                <SelectItem
+                                  value="Serviços Gerais"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Serviços Gerais
+                                </SelectItem>
+                                <SelectItem
+                                  value="Startups e Inovação"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Startups e Inovação
+                                </SelectItem>
+                                <SelectItem
+                                  value="Tecnologia da Informação"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Tecnologia da Informação
+                                </SelectItem>
+                                <SelectItem
+                                  value="Turismo e Hotelaria"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Turismo e Hotelaria
+                                </SelectItem>
+                                <SelectItem
+                                  value="Outros"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Outros
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -739,27 +1198,74 @@ export default function CadastroPage() {
                         >
                           Faturamento Anual *
                         </Label>
-                        <Input
-                          id="revenue"
-                          {...register("revenue")}
-                          onChange={(e) => {
-                            const formatted = formatBRL(e.target.value)
-                            setValue("revenue", formatted)
-                          }}
-                          className="h-12 md:h-14 text-sm md:text-base border-0 border-b-2 rounded-none px-0 focus-visible:ring-0 focus-visible:ring-offset-0 transition-all duration-300 bg-transparent placeholder:text-royal"
-                          style={{
-                            borderColor: `${COLORS.royal}80`,
-                            color: COLORS.clarity,
-                          }}
-                          onFocus={(e) => {
-                            e.target.style.borderColor = COLORS.gold
-                            e.target.style.boxShadow = `0 1px 0 0 ${COLORS.gold}`
-                          }}
-                          onBlur={(e) => {
-                            e.target.style.borderColor = `${COLORS.royal}80`
-                            e.target.style.boxShadow = "none"
-                          }}
-                          placeholder="R$ 0,00"
+                        <Controller
+                          name="revenue"
+                          control={control}
+                          render={({ field }) => (
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <SelectTrigger
+                                className="h-12 md:h-14 text-sm md:text-base border-0 border-b-2 rounded-none px-0 focus:ring-0 focus:ring-offset-0 bg-transparent transition-all duration-300"
+                                style={{
+                                  borderColor: `${COLORS.royal}80`,
+                                  color: field.value ? COLORS.clarity : COLORS.marfim,
+                                }}
+                                onFocus={(e) => {
+                                  e.currentTarget.style.borderColor = COLORS.gold
+                                  e.currentTarget.style.boxShadow = `0 1px 0 0 ${COLORS.gold}`
+                                }}
+                                onBlur={(e) => {
+                                  e.currentTarget.style.borderColor = `${COLORS.royal}80`
+                                  e.currentTarget.style.boxShadow = "none"
+                                }}
+                              >
+                                <SelectValue placeholder="Selecione uma Opção" />
+                              </SelectTrigger>
+                              <SelectContent
+                                className="border rounded-sm"
+                                style={{
+                                  backgroundColor: COLORS.clarity,
+                                  borderColor: COLORS.marfim,
+                                }}
+                              >
+                                <SelectItem
+                                  value="-10MM"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Até 10 milhões
+                                </SelectItem>
+                                <SelectItem
+                                  value="10MM-30MM"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  De 10 a 30 milhões
+                                </SelectItem>
+                                <SelectItem
+                                  value="30MM-50MM"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  De 30 a 50 milhões
+                                </SelectItem>
+                                <SelectItem
+                                  value="+50MM"
+                                  className="cursor-pointer hover:bg-gold/20 focus:bg-gold/10 transition-colors duration-200"
+                                  style={{
+                                    color: COLORS.vipBlue,
+                                  }}
+                                >
+                                  Mais de 50 milhões
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )}
                         />
                         {errors.revenue && (
                           <motion.p
@@ -803,50 +1309,11 @@ export default function CadastroPage() {
                     </motion.div>
 
                     <div className="space-y-8 md:space-y-10 pt-4 md:pt-8">
-                      {/* Profile Photo */}
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="flex flex-col items-start"
-                      >
-                        <Label
-                          className="text-xs md:text-sm font-medium mb-4 md:mb-6 block uppercase tracking-wider"
-                          style={{ color: COLORS.marfim }}
-                        >
-                          Foto de Perfil
-                        </Label>
-                        <div className="relative group">
-                          <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 400 }}>
-                            <Avatar className="w-24 h-24 md:w-28 md:h-28 border-2" style={{ borderColor: COLORS.gold }}>
-                              <AvatarImage src={profileImage || "/placeholder.svg"} />
-                              <AvatarFallback style={{ backgroundColor: COLORS.royal }}>
-                                <User className="w-10 h-10 md:w-12 md:h-12" style={{ color: COLORS.marfim }} />
-                              </AvatarFallback>
-                            </Avatar>
-                          </motion.div>
-                          <label
-                            htmlFor="photo-upload"
-                            className="absolute bottom-0 right-0 p-2 md:p-2.5 rounded-full cursor-pointer transition-all duration-300 hover:scale-110"
-                            style={{ backgroundColor: COLORS.gold }}
-                          >
-                            <Upload className="w-4 h-4" style={{ color: COLORS.vipBlue }} />
-                            <input
-                              id="photo-upload"
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={handleImageUpload}
-                            />
-                          </label>
-                        </div>
-                      </motion.div>
-
                       {/* Instagram */}
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
+                        transition={{ delay: 0.2 }}
                       >
                         <Label
                           htmlFor="instagram"
@@ -886,7 +1353,7 @@ export default function CadastroPage() {
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.35 }}
+                        transition={{ delay: 0.25 }}
                       >
                         <Label
                           htmlFor="linkedin"
@@ -926,7 +1393,7 @@ export default function CadastroPage() {
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
+                        transition={{ delay: 0.3 }}
                       >
                         <Label
                           htmlFor="bio"
@@ -989,7 +1456,7 @@ export default function CadastroPage() {
                   <Button
                     type="button"
                     onClick={handleBack}
-                    disabled={currentStep === 1}
+                    disabled={currentStep === 1 || isSubmitting}
                     variant="ghost"
                     className="h-11 md:h-12 px-0 font-light text-sm md:text-base hover:bg-transparent"
                     style={{
@@ -1003,19 +1470,26 @@ export default function CadastroPage() {
                 </motion.div>
 
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                   transition={{ type: "spring", stiffness: 400 }}
                 >
                   <Button
                     type="submit"
+                    disabled={isSubmitting}
                     className="h-11 md:h-12 px-6 md:px-8 font-light text-sm md:text-base rounded-sm transition-all duration-300 shadow-lg shadow-gold/20 hover:shadow-gold/30"
                     style={{
-                      backgroundColor: COLORS.gold,
+                      backgroundColor: isSubmitting ? COLORS.royal : COLORS.gold,
                       color: COLORS.vipBlue,
+                      opacity: isSubmitting ? 0.7 : 1,
                     }}
                   >
-                    {currentStep === 3 ? (
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 md:w-5 md:h-5 mr-2 animate-spin" />
+                        Enviando...
+                      </>
+                    ) : currentStep === 3 ? (
                       <>
                         Finalizar
                         <Check className="w-4 h-4 md:w-5 md:h-5 ml-2" />

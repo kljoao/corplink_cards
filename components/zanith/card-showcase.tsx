@@ -77,14 +77,6 @@ export default function CardShowcase() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-3 sm:space-y-4"
             >
-              <Image
-                src="/visa_logo.png"
-                alt="VISA"
-                width={120}
-                height={40}
-                className="h-6 sm:h-7 md:h-9 lg:h-10 w-auto"
-                priority
-              />
 
               <Image
                 src="/zenith.svg"

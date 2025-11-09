@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const COLORS = {
   vipBlue: "#000016",
@@ -14,6 +15,12 @@ const COLORS = {
 }
 
 export default function CTA() {
+  const router = useRouter()
+
+  const handleRedirect = () => {
+    router.push("/cadastro")
+  }
+
   return (
     <section className="relative overflow-hidden py-16 sm:py-24 md:py-32">
       {/* Animated background */}
@@ -143,9 +150,7 @@ export default function CTA() {
                     backgroundColor: COLORS.gold,
                     color: COLORS.vipBlue,
                   }}
-                  onClick={() => {
-                    console.log("Redirect to form")
-                  }}
+                  onClick={handleRedirect}
                 >
                   <span className="flex items-center gap-3">
                     Solicitar cartão Zenith

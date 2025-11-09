@@ -392,3 +392,48 @@ html {
 .bio-button:hover {
   transform: translateY(-1px);
 }
+
+/* Scrollbar customizado para SelectContent */
+[data-radix-select-content] {
+  scrollbar-width: thin;
+  scrollbar-color: #bebdb2 #f8f8f8;
+}
+
+[data-radix-select-content]::-webkit-scrollbar {
+  width: 8px;
+}
+
+[data-radix-select-content]::-webkit-scrollbar-track {
+  background: #f8f8f8;
+  border-radius: 4px;
+}
+
+[data-radix-select-content]::-webkit-scrollbar-thumb {
+  background: #bebdb2;
+  border-radius: 4px;
+  border: 2px solid #f8f8f8;
+}
+
+[data-radix-select-content]::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}
+
+/* Hover effect para SelectItem do Radix UI */
+[data-radix-select-item] {
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+[data-radix-select-item]:hover,
+[data-radix-select-item][data-highlighted] {
+  background-color: rgba(212, 175, 55, 0.2) !important;
+}
+
+[data-radix-select-item]:active {
+  background-color: rgba(212, 175, 55, 0.3) !important;
+}
+
+[data-radix-select-item][data-state="checked"] {
+  background-color: rgba(212, 175, 55, 0.15) !important;
+  font-weight: 500 !important;
+}

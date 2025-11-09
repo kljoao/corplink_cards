@@ -92,39 +92,42 @@
   color: #f8f8f8;
 }
 
-/* Country dropdown with dark luxury styling */
-.PhoneInputCountrySelectDropdown {
-  background-color: #f8f8f8;
-  border: 1px solid #bebdb2;
-  border-radius: 4px;
-  box-shadow: 0 8px 32px rgba(0, 0, 22, 0.4);
-  max-height: 300px;
-  overflow-y: auto;
+/* Country dropdown - IDENTIDADE VISUAL CORPLINK (tema escuro) */
+.PhoneInputCountrySelect,
+select.PhoneInputCountrySelect {
+  background-color: transparent !important;
+  color: #bebdb2 !important;
 }
 
-.PhoneInputCountryOption {
-  padding: 0.875rem 1rem;
-  color: #000016;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 300;
+/* Força cor ESCURA no fundo das options */
+.PhoneInputCountrySelect option,
+select.PhoneInputCountrySelect option,
+.PhoneInputCountry select option {
+  background-color: #17313c !important;
+  background: #17313c !important;
+  color: #f8f8f8 !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 300 !important;
 }
 
-.PhoneInputCountryOption:hover {
-  background-color: rgba(212, 175, 55, 0.1);
-  color: #000016;
+/* Option ao passar o mouse */
+.PhoneInputCountrySelect option:hover,
+select.PhoneInputCountrySelect option:hover {
+  background-color: rgba(212, 175, 55, 0.2) !important;
+  background: rgba(212, 175, 55, 0.2) !important;
+  color: #f8f8f8 !important;
 }
 
-.PhoneInputCountryOption--selected {
-  background-color: #000016;
-  color: #d4af37;
-  font-weight: 400;
-}
-
-.PhoneInputCountryOption--focused {
-  background-color: rgba(212, 175, 55, 0.15);
-  color: #000016;
+/* Option selecionada (checked) */
+.PhoneInputCountrySelect option:checked,
+select.PhoneInputCountrySelect option:checked,
+.PhoneInputCountrySelect option[selected],
+select.PhoneInputCountrySelect option[selected] {
+  background-color: #d4af37 !important;
+  background: #d4af37 !important;
+  color: #000016 !important;
+  font-weight: 600 !important;
 }
 
 /* Mobile responsive adjustments */
