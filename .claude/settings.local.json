@@ -8,7 +8,8 @@
       "Read(/C:\\Users\\João\\Desktop\\corplink_cards/**)",
       "Read(/C:\\Users\\João\\Desktop\\corplink_cards\\app/**)",
       "Read(/C:\\Users\\João\\Desktop\\corplink_cards/**)",
-      "Read(/C:\\Users\\João\\Desktop\\corplink_cards\\hooks/**)"
+      "Read(/C:\\Users\\João\\Desktop\\corplink_cards\\hooks/**)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
